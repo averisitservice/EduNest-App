@@ -1,9 +1,8 @@
-import 'package:dio/dio.dart';
 import 'package:edunest/app/UI/login/login_page.dart';
+import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
-import 'package:edunest/app/data/model/tenant_model.dart';
 import 'package:edunest/app/data/repository/tenant_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_button.dart';
 import 'package:edunest/app/global_widgets/edunest_divider.dart';
@@ -45,7 +44,7 @@ class _TenantPageState extends State<TenantPage> {
     });
 
     try {
-      final TenantModel tenant = await _tenantRepo.getTenantBySchoolCode(code);
+      final tenant = await _tenantRepo.getTenantBySchoolCode(code);
       await CommonService.setTenant(tenant);
 
       if (!mounted) return;
@@ -55,24 +54,13 @@ class _TenantPageState extends State<TenantPage> {
         transition: Transition.rightToLeft,
         duration: const Duration(milliseconds: 400),
       );
-    } on DioException catch (e) {
-      setState(() => errorMessage = _extractError(e) ?? 'Invalid school code');
-    } catch (_) {
-      setState(() => errorMessage = 'Something went wrong. Please try again.');
+    } on ApiException catch (e) {
+      setState(() => errorMessage = e.message);
     } finally {
       if (mounted) {
         setState(() => isLoading = false);
       }
     }
-  }
-
-  String? _extractError(DioException e) {
-    final data = e.response?.data;
-    if (data is Map && data['errors'] is List && (data['errors'] as List).isNotEmpty) {
-      final first = (data['errors'] as List).first;
-      if (first is Map && first['msg'] != null) return first['msg'].toString();
-    }
-    return null;
   }
 
   @override
@@ -174,7 +162,9 @@ class _TenantPageState extends State<TenantPage> {
 
                     InkWell(
                       onTap: () {},
-                      borderRadius: BorderRadius.circular(AppValues.smallRadius),
+                      borderRadius: BorderRadius.circular(
+                        AppValues.smallRadius,
+                      ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: AppValues.paddingSmall,

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final SetAppConfig activeConfig = EduNestEnvironment.initialize(env: 'uat');
+  final SetAppConfig activeConfig = EduNestEnvironment.initialize(env: 'dev');
 
   GlobalConfiguration().loadConfig(activeConfig);
 

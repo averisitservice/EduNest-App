@@ -1,6 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:edunest/app/UI/login/login_page.dart';
+import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
+import 'package:edunest/app/data/model/tenant_model.dart';
+import 'package:edunest/app/data/repository/tenant_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_button.dart';
 import 'package:edunest/app/global_widgets/edunest_divider.dart';
 import 'package:edunest/app/global_widgets/edunest_text_field.dart';
@@ -16,6 +20,9 @@ class TenantPage extends StatefulWidget {
 
 class _TenantPageState extends State<TenantPage> {
   final TextEditingController _schoolCodeController = TextEditingController();
+  final TenantRepo _tenantRepo = TenantRepo();
+
+  bool isLoading = false;
   String? errorMessage;
 
   @override
@@ -24,26 +31,48 @@ class _TenantPageState extends State<TenantPage> {
     super.dispose();
   }
 
-  void _handleProceed() {
-    final code = _schoolCodeController.text.trim();
+  Future<void> _handleProceed() async {
+    final String code = _schoolCodeController.text.trim();
+
     if (code.isEmpty) {
-      setState(() {
-        errorMessage = 'Please enter school code';
-      });
-    } else if (code == '9999') {
-      setState(() {
-        errorMessage = null;
-      });
+      setState(() => errorMessage = 'Please enter school code');
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+    });
+
+    try {
+      final TenantModel tenant = await _tenantRepo.getTenantBySchoolCode(code);
+      await CommonService.setTenant(tenant);
+
+      if (!mounted) return;
+
       Get.to(
         () => const LoginPage(),
         transition: Transition.rightToLeft,
         duration: const Duration(milliseconds: 400),
       );
-    } else {
-      setState(() {
-        errorMessage = 'Invalid school code';
-      });
+    } on DioException catch (e) {
+      setState(() => errorMessage = _extractError(e) ?? 'Invalid school code');
+    } catch (_) {
+      setState(() => errorMessage = 'Something went wrong. Please try again.');
+    } finally {
+      if (mounted) {
+        setState(() => isLoading = false);
+      }
     }
+  }
+
+  String? _extractError(DioException e) {
+    final data = e.response?.data;
+    if (data is Map && data['errors'] is List && (data['errors'] as List).isNotEmpty) {
+      final first = (data['errors'] as List).first;
+      if (first is Map && first['msg'] != null) return first['msg'].toString();
+    }
+    return null;
   }
 
   @override
@@ -105,9 +134,7 @@ class _TenantPageState extends State<TenantPage> {
                       hintText: 'Enter school code',
                       onChanged: (value) {
                         if (errorMessage != null && value.trim().isNotEmpty) {
-                          setState(() {
-                            errorMessage = null;
-                          });
+                          setState(() => errorMessage = null);
                         }
                       },
                     ),
@@ -130,7 +157,11 @@ class _TenantPageState extends State<TenantPage> {
                     ],
                     SizedBox(height: errorMessage != null ? 18 : 24),
 
-                    EdunestButton(title: 'Proceed', onPressed: _handleProceed),
+                    EdunestButton(
+                      title: 'Proceed',
+                      isLoading: isLoading,
+                      onPressed: _handleProceed,
+                    ),
 
                     const SizedBox(height: 10),
 
@@ -143,9 +174,7 @@ class _TenantPageState extends State<TenantPage> {
 
                     InkWell(
                       onTap: () {},
-                      borderRadius: BorderRadius.circular(
-                        AppValues.smallRadius,
-                      ),
+                      borderRadius: BorderRadius.circular(AppValues.smallRadius),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: AppValues.paddingSmall,

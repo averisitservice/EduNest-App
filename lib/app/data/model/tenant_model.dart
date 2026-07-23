@@ -3,6 +3,7 @@ class TenantModel {
   final String schoolCode;
   final String tenantName;
   final String schoolBannerUrl;
+  final String mobileLogoUrl;
   final String logoUrl;
   final String singleLogoUrl;
   final String primaryColor;
@@ -16,6 +17,7 @@ class TenantModel {
     required this.schoolCode,
     required this.tenantName,
     required this.schoolBannerUrl,
+    required this.mobileLogoUrl,
     required this.logoUrl,
     required this.singleLogoUrl,
     required this.primaryColor,
@@ -31,6 +33,7 @@ class TenantModel {
       schoolCode: json['schoolCode'] ?? "",
       tenantName: json['tenantName'] ?? "",
       schoolBannerUrl: json['schoolBannerUrl'] ?? "",
+      mobileLogoUrl: json['mobileLogoUrl'] ?? "",
       logoUrl: json['logoUrl'] ?? "",
       singleLogoUrl: json['singleLogoUrl'] ?? "",
       primaryColor: json['primaryColor'] ?? "",
@@ -47,6 +50,7 @@ class TenantModel {
       'schoolCode': schoolCode,
       'tenantName': tenantName,
       'schoolBannerUrl': schoolBannerUrl,
+      'mobileLogoUrl': mobileLogoUrl,
       'logoUrl': logoUrl,
       'singleLogoUrl': singleLogoUrl,
       'primaryColor': primaryColor,

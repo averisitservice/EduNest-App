@@ -1,3 +1,4 @@
+import 'package:edunest/app/UI/home/home_page.dart';
 import 'package:edunest/app/UI/login/widgets/forgot_password_section.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
@@ -5,6 +6,7 @@ import 'package:edunest/app/global_widgets/edunest_button.dart';
 import 'package:edunest/app/global_widgets/edunest_divider.dart';
 import 'package:edunest/app/global_widgets/edunest_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -60,9 +62,22 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     if (userId.isNotEmpty && password.isNotEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Logging in as $userId...')));
+      if (userId == '9999' && password == '9999') {
+        Get.to(
+          () => const HomePage(),
+          transition: Transition.rightToLeft,
+          duration: const Duration(milliseconds: 400),
+        );
+      } else {
+        setState(() {
+          if (userId != '9999') {
+            userIdError = 'Invalid User ID';
+          }
+          if (password != '9999') {
+            passwordError = 'Invalid password';
+          }
+        });
+      }
     }
   }
 
@@ -83,27 +98,26 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       backgroundColor: AppColors.blueBackground,
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leadingWidth: 200,
+        surfaceTintColor: Colors.transparent,
+        leadingWidth: 220,
         leading: InkWell(
           onTap: () => Get.back(),
           child: Padding(
             padding: const EdgeInsets.only(left: 8),
             child: Row(
               children: const [
-                Icon(
-                  Icons.chevron_left,
-                  color: AppColors.primaryDark,
-                  size: 24,
-                ),
+                Icon(Icons.chevron_left, color: AppColors.darkText, size: 24),
                 SizedBox(width: 4),
                 Text(
                   'Change School Code',
                   style: TextStyle(
-                    color: AppColors.primaryDark,
+                    color: AppColors.darkText,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
@@ -347,7 +361,7 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 32),
+                const SizedBox(height: 50),
                 const Text(
                   'Powered By',
                   style: TextStyle(

@@ -1,6 +1,9 @@
+import 'package:edunest/app/UI/login/login_page.dart';
 import 'package:edunest/app/UI/login/tenant_page.dart';
+import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
+import 'package:edunest/app/data/model/tenant_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,6 +19,8 @@ class _SplashScreenState extends State<SplashScreen>
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
+
+  TenantModel? _tenant;
 
   @override
   void initState() {
@@ -39,16 +44,48 @@ class _SplashScreenState extends State<SplashScreen>
     _startTimer();
   }
 
-  void _startTimer() {
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) {
-        Get.off(
-          () => const TenantPage(),
-          transition: Transition.fadeIn,
-          duration: const Duration(milliseconds: 600),
-        );
-      }
-    });
+  Future<void> _startTimer() async {
+    TenantModel? tenant;
+    try {
+      tenant = await CommonService.getTenant();
+    } catch (_) {
+      tenant = null;
+    }
+
+    if (!mounted) return;
+    setState(() => _tenant = tenant);
+
+    await Future.delayed(const Duration(seconds: 3));
+    if (!mounted) return;
+
+    Get.off(
+      () => tenant != null ? const LoginPage() : const TenantPage(),
+      transition: Transition.fadeIn,
+      duration: const Duration(milliseconds: 600),
+    );
+  }
+
+  Widget _buildSplashImage(double screenWidth) {
+    final String bannerUrl = _tenant?.schoolBannerUrl ?? '';
+
+    if (bannerUrl.isNotEmpty) {
+      return Image.network(
+        bannerUrl,
+        width: screenWidth * 0.75,
+        fit: BoxFit.contain,
+        errorBuilder: (context, error, stackTrace) => _defaultLogo(screenWidth),
+      );
+    }
+
+    return _defaultLogo(screenWidth);
+  }
+
+  Widget _defaultLogo(double screenWidth) {
+    return Image.asset(
+      'assets/images/full-icon.png',
+      width: screenWidth * 0.75,
+      fit: BoxFit.contain,
+    );
   }
 
   @override
@@ -71,11 +108,7 @@ class _SplashScreenState extends State<SplashScreen>
                 opacity: _fadeAnimation,
                 child: ScaleTransition(
                   scale: _scaleAnimation,
-                  child: Image.asset(
-                    'assets/images/full-icon.png',
-                    width: screenWidth * 0.75,
-                    fit: BoxFit.contain,
-                  ),
+                  child: _buildSplashImage(screenWidth),
                 ),
               ),
             ),

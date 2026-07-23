@@ -1,6 +1,10 @@
 import 'package:edunest/app/UI/login/login_page.dart';
+import 'package:edunest/app/core/network/error_helper.dart';
+import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
+import 'package:edunest/app/data/model/tenant_model.dart';
+import 'package:edunest/app/data/repository/tenant_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_button.dart';
 import 'package:edunest/app/global_widgets/edunest_divider.dart';
 import 'package:edunest/app/global_widgets/edunest_text_field.dart';
@@ -16,6 +20,9 @@ class TenantPage extends StatefulWidget {
 
 class _TenantPageState extends State<TenantPage> {
   final TextEditingController _schoolCodeController = TextEditingController();
+  final TenantRepo _tenantRepo = TenantRepo();
+
+  bool isLoading = false;
   String? errorMessage;
 
   @override
@@ -24,25 +31,42 @@ class _TenantPageState extends State<TenantPage> {
     super.dispose();
   }
 
-  void _handleProceed() {
+  Future<void> _handleProceed() async {
     final code = _schoolCodeController.text.trim();
+
     if (code.isEmpty) {
       setState(() {
         errorMessage = 'Please enter school code';
       });
-    } else if (code == '9999') {
-      setState(() {
-        errorMessage = null;
-      });
+      return;
+    }
+
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+    });
+
+    try {
+      final TenantModel tenant = await _tenantRepo.getTenantBySchoolCode(code);
+      await CommonService.setTenant(tenant);
+
+      if (!mounted) return;
+
       Get.to(
         () => const LoginPage(),
         transition: Transition.rightToLeft,
         duration: const Duration(milliseconds: 400),
       );
-    } else {
+    } on ApiException catch (e) {
       setState(() {
-        errorMessage = 'Invalid school code';
+        errorMessage = e.message;
       });
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -130,7 +154,11 @@ class _TenantPageState extends State<TenantPage> {
                     ],
                     SizedBox(height: errorMessage != null ? 18 : 24),
 
-                    EdunestButton(title: 'Proceed', onPressed: _handleProceed),
+                    EdunestButton(
+                      title: 'Proceed',
+                      isLoading: isLoading,
+                      onPressed: _handleProceed,
+                    ),
 
                     const SizedBox(height: 10),
 

@@ -3,4 +3,6 @@ class AppUrls {
 
   static String getTenantBySchoolCode(String schoolCode) =>
       "$baseUrl/auth/tenant/$schoolCode";
+
+  static String login() => "$baseUrl/api/auth/login";
 }

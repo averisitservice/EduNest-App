@@ -1,7 +1,11 @@
 import 'package:edunest/app/UI/home/home_page.dart';
 import 'package:edunest/app/UI/login/widgets/forgot_password_section.dart';
+import 'package:edunest/app/core/network/error_helper.dart';
+import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
+import 'package:edunest/app/data/model/login_response_model.dart';
+import 'package:edunest/app/data/repository/auth_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_button.dart';
 import 'package:edunest/app/global_widgets/edunest_divider.dart';
 import 'package:edunest/app/global_widgets/edunest_text_field.dart';
@@ -22,8 +26,11 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _mobileController = TextEditingController();
 
+  final AuthRepo _authRepo = AuthRepo();
+
   bool _showPassword = true;
   bool _showForgotPassword = false;
+  bool isLoading = false;
 
   String? userIdError;
   String? passwordError;
@@ -52,31 +59,42 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void _handleLogin() {
-    final userId = _userIdController.text.trim();
+  Future<void> _handleLogin() async {
+    final username = _userIdController.text.trim();
     final password = _passwordController.text.trim();
 
     setState(() {
-      userIdError = userId.isEmpty ? 'Please enter User ID' : null;
+      userIdError = username.isEmpty ? 'Please enter User ID' : null;
       passwordError = password.isEmpty ? 'Please enter password' : null;
     });
 
-    if (userId.isNotEmpty && password.isNotEmpty) {
-      if (userId == '9999' && password == '9999') {
-        Get.to(
-          () => const HomePage(),
-          transition: Transition.rightToLeft,
-          duration: const Duration(milliseconds: 400),
-        );
-      } else {
-        setState(() {
-          if (userId != '9999') {
-            userIdError = 'Invalid User ID';
-          }
-          if (password != '9999') {
-            passwordError = 'Invalid password';
-          }
-        });
+    if (username.isEmpty || password.isEmpty) return;
+
+    setState(() => isLoading = true);
+
+    try {
+      final LoginResponseModel result = await _authRepo.login(
+        username,
+        password,
+      );
+
+      await CommonService.setSessionToken(result.session);
+      await CommonService.setRefreshToken(result.refresh);
+      await CommonService.setStudent(result.student);
+      await CommonService.setTenant(result.tenant);
+
+      if (!mounted) return;
+
+      Get.off(
+        () => const HomePage(),
+        transition: Transition.rightToLeft,
+        duration: const Duration(milliseconds: 400),
+      );
+    } on ApiException catch (e) {
+      setState(() => passwordError = e.message);
+    } finally {
+      if (mounted) {
+        setState(() => isLoading = false);
       }
     }
   }
@@ -314,7 +332,11 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const SizedBox(height: 20),
 
-                        EdunestButton(title: 'Login', onPressed: _handleLogin),
+                        EdunestButton(
+                          title: 'Login',
+                          isLoading: isLoading,
+                          onPressed: _handleLogin,
+                        ),
                       ],
 
                       const SizedBox(height: 20),

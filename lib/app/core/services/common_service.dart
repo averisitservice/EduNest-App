@@ -13,25 +13,9 @@ class CommonService {
     return prefs.getString('sessionToken');
   }
 
-  static Future<void> setRefreshToken(String refreshToken) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('refreshToken', refreshToken);
-  }
-
-  static Future<void> setSchoolCode(String schoolCode) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('schoolCode', schoolCode);
-  }
-
-  static Future<String?> getSchoolCode() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('schoolCode');
-  }
-
   static Future<void> setTenant(TenantModel tenant) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('tenant', jsonEncode(tenant.toJson()));
-    await prefs.setString('schoolCode', tenant.schoolCode);
   }
 
   static Future<TenantModel?> getTenant() async {

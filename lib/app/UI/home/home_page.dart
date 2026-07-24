@@ -1,5 +1,4 @@
 import 'package:edunest/app/UI/home/widgets/drawer_menu.dart';
-import 'package:edunest/app/UI/home/widgets/home_bottom_navigation_bar.dart';
 import 'package:edunest/app/UI/notifications/notification_page.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
@@ -15,8 +14,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _currentIndex = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,14 +87,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         child: const SafeArea(child: SizedBox()),
-      ),
-      bottomNavigationBar: HomeBottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edunest/app/UI/login/login_page.dart';
+import 'package:edunest/app/UI/profile/profile_page.dart';
 import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
@@ -46,7 +47,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
     switch (title) {
       case 'My Profile':
       case 'Profile':
-        // Get.to(() => const ProfilePage());
+        Get.to(() => const ProfilePage());
         break;
       case 'School Contacts':
         // Get.to(() => const SchoolContactsPage());
@@ -91,14 +92,12 @@ class _DrawerMenuState extends State<DrawerMenu> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Profile Card
                       Material(
                         color: Colors.transparent,
                         borderRadius: BorderRadius.circular(
                           AppValues.radius_16,
                         ),
                         child: InkWell(
-                          onTap: () => _onMenuItemTap('Profile'),
                           borderRadius: BorderRadius.circular(
                             AppValues.radius_16,
                           ),

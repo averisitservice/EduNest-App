@@ -25,7 +25,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _userIdController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _mobileController = TextEditingController();
 
@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _showForgotPassword = false;
   bool isLoading = false;
 
-  String? userIdError;
+  String? usernameError;
   String? passwordError;
   String? mobileError;
 
@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void dispose() {
-    _userIdController.dispose();
+    _usernameController.dispose();
     _passwordController.dispose();
     _mobileController.dispose();
     super.dispose();
@@ -103,11 +103,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _handleLogin() async {
-    final username = _userIdController.text.trim();
+    final username = _usernameController.text.trim();
     final password = _passwordController.text.trim();
 
     setState(() {
-      userIdError = username.isEmpty ? 'Please enter User ID' : null;
+      usernameError = username.isEmpty ? 'Please enter username' : null;
       passwordError = password.isEmpty ? 'Please enter password' : null;
     });
 
@@ -258,23 +258,23 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 24),
 
                       EdunestTextField(
-                        controller: _userIdController,
-                        labelText: 'User ID',
-                        hintText: 'Enter user ID',
+                        controller: _usernameController,
+                        labelText: 'Username',
+                        hintText: 'Enter username',
                         onChanged: (val) {
-                          if (userIdError != null && val.trim().isNotEmpty) {
-                            setState(() => userIdError = null);
+                          if (usernameError != null && val.trim().isNotEmpty) {
+                            setState(() => usernameError = null);
                           }
                         },
                       ),
-                      if (userIdError != null) ...[
+                      if (usernameError != null) ...[
                         const SizedBox(height: 6),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 4),
                             child: Text(
-                              userIdError!,
+                              usernameError!,
                               style: const TextStyle(
                                 color: AppColors.errorColor,
                                 fontSize: AppValues.fontSizeSmall,

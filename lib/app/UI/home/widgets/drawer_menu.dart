@@ -32,51 +32,36 @@ class _DrawerMenuState extends State<DrawerMenu> {
   }
 
   final List<Map<String, dynamic>> _menuItems = const [
-    {'title': 'Profile', 'icon': Icons.person_outline_rounded},
-    {'title': 'Attendance', 'icon': Icons.calendar_today_outlined},
-    {'title': 'Homework', 'icon': Icons.menu_book_outlined},
-    {'title': 'Fees', 'icon': Icons.currency_rupee_rounded},
-    {'title': 'Timetable', 'icon': Icons.edit_calendar_outlined},
-    {'title': 'Exams & Results', 'icon': Icons.bar_chart_rounded},
-    {'title': 'Announcements', 'icon': Icons.campaign_outlined},
-    {'title': 'Events', 'icon': Icons.event_outlined},
-    {'title': 'Bus Tracking', 'icon': Icons.directions_bus_outlined},
-    {'title': 'Leave Request', 'icon': Icons.description_outlined},
+    {'title': 'My Profile', 'icon': Icons.person_outline_rounded},
+    {'title': 'School Contacts', 'icon': Icons.headset_mic_outlined},
+    {'title': 'Settings', 'icon': Icons.settings_outlined},
+    {'title': 'FAQ', 'icon': Icons.settings_outlined},
+    {'title': 'About Us', 'icon': Icons.error_outline_rounded},
+    {'title': 'Rate Us', 'icon': Icons.star_outline_rounded},
   ];
 
   void _onMenuItemTap(String title) {
     Navigator.pop(context); // Close drawer first
 
     switch (title) {
+      case 'My Profile':
       case 'Profile':
         // Get.to(() => const ProfilePage());
         break;
-      case 'Attendance':
-        // Get.to(() => const AttendancePage());
+      case 'School Contacts':
+        // Get.to(() => const SchoolContactsPage());
         break;
-      case 'Homework':
-        // Get.to(() => const HomeworkPage());
+      case 'Settings':
+        // Get.to(() => const SettingsPage());
         break;
-      case 'Fees':
-        // Get.to(() => const FeesPage());
+      case 'FAQ':
+        // Get.to(() => const FAQPage());
         break;
-      case 'Timetable':
-        // Get.to(() => const TimetablePage());
+      case 'About Us':
+        // Get.to(() => const AboutUsPage());
         break;
-      case 'Exams & Results':
-        // Get.to(() => const ResultsPage());
-        break;
-      case 'Announcements':
-        // Get.to(() => const AnnouncementsPage());
-        break;
-      case 'Events':
-        // Get.to(() => const EventsPage());
-        break;
-      case 'Bus Tracking':
-        // Get.to(() => const BusTrackingPage());
-        break;
-      case 'Leave Request':
-        // Get.to(() => const LeaveRequestPage());
+      case 'Rate Us':
+        // Get.to(() => const RateUsPage());
         break;
       default:
         break;
@@ -133,8 +118,11 @@ class _DrawerMenuState extends State<DrawerMenu> {
                                   radius: 24,
                                   backgroundColor: AppColors.secondary
                                       .withValues(alpha: 0.2),
-                                  backgroundImage: _student?.photoUrl.isNotEmpty == true
-                                      ? CachedNetworkImageProvider(_student!.photoUrl)
+                                  backgroundImage:
+                                      _student?.photoUrl.isNotEmpty == true
+                                      ? CachedNetworkImageProvider(
+                                          _student!.photoUrl,
+                                        )
                                       : null,
                                   child: _student?.photoUrl.isNotEmpty == true
                                       ? null

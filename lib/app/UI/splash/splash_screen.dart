@@ -22,6 +22,7 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _scaleAnimation;
 
   TenantModel? _tenant;
+  bool _showBanner = false;
 
   @override
   void initState() {
@@ -54,9 +55,14 @@ class _SplashScreenState extends State<SplashScreen>
     }
 
     if (!mounted) return;
-    setState(() => _tenant = tenant);
+    setState(() {
+      _tenant = tenant;
+      if (tenant != null && tenant.schoolBannerUrl.isNotEmpty) {
+        _showBanner = true;
+      }
+    });
 
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(milliseconds: 1000));
     if (!mounted) return;
 
     Get.off(
@@ -118,9 +124,8 @@ class _SplashScreenState extends State<SplashScreen>
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final String bannerUrl = _tenant?.schoolBannerUrl ?? '';
-    print('bannerUrl : $bannerUrl');
 
-    if (bannerUrl.isNotEmpty) {
+    if (_showBanner && bannerUrl.isNotEmpty) {
       return Scaffold(
         backgroundColor: AppColors.colorWhite,
         body: Center(
@@ -133,10 +138,30 @@ class _SplashScreenState extends State<SplashScreen>
                 width: double.infinity,
                 height: double.infinity,
                 fit: BoxFit.cover,
-                placeholder: (context, url) =>
-                    SafeArea(child: _buildDefaultSplashBody(screenWidth)),
-                errorWidget: (context, url, error) =>
-                    SafeArea(child: _buildDefaultSplashBody(screenWidth)),
+                placeholder: (context, url) => Center(
+                  child: SizedBox(
+                    width: AppValues.iconSizeDefault,
+                    height: AppValues.iconSizeDefault,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.5,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        AppColors.primary,
+                      ),
+                    ),
+                  ),
+                ),
+                errorWidget: (context, url, error) => Center(
+                  child: SizedBox(
+                    width: AppValues.iconSizeDefault,
+                    height: AppValues.iconSizeDefault,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.5,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        AppColors.primary,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
           ),

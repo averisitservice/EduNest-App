@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edunest/app/UI/home/home_page.dart';
+import 'package:edunest/app/UI/login/tenant_page.dart';
 import 'package:edunest/app/UI/login/widgets/forgot_password_section.dart';
 import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/services/common_service.dart';
@@ -167,7 +168,10 @@ class _LoginPageState extends State<LoginPage> {
         surfaceTintColor: Colors.transparent,
         leadingWidth: 220,
         leading: InkWell(
-          onTap: () => Get.back(),
+          onTap: () async {
+            await CommonService.clearSharedPreferences();
+            Get.offAll(() => const TenantPage());
+          },
           child: Padding(
             padding: const EdgeInsets.only(left: 8),
             child: Row(

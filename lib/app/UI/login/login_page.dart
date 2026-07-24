@@ -5,6 +5,7 @@ import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/login_response_model.dart';
+import 'package:edunest/app/data/model/tenant_model.dart';
 import 'package:edunest/app/data/repository/auth_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_button.dart';
 import 'package:edunest/app/global_widgets/edunest_divider.dart';
@@ -38,10 +39,26 @@ class _LoginPageState extends State<LoginPage> {
 
   String version = '';
 
+  TenantModel? _tenant;
+
   @override
   void initState() {
     super.initState();
     getAppVersion();
+    _loadTenant();
+  }
+
+  /// Loads the school saved by the school-code lookup on the tenant page,
+  /// so the login screen shows that school's logo and name.
+  Future<void> _loadTenant() async {
+    TenantModel? tenant;
+    try {
+      tenant = await CommonService.getTenant();
+    } catch (_) {
+      tenant = null;
+    }
+    if (!mounted) return;
+    setState(() => _tenant = tenant);
   }
 
   Future<void> getAppVersion() async {
@@ -57,6 +74,34 @@ class _LoginPageState extends State<LoginPage> {
     _passwordController.dispose();
     _mobileController.dispose();
     super.dispose();
+  }
+
+  /// Prefers the school's mobile logo, then its main logo, then the bundled asset.
+  Widget _buildSchoolLogo() {
+    final String logoUrl = _tenant?.mobileLogoUrl.isNotEmpty == true
+        ? _tenant!.mobileLogoUrl
+        : (_tenant?.logoUrl ?? '');
+
+    if (logoUrl.isNotEmpty) {
+      return Image.network(
+        logoUrl,
+        width: 70,
+        height: 70,
+        fit: BoxFit.contain,
+        errorBuilder: (context, error, stackTrace) => _defaultLogo(),
+      );
+    }
+
+    return _defaultLogo();
+  }
+
+  Widget _defaultLogo() {
+    return Image.asset(
+      'assets/images/full-icon.png',
+      width: 70,
+      height: 70,
+      fit: BoxFit.contain,
+    );
   }
 
   Future<void> _handleLogin() async {
@@ -163,20 +208,15 @@ class _LoginPageState extends State<LoginPage> {
                     color: const Color(0xFF0F366F),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Center(
-                    child: Image.asset(
-                      'assets/images/full-icon.png',
-                      width: 70,
-                      height: 70,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
+                  child: Center(child: _buildSchoolLogo()),
                 ),
                 const SizedBox(height: 12),
-                const Text(
-                  'Amrita Vidyalayam, Ahmedabad',
+                Text(
+                  _tenant?.tenantName.isNotEmpty == true
+                      ? _tenant!.tenantName
+                      : 'Loading school...',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: AppValues.fontSizeBody,
                     color: AppColors.colorBlack,
                     fontWeight: FontWeight.bold,

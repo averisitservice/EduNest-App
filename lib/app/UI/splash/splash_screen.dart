@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:edunest/app/UI/home/home_page.dart';
 import 'package:edunest/app/UI/login/login_page.dart';
 import 'package:edunest/app/UI/login/tenant_page.dart';
 import 'package:edunest/app/core/services/common_service.dart';
@@ -48,10 +49,13 @@ class _SplashScreenState extends State<SplashScreen>
 
   Future<void> _startTimer() async {
     TenantModel? tenant;
+    String? sessionToken;
     try {
       tenant = await CommonService.getTenant();
+      sessionToken = await CommonService.getSessionToken();
     } catch (_) {
       tenant = null;
+      sessionToken = null;
     }
 
     if (!mounted) return;
@@ -65,8 +69,19 @@ class _SplashScreenState extends State<SplashScreen>
     await Future.delayed(const Duration(milliseconds: 1000));
     if (!mounted) return;
 
+    Widget nextScreen;
+    if (tenant != null) {
+      if (sessionToken != null && sessionToken.isNotEmpty) {
+        nextScreen = const HomePage();
+      } else {
+        nextScreen = const LoginPage();
+      }
+    } else {
+      nextScreen = const TenantPage();
+    }
+
     Get.off(
-      () => tenant != null ? const LoginPage() : const TenantPage(),
+      () => nextScreen,
       transition: Transition.fadeIn,
       duration: const Duration(milliseconds: 600),
     );

@@ -1,6 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edunest/app/UI/login/login_page.dart';
+import 'package:edunest/app/UI/profile/about_us_page.dart';
+import 'package:edunest/app/UI/profile/faq_page.dart';
 import 'package:edunest/app/UI/profile/profile_page.dart';
+import 'package:edunest/app/UI/profile/school_contacts_page.dart';
 import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
@@ -50,16 +53,16 @@ class _DrawerMenuState extends State<DrawerMenu> {
         Get.to(() => const ProfilePage());
         break;
       case 'School Contacts':
-        // Get.to(() => const SchoolContactsPage());
+        Get.to(() => const SchoolContactsPage());
         break;
       case 'Settings':
         // Get.to(() => const SettingsPage());
         break;
       case 'FAQ':
-        // Get.to(() => const FAQPage());
+        Get.to(() => const FAQPage());
         break;
       case 'About Us':
-        // Get.to(() => const AboutUsPage());
+        Get.to(() => const AboutUsPage());
         break;
       case 'Rate Us':
         // Get.to(() => const RateUsPage());

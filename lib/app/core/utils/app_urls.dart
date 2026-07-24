@@ -11,4 +11,7 @@ class AppUrls {
   // STUDENT
   static String getStudentDetailsById(int studentId) =>
       "$baseUrl/api/student/$studentId";
+
+  // SCHOOL
+  static String getSchoolContact() => "$baseUrl/api/school/contact";
 }

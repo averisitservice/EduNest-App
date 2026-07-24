@@ -4,7 +4,7 @@ import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/data/model/student_detail_model.dart';
 import 'package:edunest/app/data/model/student_model.dart';
-import 'package:edunest/app/data/repository/student_repo.dart';
+import 'package:edunest/app/data/repository/profile_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -16,7 +16,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final StudentRepo _studentRepo = StudentRepo();
+  final ProfileRepo _profileRepo = ProfileRepo();
 
   StudentDetailModel? _student;
   bool _isLoading = true;
@@ -40,7 +40,7 @@ class _ProfilePageState extends State<ProfilePage> {
       if (stored == null) {
         throw ApiException('Please log in again to view your profile.');
       }
-      final detail = await _studentRepo.getStudentDetailsById(stored.studentId);
+      final detail = await _profileRepo.getStudentDetailsById(stored.studentId);
       if (!mounted) return;
       setState(() => _student = detail);
     } on ApiException catch (e) {

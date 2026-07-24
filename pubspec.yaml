@@ -17,6 +17,7 @@ dependencies:
   get: ^4.7.3
   google_fonts: ^8.2.0
   package_info_plus: ^9.0.0
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:

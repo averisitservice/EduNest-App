@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edunest/app/UI/home/home_page.dart';
 import 'package:edunest/app/UI/login/widgets/forgot_password_section.dart';
 import 'package:edunest/app/core/network/error_helper.dart';
@@ -78,17 +79,16 @@ class _LoginPageState extends State<LoginPage> {
     final String logoUrl = _tenant?.mobileLogoUrl.isNotEmpty == true
         ? _tenant!.mobileLogoUrl
         : (_tenant?.logoUrl ?? '');
-
     if (logoUrl.isNotEmpty) {
-      return Image.network(
-        logoUrl,
+      return CachedNetworkImage(
+        imageUrl: logoUrl,
         width: 70,
         height: 70,
         fit: BoxFit.contain,
-        errorBuilder: (context, error, stackTrace) => _defaultLogo(),
+        placeholder: (context, url) => _defaultLogo(),
+        errorWidget: (context, url, error) => _defaultLogo(),
       );
     }
-
     return _defaultLogo();
   }
 

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edunest/app/UI/login/login_page.dart';
 import 'package:edunest/app/UI/login/tenant_page.dart';
 import 'package:edunest/app/core/services/common_service.dart';
@@ -65,19 +66,38 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 
-  Widget _buildSplashImage(double screenWidth) {
-    final String bannerUrl = _tenant?.schoolBannerUrl ?? '';
-
-    if (bannerUrl.isNotEmpty) {
-      return Image.network(
-        bannerUrl,
-        width: screenWidth * 0.75,
-        fit: BoxFit.contain,
-        errorBuilder: (context, error, stackTrace) => _defaultLogo(screenWidth),
-      );
-    }
-
-    return _defaultLogo(screenWidth);
+  Widget _buildDefaultSplashBody(double screenWidth) {
+    return Stack(
+      children: [
+        Center(
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: ScaleTransition(
+              scale: _scaleAnimation,
+              child: _defaultLogo(screenWidth),
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 40.0,
+          left: 0.0,
+          right: 0.0,
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: Center(
+              child: SizedBox(
+                width: AppValues.iconSizeDefault,
+                height: AppValues.iconSizeDefault,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.5,
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _defaultLogo(double screenWidth) {
@@ -97,44 +117,36 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
+    final String bannerUrl = _tenant?.schoolBannerUrl ?? '';
+    print('bannerUrl : $bannerUrl');
+
+    if (bannerUrl.isNotEmpty) {
+      return Scaffold(
+        backgroundColor: AppColors.colorWhite,
+        body: Center(
+          child: FadeTransition(
+            opacity: _fadeAnimation,
+            child: ScaleTransition(
+              scale: _scaleAnimation,
+              child: CachedNetworkImage(
+                imageUrl: bannerUrl,
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.cover,
+                placeholder: (context, url) =>
+                    SafeArea(child: _buildDefaultSplashBody(screenWidth)),
+                errorWidget: (context, url, error) =>
+                    SafeArea(child: _buildDefaultSplashBody(screenWidth)),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       backgroundColor: AppColors.colorWhite,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            Center(
-              child: FadeTransition(
-                opacity: _fadeAnimation,
-                child: ScaleTransition(
-                  scale: _scaleAnimation,
-                  child: _buildSplashImage(screenWidth),
-                ),
-              ),
-            ),
-            Positioned(
-              bottom: 40.0,
-              left: 0.0,
-              right: 0.0,
-              child: FadeTransition(
-                opacity: _fadeAnimation,
-                child: Center(
-                  child: SizedBox(
-                    width: AppValues.iconSizeDefault,
-                    height: AppValues.iconSizeDefault,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2.5,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        AppColors.primary,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: SafeArea(child: _buildDefaultSplashBody(screenWidth)),
     );
   }
 }

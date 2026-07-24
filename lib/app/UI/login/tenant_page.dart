@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edunest/app/UI/login/login_page.dart';
 import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/services/common_service.dart';
@@ -31,6 +32,18 @@ class _TenantPageState extends State<TenantPage> {
     super.dispose();
   }
 
+  void _warmImageCache(TenantModel tenant) {
+    for (final url in [
+      tenant.schoolBannerUrl,
+      tenant.mobileLogoUrl,
+      tenant.logoUrl,
+    ]) {
+      if (url.isNotEmpty) {
+        CachedNetworkImageProvider(url).resolve(const ImageConfiguration());
+      }
+    }
+  }
+
   Future<void> _handleProceed() async {
     final code = _schoolCodeController.text.trim();
 
@@ -49,6 +62,7 @@ class _TenantPageState extends State<TenantPage> {
     try {
       final TenantModel tenant = await _tenantRepo.getTenantBySchoolCode(code);
       await CommonService.setTenant(tenant);
+      _warmImageCache(tenant);
 
       if (!mounted) return;
 

@@ -27,17 +27,18 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _mobileController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
   final AuthRepo _authRepo = AuthRepo();
 
   bool _showPassword = true;
   bool _showForgotPassword = false;
   bool isLoading = false;
+  bool isSendingReset = false;
 
   String? usernameError;
   String? passwordError;
-  String? mobileError;
+  String? emailError;
 
   String version = '';
 
@@ -72,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
   void dispose() {
     _usernameController.dispose();
     _passwordController.dispose();
-    _mobileController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 
@@ -142,17 +143,36 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void _handleGetOtp() {
-    final mobile = _mobileController.text.trim();
+  Future<void> _handleForgotPassword() async {
+    final email = _emailController.text.trim();
+
+    if (email.isEmpty) {
+      setState(() => emailError = 'Please enter your registered email');
+      return;
+    }
 
     setState(() {
-      mobileError = mobile.isEmpty ? 'Please enter mobile number' : null;
+      isSendingReset = true;
+      emailError = null;
     });
 
-    if (mobile.isNotEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('OTP sent to $mobile')));
+    try {
+      final String data = await _authRepo.forgotPassword(email);
+
+      if (!mounted) return;
+
+      setState(() {
+        _showForgotPassword = false;
+        _emailController.clear();
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(data)));
+    } on ApiException catch (e) {
+      setState(() => emailError = e.message);
+    } finally {
+      if (mounted) {
+        setState(() => isSendingReset = false);
+      }
     }
   }
 
@@ -332,18 +352,19 @@ class _LoginPageState extends State<LoginPage> {
 
                       if (_showForgotPassword) ...[
                         ForgotPasswordSection(
-                          mobileController: _mobileController,
-                          mobileError: mobileError,
+                          emailController: _emailController,
+                          emailError: emailError,
+                          isLoading: isSendingReset,
                           onClose: () {
                             setState(() {
                               _showForgotPassword = false;
-                              mobileError = null;
+                              emailError = null;
                             });
                           },
-                          onGetOtp: _handleGetOtp,
+                          onSubmit: _handleForgotPassword,
                           onChanged: (val) {
-                            if (mobileError != null && val.trim().isNotEmpty) {
-                              setState(() => mobileError = null);
+                            if (emailError != null && val.trim().isNotEmpty) {
+                              setState(() => emailError = null);
                             }
                           },
                         ),

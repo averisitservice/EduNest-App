@@ -16,4 +16,16 @@ class AuthRepo extends BaseRepo {
       throw ErrorHelper.toApiException(e);
     }
   }
+
+  Future<String> forgotPassword(String email) async {
+    try {
+      var res = await DioClient.getInstance().post(
+        AppUrls.forgotPassword(),
+        data: {"email": email},
+      );
+      return res.data['data'] ?? 'A new password has been sent to your email.';
+    } catch (e) {
+      throw ErrorHelper.toApiException(e);
+    }
+  }
 }

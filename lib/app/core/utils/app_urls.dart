@@ -5,4 +5,6 @@ class AppUrls {
       "$baseUrl/auth/tenant/$schoolCode";
 
   static String login() => "$baseUrl/api/auth/login";
+
+  static String forgotPassword() => "$baseUrl/api/auth/forgot-password";
 }

@@ -5,18 +5,20 @@ import 'package:edunest/app/global_widgets/edunest_text_field.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPasswordSection extends StatelessWidget {
-  final TextEditingController mobileController;
-  final String? mobileError;
+  final TextEditingController emailController;
+  final String? emailError;
+  final bool isLoading;
   final VoidCallback onClose;
-  final VoidCallback onGetOtp;
+  final VoidCallback onSubmit;
   final ValueChanged<String>? onChanged;
 
   const ForgotPasswordSection({
     super.key,
-    required this.mobileController,
-    this.mobileError,
+    required this.emailController,
+    this.emailError,
+    this.isLoading = false,
     required this.onClose,
-    required this.onGetOtp,
+    required this.onSubmit,
     this.onChanged,
   });
 
@@ -59,7 +61,7 @@ class ForgotPasswordSection extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           const Text(
-            'To change your password, kindly share your registered mobile number',
+            'To reset your password, kindly share your registered email address',
             style: TextStyle(
               fontSize: AppValues.fontSizeSmall,
               color: AppColors.darkGrey,
@@ -68,19 +70,18 @@ class ForgotPasswordSection extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           EdunestTextField(
-            controller: mobileController,
-            labelText: 'Mobile Number',
-            hintText: 'Enter mobile number',
-            keyboardType: TextInputType.number,
-            maxLength: 10,
+            controller: emailController,
+            labelText: 'Email Address',
+            hintText: 'Enter registered email',
+            keyboardType: TextInputType.emailAddress,
             onChanged: onChanged,
           ),
-          if (mobileError != null) ...[
+          if (emailError != null) ...[
             const SizedBox(height: 6),
             Padding(
               padding: const EdgeInsets.only(left: 4),
               child: Text(
-                mobileError!,
+                emailError!,
                 style: const TextStyle(
                   color: AppColors.errorColor,
                   fontSize: AppValues.fontSizeSmall,
@@ -90,7 +91,11 @@ class ForgotPasswordSection extends StatelessWidget {
             ),
           ],
           const SizedBox(height: 16),
-          EdunestButton(title: 'Get OTP', onPressed: onGetOtp),
+          EdunestButton(
+            title: 'Send New Password',
+            isLoading: isLoading,
+            onPressed: onSubmit,
+          ),
         ],
       ),
     );

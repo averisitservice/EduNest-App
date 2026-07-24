@@ -48,8 +48,6 @@ class _LoginPageState extends State<LoginPage> {
     _loadTenant();
   }
 
-  /// Loads the school saved by the school-code lookup on the tenant page,
-  /// so the login screen shows that school's logo and name.
   Future<void> _loadTenant() async {
     TenantModel? tenant;
     try {
@@ -76,7 +74,6 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  /// Prefers the school's mobile logo, then its main logo, then the bundled asset.
   Widget _buildSchoolLogo() {
     final String logoUrl = _tenant?.mobileLogoUrl.isNotEmpty == true
         ? _tenant!.mobileLogoUrl

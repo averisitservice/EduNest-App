@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edunest/app/UI/login/login_page.dart';
 import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
+import 'package:edunest/app/data/model/student_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,6 +15,22 @@ class DrawerMenu extends StatefulWidget {
 }
 
 class _DrawerMenuState extends State<DrawerMenu> {
+  StudentModel? _student;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadStudent();
+  }
+
+  Future<void> _loadStudent() async {
+    final student = await CommonService.getStudent();
+    if (!mounted) return;
+    setState(() {
+      _student = student;
+    });
+  }
+
   final List<Map<String, dynamic>> _menuItems = const [
     {'title': 'Profile', 'icon': Icons.person_outline_rounded},
     {'title': 'Attendance', 'icon': Icons.calendar_today_outlined},
@@ -115,30 +133,35 @@ class _DrawerMenuState extends State<DrawerMenu> {
                                   radius: 24,
                                   backgroundColor: AppColors.secondary
                                       .withValues(alpha: 0.2),
-                                  child: const Icon(
-                                    Icons.person,
-                                    color: AppColors.primary,
-                                    size: 28,
-                                  ),
+                                  backgroundImage: _student?.photoUrl.isNotEmpty == true
+                                      ? CachedNetworkImageProvider(_student!.photoUrl)
+                                      : null,
+                                  child: _student?.photoUrl.isNotEmpty == true
+                                      ? null
+                                      : const Icon(
+                                          Icons.person,
+                                          color: AppColors.primary,
+                                          size: 28,
+                                        ),
                                 ),
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
-                                    children: const [
+                                    children: [
                                       Text(
-                                        'Harshid Patel',
-                                        style: TextStyle(
+                                        _student?.studentName ?? 'Loading...',
+                                        style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
                                           color: AppColors.darkText,
                                         ),
                                       ),
-                                      SizedBox(height: 3),
+                                      const SizedBox(height: 3),
                                       Text(
-                                        'harshid@gmail.com',
-                                        style: TextStyle(
+                                        _student?.email ?? '',
+                                        style: const TextStyle(
                                           fontSize: 13,
                                           color: AppColors.darkGrey,
                                         ),

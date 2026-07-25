@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:edunest/app/UI/login/login_page.dart';
+import 'package:edunest/app/UI/login/tenant_page.dart';
 import 'package:edunest/app/UI/profile/about_us_page.dart';
 import 'package:edunest/app/UI/profile/faq_page.dart';
 import 'package:edunest/app/UI/profile/profile_page.dart';
@@ -224,7 +224,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
                         child: InkWell(
                           onTap: () {
                             CommonService.clearSharedPreferences();
-                            Get.offAll(() => const LoginPage());
+                            Get.offAll(() => const TenantPage());
                           },
                           borderRadius: BorderRadius.circular(10),
                           child: Container(

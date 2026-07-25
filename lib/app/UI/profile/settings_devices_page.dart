@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
+import 'package:edunest/app/core/values/app_values.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -88,7 +89,7 @@ class _SettingsDevicesPageState extends State<SettingsDevicesPage> {
                       icon: const Icon(
                         Icons.chevron_left_rounded,
                         color: AppColors.primary,
-                        size: 32,
+                        size: AppValues.appBarIconSize,
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
@@ -119,11 +120,15 @@ class _SettingsDevicesPageState extends State<SettingsDevicesPage> {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
+                          color: AppColors.colorWhite,
+                          borderRadius: BorderRadius.circular(
+                            AppValues.radiusLarge,
+                          ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.04),
+                              color: AppColors.colorBlack.withValues(
+                                alpha: 0.04,
+                              ),
                               blurRadius: 10,
                               offset: const Offset(0, 4),
                             ),
@@ -192,18 +197,22 @@ class _SettingsDevicesPageState extends State<SettingsDevicesPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(AppValues.paddingSmall),
             decoration: BoxDecoration(
               color: AppColors.blueBackground,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppValues.radiusMedium),
             ),
-            child: Icon(icon, color: AppColors.primary, size: 20),
+            child: Icon(
+              icon,
+              color: AppColors.primary,
+              size: AppValues.iconSizeMedium,
+            ),
           ),
           const SizedBox(width: 14),
           Expanded(
             flex: 5,
             child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
+              padding: const EdgeInsets.only(top: AppValues.paddingSmall),
               child: Text(
                 label,
                 style: const TextStyle(
@@ -218,7 +227,7 @@ class _SettingsDevicesPageState extends State<SettingsDevicesPage> {
           Expanded(
             flex: 6,
             child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
+              padding: const EdgeInsets.only(top: AppValues.paddingSmall),
               child: Text(
                 value,
                 textAlign: TextAlign.end,
@@ -237,7 +246,7 @@ class _SettingsDevicesPageState extends State<SettingsDevicesPage> {
 
   Widget _buildDivider() {
     return Divider(
-      height: 1,
+      height: AppValues.dividerHeight,
       thickness: 0.5,
       indent: 16,
       endIndent: 16,

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
+import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/student_detail_model.dart';
 import 'package:edunest/app/data/model/student_model.dart';
 import 'package:edunest/app/data/repository/profile_repo.dart';
@@ -97,7 +98,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     icon: const Icon(
                       Icons.chevron_left_rounded,
                       color: AppColors.primary,
-                      size: 32,
+                      size: AppValues.appBarIconSize,
                     ),
                     onPressed: () => Navigator.pop(context),
                   ),
@@ -126,7 +127,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     : _errorMessage != null
                     ? Center(
                         child: Padding(
-                          padding: const EdgeInsets.all(24),
+                          padding: const EdgeInsets.all(
+                            AppValues.paddingXLarge,
+                          ),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -149,18 +152,26 @@ class _ProfilePageState extends State<ProfilePage> {
                       )
                     : SingleChildScrollView(
                         physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: AppValues.paddingLarge,
+                        ),
                         child: Column(
                           children: [
                             const SizedBox(height: 16),
                             Container(
-                              padding: const EdgeInsets.all(16),
+                              padding: const EdgeInsets.all(
+                                AppValues.paddingDefault,
+                              ),
                               decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(16),
+                                color: AppColors.colorWhite,
+                                borderRadius: BorderRadius.circular(
+                                  AppValues.radiusLarge,
+                                ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.04),
+                                    color: AppColors.colorBlack.withValues(
+                                      alpha: 0.04,
+                                    ),
                                     blurRadius: 10,
                                     offset: const Offset(0, 4),
                                   ),
@@ -193,7 +204,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           : const Icon(
                                               Icons.person_outline_rounded,
                                               color: AppColors.primary,
-                                              size: 32,
+                                              size: AppValues.appBarIconSize,
                                             ),
                                     ),
                                   ),
@@ -231,8 +242,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               title: 'Student Profile',
                               subtitle: 'Your personal profile details',
                               icon: Icons.badge_outlined,
-                              iconColor: const Color(0xFF0F65D6),
-                              bgColor: const Color(0xFFEAF4FC),
+                              iconColor: AppColors.primary,
+                              bgColor: AppColors.blueBackground,
                               details: [
                                 _buildDetailRow(
                                   'Admission No',
@@ -276,8 +287,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               title: 'Parent Details',
                               subtitle: 'Your family details',
                               icon: Icons.people_outline_rounded,
-                              iconColor: const Color(0xFF9C27B0),
-                              bgColor: const Color(0xFFF3E5F5),
+                              iconColor: AppColors.colorPurple,
+                              bgColor: AppColors.lightPurple,
                               details: [
                                 _buildDetailRow(
                                   'Father Name',
@@ -305,8 +316,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               title: 'Address Information',
                               subtitle: 'Your address details',
                               icon: Icons.location_on_outlined,
-                              iconColor: const Color(0xFF4CAF50),
-                              bgColor: const Color(0xFFE8F5E9),
+                              iconColor: AppColors.iconGreen,
+                              bgColor: AppColors.lightGreen,
                               details: [
                                 _buildDetailRow(
                                   'Address',
@@ -327,7 +338,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _buildDetailRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(vertical: AppValues.paddingSmall),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -372,11 +383,11 @@ class _ProfilePageState extends State<ProfilePage> {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        color: AppColors.colorWhite,
+        borderRadius: BorderRadius.circular(AppValues.radiusDefault),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: AppColors.colorBlack.withValues(alpha: 0.03),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -384,7 +395,7 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppValues.radiusDefault),
         child: InkWell(
           onTap: () {
             setState(() {
@@ -395,23 +406,29 @@ class _ProfilePageState extends State<ProfilePage> {
               }
             });
           },
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppValues.radiusDefault),
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(AppValues.paddingDefault),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(AppValues.margin_10),
                       decoration: BoxDecoration(
                         color: bgColor,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(
+                          AppValues.margin_10,
+                        ),
                       ),
-                      child: Icon(icon, color: iconColor, size: 24),
+                      child: Icon(
+                        icon,
+                        color: iconColor,
+                        size: AppValues.iconDefaultSize,
+                      ),
                     ),
-                    const SizedBox(width: 16),
+                    const SizedBox(width: AppValues.paddingDefault),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -440,7 +457,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ? Icons.keyboard_arrow_up_rounded
                           : Icons.keyboard_arrow_down_rounded,
                       color: AppColors.primary,
-                      size: 24,
+                      size: AppValues.iconDefaultSize,
                     ),
                   ],
                 ),

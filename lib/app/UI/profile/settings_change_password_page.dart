@@ -100,9 +100,9 @@ class _SettingsChangePasswordPageState
         message,
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: AppColors.primary,
-        colorText: Colors.white,
-        margin: const EdgeInsets.all(16),
-        borderRadius: 12,
+        colorText: AppColors.colorWhite,
+        margin: const EdgeInsets.all(AppValues.paddingDefault),
+        borderRadius: AppValues.radiusDefault,
       );
 
       Navigator.pop(context);
@@ -154,7 +154,7 @@ class _SettingsChangePasswordPageState
                       icon: const Icon(
                         Icons.chevron_left_rounded,
                         color: AppColors.primary,
-                        size: 32,
+                        size: AppValues.appBarIconSize,
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
@@ -199,7 +199,7 @@ class _SettingsChangePasswordPageState
                                 hintText: 'Enter current password',
                                 obscureText: _obscureCurrent,
                                 suffixIcon: IconButton(
-                                  iconSize: 20,
+                                  iconSize: AppValues.iconSize_20,
                                   icon: Icon(
                                     _obscureCurrent
                                         ? Icons.visibility_off_outlined
@@ -245,7 +245,7 @@ class _SettingsChangePasswordPageState
                                 hintText: 'Enter new password',
                                 obscureText: _obscureNew,
                                 suffixIcon: IconButton(
-                                  iconSize: 20,
+                                  iconSize: AppValues.iconSize_20,
                                   icon: Icon(
                                     _obscureNew
                                         ? Icons.visibility_off_outlined
@@ -289,7 +289,7 @@ class _SettingsChangePasswordPageState
                                 hintText: 'Confirm new password',
                                 obscureText: _obscureConfirm,
                                 suffixIcon: IconButton(
-                                  iconSize: 20,
+                                  iconSize: AppValues.iconSize_20,
                                   icon: Icon(
                                     _obscureConfirm
                                         ? Icons.visibility_off_outlined

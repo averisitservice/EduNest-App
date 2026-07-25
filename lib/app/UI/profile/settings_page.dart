@@ -1,6 +1,7 @@
 import 'package:edunest/app/UI/profile/settings_change_password_page.dart';
 import 'package:edunest/app/UI/profile/settings_devices_page.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
+import 'package:edunest/app/core/values/app_values.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -33,7 +34,7 @@ class SettingsPage extends StatelessWidget {
                       icon: const Icon(
                         Icons.chevron_left_rounded,
                         color: AppColors.primary,
-                        size: 32,
+                        size: AppValues.appBarIconSize,
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
@@ -93,13 +94,13 @@ class SettingsPage extends StatelessWidget {
     required VoidCallback onTap,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.only(bottom: AppValues.paddingDefault),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        color: AppColors.colorWhite,
+        borderRadius: BorderRadius.circular(AppValues.radiusLarge),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.colorBlack.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -107,10 +108,10 @@ class SettingsPage extends StatelessWidget {
       ),
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppValues.radiusLarge),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppValues.radiusLarge),
           child: Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 16.0,
@@ -119,12 +120,18 @@ class SettingsPage extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(AppValues.paddingMedium),
                   decoration: BoxDecoration(
                     color: AppColors.blueBackground,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(
+                      AppValues.radiusDefault,
+                    ),
                   ),
-                  child: Icon(icon, color: AppColors.primary, size: 24),
+                  child: Icon(
+                    icon,
+                    color: AppColors.primary,
+                    size: AppValues.iconDefaultSize,
+                  ),
                 ),
                 const SizedBox(width: 16),
                 Expanded(

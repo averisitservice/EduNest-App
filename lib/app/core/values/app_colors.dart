@@ -26,4 +26,10 @@ abstract class AppColors {
   static const Color inputFill = Color(0xFFFBFDFF);
   static const Color inputBorder = Color(0xFFD6E4F0);
   static const Color lightBackground = Color(0xFFF4F6F9);
+
+  // Profile Custom Colors
+  static const Color colorPurple = Color(0xFF9C27B0);
+  static const Color lightPurple = Color(0xFFF3E5F5);
+  static const Color lightGreen = Color(0xFFE8F5E9);
+  static const Color iconGreen = Color(0xFF4CAF50);
 }

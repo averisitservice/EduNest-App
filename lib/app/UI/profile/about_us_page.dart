@@ -1,4 +1,5 @@
 import 'package:edunest/app/core/values/app_colors.dart';
+import 'package:edunest/app/core/values/app_values.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -53,7 +54,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                       icon: const Icon(
                         Icons.chevron_left_rounded,
                         color: AppColors.primary,
-                        size: 32,
+                        size: AppValues.appBarIconSize,
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
@@ -111,7 +112,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                             const Text(
                               'Powered By',
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: AppValues.fontSizeSmall,
                                 color: AppColors.darkGrey,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -129,7 +130,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                                 Text(
                                   'EDUNEXT',
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: AppValues.fontSizeDefault,
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.primary.withValues(
                                       alpha: 0.9,

@@ -1,4 +1,5 @@
 import 'package:edunest/app/core/values/app_colors.dart';
+import 'package:edunest/app/core/values/app_values.dart';
 import 'package:flutter/material.dart';
 
 class FAQPage extends StatefulWidget {
@@ -70,7 +71,7 @@ class _FAQPageState extends State<FAQPage> {
                       icon: const Icon(
                         Icons.chevron_left_rounded,
                         color: AppColors.primary,
-                        size: 32,
+                        size: AppValues.appBarIconSize,
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
@@ -105,13 +106,17 @@ class _FAQPageState extends State<FAQPage> {
                     final bool isExpanded = _expandedIndex == index;
 
                     return Container(
-                      margin: const EdgeInsets.only(bottom: 16),
+                      margin: const EdgeInsets.only(
+                        bottom: AppValues.paddingDefault,
+                      ),
                       decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
+                        color: AppColors.colorWhite,
+                        borderRadius: BorderRadius.circular(
+                          AppValues.radiusDefault,
+                        ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.03),
+                            color: AppColors.colorBlack.withValues(alpha: 0.03),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -119,7 +124,9 @@ class _FAQPageState extends State<FAQPage> {
                       ),
                       child: Material(
                         color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(
+                          AppValues.radiusDefault,
+                        ),
                         child: InkWell(
                           onTap: () {
                             setState(() {
@@ -130,9 +137,13 @@ class _FAQPageState extends State<FAQPage> {
                               }
                             });
                           },
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(
+                            AppValues.radiusDefault,
+                          ),
                           child: Padding(
-                            padding: const EdgeInsets.all(16.0),
+                            padding: const EdgeInsets.all(
+                              AppValues.paddingDefault,
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -154,7 +165,7 @@ class _FAQPageState extends State<FAQPage> {
                                           ? Icons.remove_rounded
                                           : Icons.add_rounded,
                                       color: AppColors.darkText,
-                                      size: 24,
+                                      size: AppValues.iconDefaultSize,
                                     ),
                                   ],
                                 ),

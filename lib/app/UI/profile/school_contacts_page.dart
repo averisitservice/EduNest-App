@@ -1,5 +1,6 @@
 import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
+import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/school_contact_model.dart';
 import 'package:edunest/app/data/repository/profile_repo.dart';
 import 'package:flutter/material.dart';
@@ -73,7 +74,7 @@ class _SchoolContactsPageState extends State<SchoolContactsPage> {
                       icon: const Icon(
                         Icons.chevron_left_rounded,
                         color: AppColors.primary,
-                        size: 32,
+                        size: AppValues.appBarIconSize,
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
@@ -103,7 +104,9 @@ class _SchoolContactsPageState extends State<SchoolContactsPage> {
                     : _errorMessage != null
                     ? Center(
                         child: Padding(
-                          padding: const EdgeInsets.all(24),
+                          padding: const EdgeInsets.all(
+                            AppValues.paddingXLarge,
+                          ),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -115,7 +118,7 @@ class _SchoolContactsPageState extends State<SchoolContactsPage> {
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              const SizedBox(height: 12),
+                              const SizedBox(height: AppValues.paddingMedium),
                               TextButton(
                                 onPressed: _loadSchoolContact,
                                 child: const Text('Retry'),
@@ -130,7 +133,7 @@ class _SchoolContactsPageState extends State<SchoolContactsPage> {
                             child: SingleChildScrollView(
                               physics: const BouncingScrollPhysics(),
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 24.0,
+                                horizontal: AppValues.paddingXLarge,
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -225,7 +228,7 @@ class _SchoolContactsPageState extends State<SchoolContactsPage> {
     required String subtitle,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      padding: const EdgeInsets.symmetric(vertical: AppValues.paddingMedium),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

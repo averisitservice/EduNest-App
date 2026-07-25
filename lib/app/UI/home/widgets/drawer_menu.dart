@@ -4,6 +4,7 @@ import 'package:edunest/app/UI/profile/about_us_page.dart';
 import 'package:edunest/app/UI/profile/faq_page.dart';
 import 'package:edunest/app/UI/profile/profile_page.dart';
 import 'package:edunest/app/UI/profile/school_contacts_page.dart';
+import 'package:edunest/app/UI/profile/settings_page.dart';
 import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
@@ -56,7 +57,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
         Get.to(() => const SchoolContactsPage());
         break;
       case 'Settings':
-        // Get.to(() => const SettingsPage());
+        Get.to(() => const SettingsPage());
         break;
       case 'FAQ':
         Get.to(() => const FAQPage());

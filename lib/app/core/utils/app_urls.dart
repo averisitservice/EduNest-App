@@ -8,6 +8,8 @@ class AppUrls {
 
   static String forgotPassword() => "$baseUrl/api/auth/forgot-password";
 
+  static String changePassword() => "$baseUrl/api/auth/change-password";
+
   // STUDENT
   static String getStudentDetailsById(int studentId) =>
       "$baseUrl/api/student/$studentId";

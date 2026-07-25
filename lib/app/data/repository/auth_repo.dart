@@ -28,4 +28,22 @@ class AuthRepo extends BaseRepo {
       throw ErrorHelper.toApiException(e);
     }
   }
+
+  Future<String> changePassword(
+    String currentPassword,
+    String newPassword,
+  ) async {
+    try {
+      var res = await DioClient.getInstance().post(
+        AppUrls.changePassword(),
+        data: {
+          "currentPassword": currentPassword,
+          "newPassword": newPassword,
+        },
+      );
+      return res.data['data'] ?? 'Your password has been changed successfully.';
+    } catch (e) {
+      throw ErrorHelper.toApiException(e);
+    }
+  }
 }

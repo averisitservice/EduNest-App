@@ -78,9 +78,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _buildSchoolLogo() {
-    final String logoUrl = _tenant?.mobileLogoUrl.isNotEmpty == true
-        ? _tenant!.mobileLogoUrl
-        : (_tenant?.logoUrl ?? '');
+    final tenant = _tenant;
+    String logoUrl = '';
+    if (tenant != null) {
+      if (tenant.mobileLogoUrl.isNotEmpty) {
+        logoUrl = tenant.mobileLogoUrl;
+      } else {
+        logoUrl = tenant.logoUrl;
+      }
+    }
     if (logoUrl.isNotEmpty) {
       return CachedNetworkImage(
         imageUrl: logoUrl,
@@ -178,14 +184,15 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final tenant = _tenant;
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: AppColors.blueBackground,
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: AppColors.transparent,
         leadingWidth: 220,
         leading: InkWell(
           onTap: () async {
@@ -226,15 +233,15 @@ class _LoginPageState extends State<LoginPage> {
                   width: 90,
                   height: 90,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF0F366F),
+                    color: AppColors.darkBlueLogoBackground,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(child: _buildSchoolLogo()),
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  _tenant?.tenantName.isNotEmpty == true
-                      ? _tenant!.tenantName
+                  (tenant != null && tenant.tenantName.isNotEmpty)
+                      ? tenant.tenantName
                       : 'Loading school...',
                   textAlign: TextAlign.center,
                   style: const TextStyle(
@@ -254,7 +261,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   decoration: BoxDecoration(
                     color: AppColors.colorWhite,
-                    borderRadius: BorderRadius.circular(AppValues.radius_20),
+                    borderRadius: BorderRadius.circular(AppValues.radius20),
                     boxShadow: [
                       BoxShadow(
                         color: AppColors.primary.withValues(alpha: 0.06),
@@ -427,7 +434,7 @@ class _LoginPageState extends State<LoginPage> {
                               Icon(
                                 Icons.help_outline_rounded,
                                 color: AppColors.primary,
-                                size: AppValues.margin_18,
+                                size: AppValues.margin18,
                               ),
                               SizedBox(width: AppValues.paddingSmall),
                               Text(

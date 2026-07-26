@@ -21,15 +21,29 @@ abstract class AppColors {
   static const Color colorGreen = Colors.green;
   static const Color errorColor = Color(0xFFAB0B0B);
 
-  // Input & UI Component Colors
   static const Color darkText = Color(0xFF2D3748);
   static const Color inputFill = Color(0xFFFBFDFF);
   static const Color inputBorder = Color(0xFFD6E4F0);
   static const Color lightBackground = Color(0xFFF4F6F9);
 
-  // Profile Custom Colors
   static const Color colorPurple = Color(0xFF9C27B0);
   static const Color lightPurple = Color(0xFFF3E5F5);
   static const Color lightGreen = Color(0xFFE8F5E9);
   static const Color iconGreen = Color(0xFF4CAF50);
+
+  static const Color transparent = Colors.transparent;
+  static const Color darkBlueLogoBackground = Color(0xFF0F366F);
+
+  static const Color notificationGreenIcon = Color(0xFF16A34A);
+  static const Color notificationGreenBg = Color(0xFFF0FDF4);
+  static const Color notificationOrangeIcon = Color(0xFFEA580C);
+  static const Color notificationOrangeBg = Color(0xFFFFEDD5);
+  static const Color notificationPurpleIcon = Color(0xFF9333EA);
+  static const Color notificationPurpleBg = Color(0xFFF3E8FF);
+  static const Color notificationCyanIcon = Color(0xFF0891B2);
+  static const Color notificationCyanBg = Color(0xFFCFFAFE);
+  static const Color notificationRedIcon = Color(0xFFE11D48);
+  static const Color notificationRedBg = Color(0xFFFFE4E6);
+  static const Color notificationAmberIcon = Color(0xFFD97706);
+  static const Color notificationAmberBg = Color(0xFFFEF3C7);
 }

@@ -46,7 +46,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
   ];
 
   void _onMenuItemTap(String title) {
-    Navigator.pop(context); // Close drawer first
+    Navigator.pop(context);
 
     switch (title) {
       case 'My Profile':
@@ -66,7 +66,6 @@ class _DrawerMenuState extends State<DrawerMenu> {
         Get.to(() => const AboutUsPage());
         break;
       case 'Rate Us':
-        // Get.to(() => const RateUsPage());
         break;
       default:
         break;
@@ -76,12 +75,13 @@ class _DrawerMenuState extends State<DrawerMenu> {
   @override
   Widget build(BuildContext context) {
     final double drawerWidth = MediaQuery.of(context).size.width * 0.90;
+    final student = _student;
 
     return SizedBox(
       width: drawerWidth < 310 ? drawerWidth : 310,
       child: Drawer(
         backgroundColor: AppColors.colorWhite,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: AppColors.transparent,
         elevation: 16,
         child: SafeArea(
           child: Column(
@@ -97,13 +97,13 @@ class _DrawerMenuState extends State<DrawerMenu> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Material(
-                        color: Colors.transparent,
+                        color: AppColors.transparent,
                         borderRadius: BorderRadius.circular(
-                          AppValues.radius_16,
+                          AppValues.radius16,
                         ),
                         child: InkWell(
                           borderRadius: BorderRadius.circular(
-                            AppValues.radius_16,
+                            AppValues.radius16,
                           ),
                           child: Container(
                             padding: const EdgeInsets.all(
@@ -112,7 +112,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
                             decoration: BoxDecoration(
                               color: AppColors.blueBackground,
                               borderRadius: BorderRadius.circular(
-                                AppValues.radius_16,
+                                AppValues.radius16,
                               ),
                             ),
                             child: Row(
@@ -122,12 +122,12 @@ class _DrawerMenuState extends State<DrawerMenu> {
                                   backgroundColor: AppColors.secondary
                                       .withValues(alpha: 0.2),
                                   backgroundImage:
-                                      _student?.photoUrl.isNotEmpty == true
+                                      (student != null && student.photoUrl.isNotEmpty)
                                       ? CachedNetworkImageProvider(
-                                          _student!.photoUrl,
+                                          student.photoUrl,
                                         )
                                       : null,
-                                  child: _student?.photoUrl.isNotEmpty == true
+                                  child: (student != null && student.photoUrl.isNotEmpty)
                                       ? null
                                       : const Icon(
                                           Icons.person,
@@ -142,7 +142,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        _student?.studentName ?? 'Loading...',
+                                        student != null ? student.studentName : 'Loading...',
                                         style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
@@ -151,7 +151,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
                                       ),
                                       const SizedBox(height: 3),
                                       Text(
-                                        _student?.email ?? '',
+                                        student != null ? student.email : '',
                                         style: const TextStyle(
                                           fontSize: 13,
                                           color: AppColors.darkGrey,
@@ -177,7 +177,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
                           return Padding(
                             padding: const EdgeInsets.only(bottom: 8),
                             child: Material(
-                              color: Colors.transparent,
+                              color: AppColors.transparent,
                               borderRadius: BorderRadius.circular(10),
                               child: InkWell(
                                 onTap: () => _onMenuItemTap(title),
@@ -220,7 +220,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
                       ),
                       const SizedBox(height: 10),
                       Material(
-                        color: Colors.transparent,
+                        color: AppColors.transparent,
                         borderRadius: BorderRadius.circular(10),
                         child: InkWell(
                           onTap: () {

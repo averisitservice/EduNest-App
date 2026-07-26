@@ -53,9 +53,9 @@ class _HomePageState extends State<HomePage> {
       drawer: const DrawerMenu(),
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: AppColors.transparent,
         leading: Builder(
           builder: (context) => IconButton(
             icon: const Icon(

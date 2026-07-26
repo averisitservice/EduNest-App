@@ -112,7 +112,7 @@ class _TenantPageState extends State<TenantPage> {
                 ),
                 decoration: BoxDecoration(
                   color: AppColors.colorWhite,
-                  borderRadius: BorderRadius.circular(AppValues.radius_20),
+                  borderRadius: BorderRadius.circular(AppValues.radius20),
                   boxShadow: [
                     BoxShadow(
                       color: AppColors.primary.withValues(alpha: 0.06),
@@ -199,7 +199,7 @@ class _TenantPageState extends State<TenantPage> {
                             Icon(
                               Icons.help_outline_rounded,
                               color: AppColors.primary,
-                              size: AppValues.margin_18,
+                              size: AppValues.margin18,
                             ),
                             SizedBox(width: AppValues.paddingSmall),
                             Text(

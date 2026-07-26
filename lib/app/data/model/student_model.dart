@@ -8,7 +8,6 @@ class StudentModel {
   final String photoUrl;
   final bool isHostel;
 
-  // Current class placement
   final int classId;
   final String className;
   final int sectionId;

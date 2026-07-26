@@ -5,8 +5,7 @@ import 'package:edunest/app/core/values/app_values.dart';
 class EdunestDivider extends StatelessWidget {
   final Color dividerColor;
   final Color? color;
-  final double thickNess;
-  final double? thickness;
+  final double thickness;
   final double height;
   final String? text;
   final bool isDashed;
@@ -20,13 +19,12 @@ class EdunestDivider extends StatelessWidget {
     super.key,
     this.dividerColor = AppColors.borderGrey,
     this.color,
-    this.thickNess = 0.8,
-    this.thickness,
+    this.thickness = 0.8,
     this.height = 10.0,
     this.text,
     this.isDashed = false,
-    this.dashWidth = AppValues.margin_5,
-    this.dashSpace = AppValues.margin_4,
+    this.dashWidth = AppValues.margin5,
+    this.dashSpace = AppValues.margin4,
     this.width,
     this.margin,
     this.padding,
@@ -35,7 +33,7 @@ class EdunestDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color effectiveColor = color ?? dividerColor;
-    final double effectiveThickness = thickness ?? thickNess;
+    final double effectiveThickness = thickness;
 
     final Widget lineWidget = isDashed && dashSpace > 0
         ? CustomPaint(
@@ -56,8 +54,9 @@ class EdunestDivider extends StatelessWidget {
           );
 
     Widget dividerChild;
+    final String? textVal = text;
 
-    if (text != null && text!.isNotEmpty) {
+    if (textVal != null && textVal.isNotEmpty) {
       dividerChild = Row(
         children: [
           Expanded(child: lineWidget),
@@ -66,7 +65,7 @@ class EdunestDivider extends StatelessWidget {
                 padding ??
                 const EdgeInsets.symmetric(horizontal: AppValues.paddingMedium),
             child: Text(
-              text!,
+              textVal,
               style: TextStyle(
                 color: effectiveColor,
                 fontSize: AppValues.fontSizeSmall,

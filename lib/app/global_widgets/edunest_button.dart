@@ -4,7 +4,6 @@ import 'package:edunest/app/core/values/app_values.dart';
 
 class EdunestButton extends StatelessWidget {
   final String title;
-  final String? text;
   final VoidCallback? onPressed;
   final bool disabled;
   final bool isLoading;
@@ -26,7 +25,6 @@ class EdunestButton extends StatelessWidget {
   const EdunestButton({
     super.key,
     this.title = '',
-    this.text,
     this.onPressed,
     this.disabled = false,
     this.isLoading = false,
@@ -39,7 +37,7 @@ class EdunestButton extends StatelessWidget {
     this.borderWidth = 1,
     this.fontSize = AppValues.fontSizeDefault,
     this.verticalPadding = AppValues.paddingMedium,
-    this.radius = AppValues.radius_20,
+    this.radius = AppValues.radius20,
     this.width,
     this.height,
     this.icon,
@@ -49,7 +47,6 @@ class EdunestButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isOutlined = borderColor != null;
-    final String buttonTitle = text ?? title;
 
     final List<Color> defaultGradient = [
       disabled ? AppColors.colorGrey : (backgroundColor ?? AppColors.primary),
@@ -71,7 +68,7 @@ class EdunestButton extends StatelessWidget {
               )
             : null,
         color: isOutlined
-            ? Colors.transparent
+            ? AppColors.transparent
             : (!useGradient
                   ? (disabled
                         ? AppColors.colorGrey
@@ -92,8 +89,8 @@ class EdunestButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: (disabled || isLoading) ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.transparent,
-          shadowColor: Colors.transparent,
+          backgroundColor: AppColors.transparent,
+          shadowColor: AppColors.transparent,
           elevation: 0,
           padding: EdgeInsets.symmetric(vertical: verticalPadding),
           shape: RoundedRectangleBorder(
@@ -121,7 +118,7 @@ class EdunestButton extends StatelessWidget {
                     const SizedBox(width: AppValues.paddingSmall),
                   ],
                   Text(
-                    buttonTitle,
+                    title,
                     style: TextStyle(
                       fontSize: fontSize,
                       color: disabled ? AppColors.colorWhite : textColor,

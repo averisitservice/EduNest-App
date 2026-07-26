@@ -42,7 +42,6 @@ class _AboutUsPageState extends State<AboutUsPage> {
         child: SafeArea(
           child: Column(
             children: [
-              // Custom Header/AppBar
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 8.0,
@@ -104,7 +103,6 @@ class _AboutUsPageState extends State<AboutUsPage> {
                         subtitle: 'https://averisitservices.in',
                       ),
                       const Spacer(),
-                      // Bottom Brand Section
                       Center(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,

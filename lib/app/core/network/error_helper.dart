@@ -12,7 +12,11 @@ class ApiException implements Exception {
 class ErrorHelper {
   static ApiException toApiException(Object error) {
     if (error is DioException) {
-      final data = error.response?.data;
+      final response = error.response;
+      dynamic data;
+      if (response != null) {
+        data = response.data;
+      }
       if (data is Map &&
           data['errors'] is List &&
           (data['errors'] as List).isNotEmpty) {

@@ -79,6 +79,47 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final student = _student;
+
+    String studentNameVal = '-';
+    String displayClassVal = '-';
+    String admissionNoVal = '-';
+    String dateOfBirthVal = '-';
+    String rollNoVal = '-';
+    String aadharNoVal = '-';
+    String genderVal = '-';
+    String mobileNoVal = '-';
+    String emailVal = '-';
+    String classTeacherNameVal = '-';
+
+    String fatherNameVal = '-';
+    String motherNameVal = '-';
+    String parentMobileVal = '-';
+    String parentEmailVal = '-';
+    String parentAadharVal = '-';
+
+    String addressVal = '-';
+
+    if (student != null) {
+      studentNameVal = _value(student.studentName);
+      displayClassVal = _value(student.displayClass);
+      admissionNoVal = _value(student.admissionNo);
+      dateOfBirthVal = _formatDate(student.dateOfBirth);
+      rollNoVal = _value(student.rollNo);
+      aadharNoVal = _value(student.aadharNo);
+      genderVal = _formatGender(student.gender);
+      mobileNoVal = _value(student.mobileNo);
+      emailVal = _value(student.email);
+      classTeacherNameVal = _value(student.classTeacherName);
+
+      fatherNameVal = _value(student.fatherName);
+      motherNameVal = _value(student.motherName);
+      parentMobileVal = _value(student.parentMobile);
+      parentEmailVal = _value(student.parentEmail);
+      parentAadharVal = _value(student.parentAadhar);
+
+      addressVal = _value(student.address);
+    }
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -193,13 +234,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                       radius: 32,
                                       backgroundColor: AppColors.blueBackground,
                                       backgroundImage:
-                                          _student?.photoUrl.isNotEmpty == true
+                                          (student != null && student.photoUrl.isNotEmpty)
                                           ? CachedNetworkImageProvider(
-                                              _student!.photoUrl,
+                                              student.photoUrl,
                                             )
                                           : null,
                                       child:
-                                          _student?.photoUrl.isNotEmpty == true
+                                          (student != null && student.photoUrl.isNotEmpty)
                                           ? null
                                           : const Icon(
                                               Icons.person_outline_rounded,
@@ -215,7 +256,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          _value(_student?.studentName),
+                                          studentNameVal,
                                           style: const TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
@@ -224,7 +265,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         ),
                                         const SizedBox(height: 4),
                                         Text(
-                                          '${_value(_student?.displayClass)}  •  ${_value(_student?.admissionNo)}',
+                                          '$displayClassVal  •  $admissionNoVal',
                                           style: const TextStyle(
                                             fontSize: 13,
                                             fontWeight: FontWeight.w500,
@@ -247,39 +288,39 @@ class _ProfilePageState extends State<ProfilePage> {
                               details: [
                                 _buildDetailRow(
                                   'Admission No',
-                                  _value(_student?.admissionNo),
+                                  admissionNoVal,
                                 ),
                                 _buildDetailRow(
                                   'Date of Birth',
-                                  _formatDate(_student?.dateOfBirth),
+                                  dateOfBirthVal,
                                 ),
                                 _buildDetailRow(
                                   'Class',
-                                  _value(_student?.displayClass),
+                                  displayClassVal,
                                 ),
                                 _buildDetailRow(
                                   'Roll Number',
-                                  _value(_student?.rollNo),
+                                  rollNoVal,
                                 ),
                                 _buildDetailRow(
                                   'Aadhaar Number',
-                                  _value(_student?.aadharNo),
+                                  aadharNoVal,
                                 ),
                                 _buildDetailRow(
                                   'Gender',
-                                  _formatGender(_student?.gender),
+                                  genderVal,
                                 ),
                                 _buildDetailRow(
                                   'Mobile Number',
-                                  _value(_student?.mobileNo),
+                                  mobileNoVal,
                                 ),
                                 _buildDetailRow(
                                   'Email ID',
-                                  _value(_student?.email),
+                                  emailVal,
                                 ),
                                 _buildDetailRow(
                                   'Class Teacher',
-                                  _value(_student?.classTeacherName),
+                                  classTeacherNameVal,
                                 ),
                               ],
                             ),
@@ -292,23 +333,23 @@ class _ProfilePageState extends State<ProfilePage> {
                               details: [
                                 _buildDetailRow(
                                   'Father Name',
-                                  _value(_student?.fatherName),
+                                  fatherNameVal,
                                 ),
                                 _buildDetailRow(
                                   'Mother Name',
-                                  _value(_student?.motherName),
+                                  motherNameVal,
                                 ),
                                 _buildDetailRow(
                                   'Primary Phone',
-                                  _value(_student?.parentMobile),
+                                  parentMobileVal,
                                 ),
                                 _buildDetailRow(
                                   'Parent Email',
-                                  _value(_student?.parentEmail),
+                                  parentEmailVal,
                                 ),
                                 _buildDetailRow(
                                   'Parent Aadhaar',
-                                  _value(_student?.parentAadhar),
+                                  parentAadharVal,
                                 ),
                               ],
                             ),
@@ -321,7 +362,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               details: [
                                 _buildDetailRow(
                                   'Address',
-                                  _value(_student?.address),
+                                  addressVal,
                                 ),
                               ],
                             ),
@@ -394,7 +435,7 @@ class _ProfilePageState extends State<ProfilePage> {
         ],
       ),
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         borderRadius: BorderRadius.circular(AppValues.radiusDefault),
         child: InkWell(
           onTap: () {
@@ -415,11 +456,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.all(AppValues.margin_10),
+                      padding: const EdgeInsets.all(AppValues.margin10),
                       decoration: BoxDecoration(
                         color: bgColor,
                         borderRadius: BorderRadius.circular(
-                          AppValues.margin_10,
+                          AppValues.margin10,
                         ),
                       ),
                       child: Icon(

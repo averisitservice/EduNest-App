@@ -58,7 +58,6 @@ class _SettingsDevicesPageState extends State<SettingsDevicesPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Compute Screen Resolution dynamically
     final size = MediaQuery.of(context).size;
     final pixelRatio = MediaQuery.of(context).devicePixelRatio;
     final resolution =
@@ -77,7 +76,6 @@ class _SettingsDevicesPageState extends State<SettingsDevicesPage> {
         child: SafeArea(
           child: Column(
             children: [
-              // Custom Header Row
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 8.0,

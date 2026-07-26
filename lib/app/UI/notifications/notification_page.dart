@@ -27,8 +27,8 @@ class _NotificationPageState extends State<NotificationPage> {
       'time': '09:15 AM',
       'isUnread': true,
       'icon': Icons.calendar_today_rounded,
-      'iconColor': const Color(0xFF16A34A),
-      'iconBgColor': const Color(0xFFF0FDF4),
+      'iconColor': AppColors.notificationGreenIcon,
+      'iconBgColor': AppColors.notificationGreenBg,
     },
     {
       'title': 'Fee Receipt Generated',
@@ -36,8 +36,8 @@ class _NotificationPageState extends State<NotificationPage> {
       'time': '08:45 AM',
       'isUnread': false,
       'icon': Icons.currency_rupee_rounded,
-      'iconColor': const Color(0xFFEA580C),
-      'iconBgColor': const Color(0xFFFFEDD5),
+      'iconColor': AppColors.notificationOrangeIcon,
+      'iconBgColor': AppColors.notificationOrangeBg,
     },
     {
       'title': 'School Announcement',
@@ -45,8 +45,8 @@ class _NotificationPageState extends State<NotificationPage> {
       'time': 'Yesterday',
       'isUnread': false,
       'icon': Icons.campaign_outlined,
-      'iconColor': const Color(0xFF9333EA),
-      'iconBgColor': const Color(0xFFF3E8FF),
+      'iconColor': AppColors.notificationPurpleIcon,
+      'iconBgColor': AppColors.notificationPurpleBg,
     },
     {
       'title': 'Bus Update',
@@ -54,8 +54,8 @@ class _NotificationPageState extends State<NotificationPage> {
       'time': 'Yesterday',
       'isUnread': false,
       'icon': Icons.directions_bus_rounded,
-      'iconColor': const Color(0xFF0891B2),
-      'iconBgColor': const Color(0xFFCFFAFE),
+      'iconColor': AppColors.notificationCyanIcon,
+      'iconBgColor': AppColors.notificationCyanBg,
     },
     {
       'title': 'Exam Schedule Published',
@@ -63,8 +63,8 @@ class _NotificationPageState extends State<NotificationPage> {
       'time': '22 Jul 2026',
       'isUnread': false,
       'icon': Icons.assignment_outlined,
-      'iconColor': const Color(0xFFE11D48),
-      'iconBgColor': const Color(0xFFFFE4E6),
+      'iconColor': AppColors.notificationRedIcon,
+      'iconBgColor': AppColors.notificationRedBg,
     },
     {
       'title': 'Circular Published',
@@ -72,8 +72,8 @@ class _NotificationPageState extends State<NotificationPage> {
       'time': '21 Jul 2026',
       'isUnread': false,
       'icon': Icons.star_outline_rounded,
-      'iconColor': const Color(0xFFD97706),
-      'iconBgColor': const Color(0xFFFEF3C7),
+      'iconColor': AppColors.notificationAmberIcon,
+      'iconBgColor': AppColors.notificationAmberBg,
     },
   ];
 
@@ -83,9 +83,9 @@ class _NotificationPageState extends State<NotificationPage> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle.dark,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
-        surfaceTintColor: Colors.transparent,
+        surfaceTintColor: AppColors.transparent,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_rounded, color: AppColors.darkText),
           onPressed: () => Navigator.pop(context),
@@ -121,7 +121,7 @@ class _NotificationPageState extends State<NotificationPage> {
                 Container(
                   decoration: BoxDecoration(
                     color: AppColors.colorWhite,
-                    borderRadius: BorderRadius.circular(AppValues.radius_20),
+                    borderRadius: BorderRadius.circular(AppValues.radius20),
                     boxShadow: [
                       BoxShadow(
                         color: AppColors.colorBlack.withValues(alpha: 0.03),
@@ -161,7 +161,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                 shape: BoxShape.circle,
                                 color: isUnread
                                     ? AppColors.primary
-                                    : Colors.transparent,
+                                    : AppColors.transparent,
                               ),
                             ),
                             Container(

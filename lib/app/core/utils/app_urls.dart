@@ -10,10 +10,8 @@ class AppUrls {
 
   static String changePassword() => "$baseUrl/api/auth/change-password";
 
-  // STUDENT
   static String getStudentDetailsById(int studentId) =>
       "$baseUrl/api/student/$studentId";
 
-  // SCHOOL
   static String getSchoolContact() => "$baseUrl/api/school/contact";
 }

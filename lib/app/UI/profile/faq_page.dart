@@ -123,7 +123,7 @@ class _FAQPageState extends State<FAQPage> {
                         ],
                       ),
                       child: Material(
-                        color: Colors.transparent,
+                        color: AppColors.transparent,
                         borderRadius: BorderRadius.circular(
                           AppValues.radiusDefault,
                         ),

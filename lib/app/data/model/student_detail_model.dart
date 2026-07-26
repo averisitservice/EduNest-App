@@ -5,7 +5,6 @@ class StudentDetailModel {
   final String studentName;
   final String photoUrl;
 
-  // Personal
   final String dateOfBirth;
   final String gender;
   final String aadharNo;
@@ -13,7 +12,6 @@ class StudentDetailModel {
   final String mobileNo;
   final bool isHostel;
 
-  // Class placement
   final int classId;
   final String className;
   final int sectionId;
@@ -22,14 +20,12 @@ class StudentDetailModel {
   final String rollNo;
   final String classTeacherName;
 
-  // Parents
   final String fatherName;
   final String motherName;
   final String parentMobile;
   final String parentEmail;
   final String parentAadhar;
 
-  // Full address on one line, e.g. "Block A, Pune, Maharashtra - 411001"
   final String address;
 
   const StudentDetailModel({

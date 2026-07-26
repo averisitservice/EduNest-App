@@ -107,7 +107,7 @@ class SettingsPage extends StatelessWidget {
         ],
       ),
       child: Material(
-        color: Colors.transparent,
+        color: AppColors.transparent,
         borderRadius: BorderRadius.circular(AppValues.radiusLarge),
         child: InkWell(
           onTap: onTap,

@@ -29,7 +29,7 @@ class ForgotPasswordSection extends StatelessWidget {
       padding: const EdgeInsets.all(AppValues.paddingMedium),
       decoration: BoxDecoration(
         color: AppColors.lightBackground,
-        borderRadius: BorderRadius.circular(AppValues.radius_12),
+        borderRadius: BorderRadius.circular(AppValues.radius12),
         border: Border.all(
           color: AppColors.borderGrey.withValues(alpha: 0.5),
           width: 1,

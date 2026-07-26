@@ -138,7 +138,8 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
-    final String bannerUrl = _tenant?.schoolBannerUrl ?? '';
+    final tenant = _tenant;
+    final String bannerUrl = tenant != null ? tenant.schoolBannerUrl : '';
 
     if (_showBanner && bannerUrl.isNotEmpty) {
       return Scaffold(

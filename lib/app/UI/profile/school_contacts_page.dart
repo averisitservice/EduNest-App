@@ -49,6 +49,22 @@ class _SchoolContactsPageState extends State<SchoolContactsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final contact = _contact;
+    String schoolNameVal = '-';
+    String addressVal = '-';
+    String contactNameVal = '-';
+    String contactPhoneVal = '-';
+    String contactEmailVal = '-';
+    String websiteVal = '-';
+
+    if (contact != null) {
+      schoolNameVal = _value(contact.schoolName);
+      addressVal = _value(contact.address);
+      contactNameVal = _value(contact.contactName);
+      contactPhoneVal = _value(contact.contactPhone);
+      contactEmailVal = _value(contact.contactEmail);
+      websiteVal = _value(contact.website);
+    }
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -62,7 +78,6 @@ class _SchoolContactsPageState extends State<SchoolContactsPage> {
         child: SafeArea(
           child: Column(
             children: [
-              // Custom Header/AppBar
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 8.0,
@@ -137,42 +152,41 @@ class _SchoolContactsPageState extends State<SchoolContactsPage> {
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _buildInfoTile(
-                                    icon: Icons.school_outlined,
-                                    title: 'School Name',
-                                    subtitle: _value(_contact?.schoolName),
-                                  ),
-                                  _buildInfoTile(
-                                    icon: Icons.location_on_outlined,
-                                    title: 'Address',
-                                    subtitle: _value(_contact?.address),
-                                  ),
-                                  _buildInfoTile(
-                                    icon: Icons.person_outline_rounded,
-                                    title: 'Contact Person',
-                                    subtitle: _value(_contact?.contactName),
-                                  ),
-                                  _buildInfoTile(
-                                    icon: Icons.phone_outlined,
-                                    title: 'Contact No.',
-                                    subtitle: _value(_contact?.contactPhone),
-                                  ),
-                                  _buildInfoTile(
-                                    icon: Icons.mail_outline_rounded,
-                                    title: 'Email Address',
-                                    subtitle: _value(_contact?.contactEmail),
-                                  ),
-                                  _buildInfoTile(
-                                    icon: Icons.language_rounded,
-                                    title: 'Website',
-                                    subtitle: _value(_contact?.website),
-                                  ),
-                                ],
+                                  children: [
+                                    _buildInfoTile(
+                                      icon: Icons.school_outlined,
+                                      title: 'School Name',
+                                      subtitle: schoolNameVal,
+                                    ),
+                                    _buildInfoTile(
+                                      icon: Icons.location_on_outlined,
+                                      title: 'Address',
+                                      subtitle: addressVal,
+                                    ),
+                                    _buildInfoTile(
+                                      icon: Icons.person_outline_rounded,
+                                      title: 'Contact Person',
+                                      subtitle: contactNameVal,
+                                    ),
+                                    _buildInfoTile(
+                                      icon: Icons.phone_outlined,
+                                      title: 'Contact No.',
+                                      subtitle: contactPhoneVal,
+                                    ),
+                                    _buildInfoTile(
+                                      icon: Icons.mail_outline_rounded,
+                                      title: 'Email Address',
+                                      subtitle: contactEmailVal,
+                                    ),
+                                    _buildInfoTile(
+                                      icon: Icons.language_rounded,
+                                      title: 'Website',
+                                      subtitle: websiteVal,
+                                    ),
+                                  ],
                               ),
                             ),
                           ),
-                          // Bottom Brand Section
                           Padding(
                             padding: const EdgeInsets.only(bottom: 5, top: 5),
                             child: Column(

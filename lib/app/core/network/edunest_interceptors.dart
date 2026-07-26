@@ -36,7 +36,8 @@ class EdunestInterceptors extends Interceptor {
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
-    if (err.response?.statusCode == 401) {
+    final response = err.response;
+    if (response != null && response.statusCode == 401) {
       await CommonService.clearSharedPreferences();
       Get.offAll(() => const TenantPage());
     }

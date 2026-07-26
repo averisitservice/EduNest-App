@@ -108,7 +108,6 @@ class _SettingsChangePasswordPageState
       Navigator.pop(context);
     } on ApiException catch (e) {
       if (!mounted) return;
-      // Show the backend message against the most relevant field.
       final msg = e.message.toLowerCase();
       setState(() {
         if (msg.contains('current')) {
@@ -199,7 +198,7 @@ class _SettingsChangePasswordPageState
                                 hintText: 'Enter current password',
                                 obscureText: _obscureCurrent,
                                 suffixIcon: IconButton(
-                                  iconSize: AppValues.iconSize_20,
+                                  iconSize: AppValues.iconSize20,
                                   icon: Icon(
                                     _obscureCurrent
                                         ? Icons.visibility_off_outlined
@@ -245,7 +244,7 @@ class _SettingsChangePasswordPageState
                                 hintText: 'Enter new password',
                                 obscureText: _obscureNew,
                                 suffixIcon: IconButton(
-                                  iconSize: AppValues.iconSize_20,
+                                  iconSize: AppValues.iconSize20,
                                   icon: Icon(
                                     _obscureNew
                                         ? Icons.visibility_off_outlined
@@ -289,7 +288,7 @@ class _SettingsChangePasswordPageState
                                 hintText: 'Confirm new password',
                                 obscureText: _obscureConfirm,
                                 suffixIcon: IconButton(
-                                  iconSize: AppValues.iconSize_20,
+                                  iconSize: AppValues.iconSize20,
                                   icon: Icon(
                                     _obscureConfirm
                                         ? Icons.visibility_off_outlined
@@ -332,7 +331,7 @@ class _SettingsChangePasswordPageState
                               EdunestButton(
                                 title: 'Save Password',
                                 onPressed: _validateAndSubmit,
-                                radius: AppValues.radius_12,
+                                radius: AppValues.radius12,
                                 gradientColors: const [
                                   AppColors.primary,
                                   AppColors.primaryDark,

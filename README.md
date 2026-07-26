@@ -87,3 +87,27 @@ The project is built to support different runtime environments (Dev, UAT, Produc
 * **Production API Environment**: `https://api.mynovian.com`
 
 Configured env values can be swapped dynamically within the initialization sequence inside `lib/flavors/edunest_environment.dart`.
+
+---
+
+## 🎨 Coding & Design Standards
+
+To ensure a highly professional, clean, and maintainable codebase, the following standards are strictly enforced:
+
+### 1. Centralized Color Theme
+- All visual elements must resolve their color definitions through the `AppColors` abstraction.
+- Raw `Color(0xFF...)` and direct references to framework presets (e.g. `Colors.transparent`, `Colors.black`) are not allowed in components or views.
+- Centralizing color values ensures a unified branding theme and makes updates effortless.
+
+### 2. Standardized Null Safety Handling (No `?.` or `!.`)
+- Use Dart's local variable promotion instead of inline null-aware (`?.`) or non-null assertion (`!.`) operators.
+- To access fields of a nullable instance, assign it to a local variable (`final foo = _foo;`), check for `null` via standard conditions (`if (foo != null)`), and work with the promoted non-nullable variable.
+- For default fallbacks, use clean ternary/conditional expressions or fallback arguments.
+
+### 3. Comment-Free Codebase
+- Avoid cluttering the source files with inline developer comments or deactivated block code. 
+- The codebase relies on self-documenting code, descriptive naming, and clean structures rather than comment lines.
+
+### 4. CamelCase Variable Naming
+- All constant declarations and configurations must follow strict `camelCase` naming conventions.
+- Snake_case names (e.g. `margin_10`, `radius_20`) are replaced with standard professional camelCase representations (e.g. `margin10`, `radius20`).

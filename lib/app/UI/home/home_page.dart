@@ -47,6 +47,19 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final student = _student;
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(color: AppColors.primary),
+        ),
+      );
+    }
+    if (student == null) {
+      return const Scaffold(
+        body: Center(child: Text('Student details not found')),
+      );
+    }
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       extendBody: true,
@@ -93,19 +106,27 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               Positioned(
-                right: 12,
-                top: 12,
+                right: 6,
+                top: 6,
                 child: Container(
-                  width: 8,
-                  height: 8,
+                  padding: const EdgeInsets.all(4),
                   decoration: const BoxDecoration(
                     color: AppColors.errorColor,
                     shape: BoxShape.circle,
+                  ),
+                  child: const Text(
+                    '3',
+                    style: TextStyle(
+                      color: AppColors.colorWhite,
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
             ],
           ),
+          const SizedBox(width: 8),
         ],
       ),
       body: Container(
@@ -118,17 +139,24 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         child: SafeArea(
-          child: _isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(color: AppColors.primary),
-                )
-              : student == null
-              ? const SizedBox.shrink()
-              : SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.all(AppValues.paddingDefault),
-                  child: Column(children: [_buildProfileHeaderCard(student)]),
-                ),
+          bottom: false,
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 8.0,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildProfileHeaderCard(student),
+                const SizedBox(height: 20),
+                _buildFeatureGrid(),
+                const SizedBox(height: 20),
+                _buildStatsRow(),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -136,10 +164,10 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildProfileHeaderCard(StudentModel student) {
     return Container(
-      padding: const EdgeInsets.all(AppValues.paddingMedium),
+      padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(AppValues.radiusXLarge),
+        borderRadius: BorderRadius.circular(24.0),
         boxShadow: [
           BoxShadow(
             color: AppColors.colorBlack.withValues(alpha: 0.04),
@@ -148,68 +176,388 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      child: Row(
+      child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: AppColors.primary.withValues(alpha: 0.2),
-                width: 2.5,
-              ),
-            ),
-            child: CircleAvatar(
-              radius: 36,
-              backgroundColor: AppColors.blueBackground,
-              backgroundImage: student.photoUrl.isNotEmpty
-                  ? CachedNetworkImageProvider(student.photoUrl)
-                  : null,
-              child: student.photoUrl.isEmpty
-                  ? const Icon(
-                      Icons.person_outline_rounded,
-                      color: AppColors.primary,
-                      size: AppValues.appBarIconSize,
-                    )
-                  : null,
+          Positioned(
+            right: -4,
+            bottom: -4,
+            child: Icon(
+              Icons.school_outlined,
+              size: 80,
+              color: AppColors.primary.withValues(alpha: 0.03),
             ),
           ),
-          const SizedBox(width: AppValues.paddingDefault),
-          Expanded(
+          Row(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: AppColors.primary.withValues(alpha: 0.15),
+                    width: 3.0,
+                  ),
+                ),
+                child: CircleAvatar(
+                  radius: 38,
+                  backgroundColor: AppColors.blueBackground,
+                  backgroundImage: student.photoUrl.isNotEmpty
+                      ? CachedNetworkImageProvider(student.photoUrl)
+                      : null,
+                  child: student.photoUrl.isEmpty
+                      ? const Icon(
+                          Icons.person_outline_rounded,
+                          color: AppColors.primary,
+                          size: 28,
+                        )
+                      : null,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      student.studentName,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primaryDark,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${student.displayClass}  •  Roll No. ${student.rollNo}',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.darkGrey,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    const Text(
+                      'Academic Year 2025-27',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFeatureGrid() {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: _buildFeatureItem(
+                Icons.menu_book_rounded,
+                'Time Table',
+                AppColors.blueBackground,
+                AppColors.primary,
+              ),
+            ),
+            Expanded(
+              child: _buildFeatureItem(
+                Icons.assignment_turned_in_rounded,
+                'Homework',
+                AppColors.notificationPurpleBg,
+                AppColors.notificationPurpleIcon,
+              ),
+            ),
+            Expanded(
+              child: _buildFeatureItem(
+                Icons.book_rounded,
+                'My Subjects',
+                AppColors.notificationGreenBg,
+                AppColors.notificationGreenIcon,
+              ),
+            ),
+            Expanded(
+              child: _buildFeatureItem(
+                Icons.calendar_today_rounded,
+                'Exam Schedule',
+                AppColors.notificationOrangeBg,
+                AppColors.notificationOrangeIcon,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: AppValues.paddingDefault),
+        Row(
+          children: [
+            Expanded(
+              child: _buildFeatureItem(
+                Icons.bar_chart_rounded,
+                'Marks & Report',
+                AppColors.notificationRedBg,
+                AppColors.notificationRedIcon,
+              ),
+            ),
+            Expanded(
+              child: _buildFeatureItem(
+                Icons.account_balance_wallet_rounded,
+                'Fee Details',
+                AppColors.notificationAmberBg,
+                AppColors.notificationAmberIcon,
+              ),
+            ),
+            Expanded(
+              child: _buildFeatureItem(
+                Icons.campaign_rounded,
+                'Announcements',
+                AppColors.notificationCyanBg,
+                AppColors.notificationCyanIcon,
+              ),
+            ),
+            Expanded(
+              child: _buildFeatureItem(
+                Icons.image_rounded,
+                'Gallery',
+                AppColors.lightPurple,
+                AppColors.colorPurple,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatsRow() {
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.all(AppValues.paddingMedium),
+            height: 175.0,
+            decoration: BoxDecoration(
+              color: AppColors.colorWhite,
+              borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.colorBlack.withValues(alpha: 0.03),
+                  blurRadius: AppValues.radiusMedium,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  student.studentName,
-                  style: const TextStyle(
-                    fontSize: AppValues.fontSizeTitle,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.primaryDark,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Today's Attendance",
+                      style: TextStyle(
+                        fontSize: AppValues.fontSizeSmall,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.darkText,
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppValues.paddingXSmall + 2,
+                        vertical: AppValues.paddingXSmall / 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.lightGreen,
+                        borderRadius: BorderRadius.circular(
+                          AppValues.radiusSmall + 2,
+                        ),
+                      ),
+                      child: const Text(
+                        'Present',
+                        style: TextStyle(
+                          color: AppColors.iconGreen,
+                          fontSize: AppValues.fontSizeCaption,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: AppValues.paddingXSmall),
-                Text(
-                  '${student.displayClass}  •  Roll No. ${student.rollNo}',
-                  style: const TextStyle(
-                    fontSize: AppValues.fontSizeBody,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.darkGrey,
-                  ),
+                const Spacer(),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 60,
+                      height: 60,
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          const SizedBox(
+                            width: 58,
+                            height: 58,
+                            child: CircularProgressIndicator(
+                              value: 0.92,
+                              strokeWidth: 5.5,
+                              color: AppColors.iconGreen,
+                              backgroundColor: AppColors.lightBackground,
+                            ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Text(
+                                '92%',
+                                style: TextStyle(
+                                  fontSize: AppValues.fontSizeBody - 1,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.iconGreen,
+                                ),
+                              ),
+                              Text(
+                                'This Month',
+                                style: TextStyle(
+                                  fontSize: AppValues.fontSizeCaption - 3,
+                                  color: AppColors.darkGrey,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: AppValues.paddingMedium),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _buildLegendItem(
+                            Icons.check_circle_outline_rounded,
+                            'Present',
+                            '22',
+                            AppColors.iconGreen,
+                          ),
+                          const SizedBox(height: AppValues.paddingXSmall),
+                          _buildLegendItem(
+                            Icons.cancel_outlined,
+                            'Absent',
+                            '2',
+                            AppColors.errorColor,
+                          ),
+                          const SizedBox(height: AppValues.paddingXSmall),
+                          _buildLegendItem(
+                            Icons.access_time_rounded,
+                            'Late',
+                            '1',
+                            AppColors.notificationAmberIcon,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: AppValues.paddingXSmall),
-                const Text(
-                  'Academic Year 2026-27',
-                  style: TextStyle(
-                    fontSize: AppValues.fontSizeSmall,
-                    fontWeight: FontWeight.normal,
-                    color: AppColors.textMuted,
-                  ),
+                const Spacer(),
+                const Divider(
+                  height: AppValues.dividerHeight,
+                  thickness: AppValues.dividerThickness / 2,
+                ),
+                const SizedBox(height: AppValues.paddingXSmall + 2),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: const [
+                    Text(
+                      'View Attendance',
+                      style: TextStyle(
+                        fontSize: AppValues.fontSizeCaption + 1,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      color: AppColors.primary,
+                      size: AppValues.iconSizeSmall,
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLegendItem(
+    IconData icon,
+    String label,
+    String value,
+    Color color,
+  ) {
+    return Row(
+      children: [
+        Icon(icon, size: AppValues.fontSizeCaption + 4, color: color),
+        const SizedBox(width: AppValues.paddingXSmall),
+        Expanded(
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontSize: AppValues.fontSizeCaption,
+              fontWeight: FontWeight.w500,
+              color: AppColors.darkGrey,
+            ),
+          ),
+        ),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: AppValues.fontSizeCaption,
+            fontWeight: FontWeight.bold,
+            color: AppColors.darkText,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFeatureItem(
+    IconData icon,
+    String title,
+    Color bgColor,
+    Color iconColor,
+  ) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: 54.0,
+          height: 54.0,
+          decoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
+          child: Icon(
+            icon,
+            color: iconColor,
+            size: AppValues.appBarIconSize - 6,
+          ),
+        ),
+        const SizedBox(height: AppValues.paddingSmall),
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          maxLines: 2,
+          style: const TextStyle(
+            fontSize: AppValues.fontSizeCaption + 1,
+            fontWeight: FontWeight.bold,
+            color: AppColors.darkText,
+            height: 1.2,
+          ),
+        ),
+      ],
     );
   }
 }

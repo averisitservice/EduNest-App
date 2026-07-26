@@ -1,113 +1,149 @@
-# 🎓 EduNest App
+# EduNest — Student Mobile App
 
-A robust, feature-rich multi-tenant Flutter application designed to provide customized branding, secure access, and streamlined portal management for educational institutions.
+Flutter mobile app for **students** of the EduNest school ERP. Students connect to
+their school with a school code, sign in with a username and password, and view
+their profile, class details, and school information.
 
----
+Part of a three-app system:
 
-## 🚀 Key Features
+| Project | Role |
+|---|---|
+| **EduNest-App** (this repo) | Flutter mobile app — **students** |
+| `EduNest-Web` | React admin panel — teachers / staff |
+| `EduNest-backend` | Spring Boot REST API (serves both) |
 
-* **Multi-Tenancy Integration**: Dynamically loads institutional profiles, brand names, and banner assets based on the school code.
-* **Smart Splash Screen & Bootstrapping**: Smooth scale and fade animations that pre-load configuration settings, verify cached sessions, and dynamically transition users to the correct page.
-* **Modular Clean Architecture**: Organized with a clear separation of UI representation, network request handling, local cache persistence, data model mapping, and configuration flavors.
-* **Dynamic Institutional Branding**: Supports real-time rendering of custom school banners, fallback assets, and dynamic theme applications.
+## Getting started
 
----
-
-## 📁 Architecture & Directory Structure
-
-The project follows a clean, layered architecture structure under the `lib` folder:
-
-```text
-lib/
-├── flavors/                    # Flavor & environment configurations (dev, uat, prod)
-│   ├── edunest_environment.dart
-│   └── global_configuration.dart
-└── app/
-    ├── UI/                     # UI components and view layers
-    │   ├── splash/             # Splash Screen with bootstrap anims
-    │   └── login/              # Login, tenant selection, and form fields
-    ├── core/                   # Core frameworks, utilities, and helper tools
-    │   ├── base/               # Base repository & service definitions
-    │   ├── network/            # Networking client (Dio wrapper) & error models
-    │   ├── services/           # Shared preference persistence & settings storage
-    │   ├── utils/              # Application constants & URL builders
-    │   └── values/             # UI styling system (colors, padding, borders)
-    ├── data/                   # Data parsing and networking layers
-    │   ├── model/              # JSON serialization & business models
-    │   └── repository/         # Data repositories fetching remote details
-    └── my_app.dart             # Root GetMaterialApp configuration (fonts, routing)
-```
-
----
-
-## 🛠️ Technology Stack & Dependencies
-
-* **Language**: [Dart](https://dart.dev/) (SDK version `^3.11.4`)
-* **Framework**: [Flutter](https://flutter.dev/)
-* **State & Navigation Management**: [GetX](https://pub.dev/packages/get)
-* **Networking Client**: [Dio](https://pub.dev/packages/dio) for robust HTTP requests, interceptors, and error propagation
-* **Local Caching**: [SharedPreferences](https://pub.dev/packages/shared_preferences) for session and tenant settings
-* **Design & Typography**: [Google Fonts (Poppins)](https://pub.dev/packages/google_fonts) and Custom Material styling
-* **Device / Bundle Info**: [Package Info Plus](https://pub.dev/packages/package_info_plus)
-
----
-
-## ⚙️ Setup & Installation
-
-### Prerequisites
-Make sure you have Flutter installed and configured on your system. Run `flutter doctor` to verify.
-
-### 1. Clone & Fetch Dependencies
 ```bash
-git clone <repository-url>
-cd EduNest-App
 flutter pub get
-```
-
-### 2. Run the Application
-Start the application locally on a connected device or emulator:
-```bash
 flutter run
-```
-
-### 3. Static Analysis
-Verify code formatting and potential code issues:
-```bash
 flutter analyze
 ```
 
----
+Requires the Flutter SDK (Dart `^3.11.4`).
 
-## 🏷️ Configuration and Flavors
+### Environment / API base URL
 
-The project is built to support different runtime environments (Dev, UAT, Production) dynamically:
+The environment is selected in `lib/main.dart` via `EduNestEnvironment.initialize(env: 'dev')`.
+Base URLs live in `lib/flavors/edunest_environment.dart`:
 
-* **Dev API Environment**: `http://10.153.154.76:8080`
-* **UAT API Environment**: `https://uat-api.mynovian.com`
-* **Production API Environment**: `https://api.mynovian.com`
+| env | base URL |
+|---|---|
+| `dev` | `http://10.185.117.76:8081` (local backend, port 8081) |
+| `uat` | `https://uat-api.mynovian.com` |
+| `prod`| `https://api.mynovian.com` |
 
-Configured env values can be swapped dynamically within the initialization sequence inside `lib/flavors/edunest_environment.dart`.
+> The `dev` URL is cleartext `http://`. Android release and iOS block cleartext by
+> default, so it may work in debug but fail in release without the network config in
+> `android/.../network_security_config.xml` and `ios/Runner/Info.plist`.
 
----
+## Dependencies
 
-## 🎨 Coding & Design Standards
+| Package | Used for |
+|---|---|
+| `dio` | HTTP client |
+| `get` | Navigation + snackbars (`GetMaterialApp`) |
+| `shared_preferences` | Local storage (token, tenant, student) |
+| `cached_network_image` | Disk-cached school banner / logo / photo |
+| `device_info_plus` | Real device details on the Device Info screen |
+| `package_info_plus` | App version |
+| `google_fonts`, `intl` | Typography, date formatting |
 
-To ensure a highly professional, clean, and maintainable codebase, the following standards are strictly enforced:
+## Architecture
 
-### 1. Centralized Color Theme
-- All visual elements must resolve their color definitions through the `AppColors` abstraction.
-- Raw `Color(0xFF...)` and direct references to framework presets (e.g. `Colors.transparent`, `Colors.black`) are not allowed in components or views.
-- Centralizing color values ensures a unified branding theme and makes updates effortless.
+Follows the conventions of the team's `ChatApp-Frontend` project — **no GetX
+controllers, no result-wrapper types**. Screens are `StatefulWidget` + `setState`,
+holding a repository directly.
 
-### 2. Standardized Null Safety Handling (No `?.` or `!.`)
-- Use Dart's local variable promotion instead of inline null-aware (`?.`) or non-null assertion (`!.`) operators.
-- To access fields of a nullable instance, assign it to a local variable (`final foo = _foo;`), check for `null` via standard conditions (`if (foo != null)`), and work with the promoted non-nullable variable.
-- For default fallbacks, use clean ternary/conditional expressions or fallback arguments.
+```
+lib/
+  main.dart                       app entry — selects env, runs MyApp
+  app/
+    my_app.dart                   GetMaterialApp, theme
+    core/
+      base/base_repo.dart         BaseRepo (marker base class)
+      network/
+        dio_client.dart           DioClient.getInstance() -> fresh Dio + interceptor
+        edunest_interceptors.dart attaches Bearer token; 401 -> clear + TenantPage
+        error_helper.dart         ApiException + ErrorHelper.toApiException(e)
+      services/common_service.dart SharedPreferences: token, tenant, student, schoolCode
+      utils/app_urls.dart          AppUrls.someCall() -> full URL strings
+      values/                      app_colors.dart, app_values.dart
+    data/
+      model/                       tenant, student, student_detail, school_contact, login_response
+      repository/                  auth_repo, tenant_repo, profile_repo
+    global_widgets/                edunest_button / _text_field / _divider
+    UI/
+      splash/                      SplashScreen (routes by stored token/tenant)
+      login/                       tenant_page, login_page, forgot_password widget
+      home/                        home_page + drawer_menu
+      profile/                     profile, school_contacts, faq, about_us, settings*
+      notifications/
+  flavors/                         environment + global configuration
+```
 
-### 3. Comment-Free Codebase
-- Avoid cluttering the source files with inline developer comments or deactivated block code. 
-- The codebase relies on self-documenting code, descriptive naming, and clean structures rather than comment lines.
+### Networking pattern
 
-### 4. CamelCase Variable Naming
-- All constant declarations and configurations must follow strict `camelCase` naming conventions.
-- Snake_case names (e.g. `margin_10`, `radius_20`) are replaced with standard professional camelCase representations (e.g. `margin10`, `radius20`).
+```dart
+// repository — thin, owns the try/catch, throws ApiException
+class AuthRepo extends BaseRepo {
+  Future<LoginResponseModel> login(String username, String password) async {
+    try {
+      final res = await DioClient.getInstance().post(
+        AppUrls.login(),
+        data: {"username": username, "password": password},
+      );
+      return LoginResponseModel.fromJson(res.data['data']);
+    } catch (e) {
+      throw ErrorHelper.toApiException(e);
+    }
+  }
+}
+```
+
+```dart
+// screen — StatefulWidget holds the repo, catches ApiException for inline errors
+final AuthRepo _authRepo = AuthRepo();
+try {
+  final result = await _authRepo.login(username, password);
+  // save + navigate
+} on ApiException catch (e) {
+  setState(() => passwordError = e.message);
+}
+```
+
+The API envelope is `{ success, errors, data }`; repositories read `res.data['data']`.
+`EdunestInterceptors` adds `Authorization: Bearer <token>` from `CommonService`, and on
+`401` clears storage and returns the user to the Tenant page.
+
+## App flow
+
+```
+Splash ──► token stored?  ──yes──►  Home
+        └► tenant stored? ──yes──►  Login   (enter username + password)
+        └► otherwise      ─────────►  Tenant  (enter school code)
+```
+
+1. **Tenant** — enter school code → `GET /auth/tenant/{schoolCode}` → saves the school
+   (name, logos, banner, primary color) to local storage.
+2. **Login** — username + password → `POST /api/auth/login` → saves session/refresh
+   tokens, student profile, and tenant. Shows the school's logo and name.
+   *Forgot password* emails a new password to the registered address.
+3. **Home / Profile** — student data loads from the API (e.g. `GET /api/student/{id}`,
+   `GET /api/school/contact`); change password via `POST /api/auth/change-password`.
+
+## Student-facing API (all under `/api`, except the pre-login school lookup)
+
+| Endpoint | Purpose |
+|---|---|
+| `GET /auth/tenant/{schoolCode}` | Resolve school by code (public, pre-login) |
+| `POST /api/auth/login` | Login with `{username, password}` |
+| `POST /api/auth/forgot-password` | Email a new password |
+| `POST /api/auth/change-password` | Change password (authenticated) |
+| `GET /api/student/{studentId}` | Full student profile |
+| `GET /api/school/contact` | School contact details |
+
+## Assets
+
+Bundled images live in `assets/images/` and are declared in `pubspec.yaml`
+(`full-icon.png`, `BackGroud.png`, `ChangePassword.png`, `DeviceInfo.png`).

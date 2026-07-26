@@ -340,8 +340,7 @@ class _HomePageState extends State<HomePage> {
       children: [
         Expanded(
           child: Container(
-            padding: const EdgeInsets.all(AppValues.paddingMedium),
-            height: 175.0,
+            padding: const EdgeInsets.all(AppValues.paddingDefault),
             decoration: BoxDecoration(
               color: AppColors.colorWhite,
               borderRadius: BorderRadius.circular(AppValues.radiusLarge),
@@ -357,124 +356,225 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: AppColors.blueBackground,
+                        borderRadius: BorderRadius.circular(
+                          AppValues.radiusSmall + 2,
+                        ),
+                      ),
+                      child: const Icon(
+                        Icons.calendar_today_rounded,
+                        color: AppColors.primary,
+                        size: 18,
+                      ),
+                    ),
+                    const SizedBox(width: AppValues.paddingSmall),
                     const Text(
                       "Today's Attendance",
                       style: TextStyle(
-                        fontSize: AppValues.fontSizeSmall,
+                        fontSize: AppValues.fontSizeDefault,
                         fontWeight: FontWeight.bold,
                         color: AppColors.darkText,
                       ),
                     ),
+                    const Spacer(),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: AppValues.paddingXSmall + 2,
-                        vertical: AppValues.paddingXSmall / 2,
+                        horizontal: AppValues.paddingXSmall + 4,
+                        vertical: AppValues.paddingXSmall,
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.lightGreen,
                         borderRadius: BorderRadius.circular(
-                          AppValues.radiusSmall + 2,
+                          AppValues.radiusSmall + 4,
                         ),
                       ),
                       child: const Text(
                         'Present',
                         style: TextStyle(
                           color: AppColors.iconGreen,
-                          fontSize: AppValues.fontSizeCaption,
+                          fontSize: AppValues.fontSizeCaption + 1,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ],
                 ),
-                const Spacer(),
+                const SizedBox(height: AppValues.paddingLarge),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      width: 60,
-                      height: 60,
-                      child: Stack(
-                        alignment: Alignment.center,
+                    Expanded(
+                      flex: 4,
+                      child: Column(
                         children: [
-                          const SizedBox(
-                            width: 58,
-                            height: 58,
-                            child: CircularProgressIndicator(
-                              value: 0.92,
-                              strokeWidth: 5.5,
-                              color: AppColors.iconGreen,
-                              backgroundColor: AppColors.lightBackground,
+                          const Text(
+                            'This Month Attendance',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: AppValues.fontSizeCaption + 1,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.darkGrey,
                             ),
                           ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Text(
-                                '92%',
-                                style: TextStyle(
-                                  fontSize: AppValues.fontSizeBody - 1,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.iconGreen,
+                          const SizedBox(height: AppValues.paddingSmall),
+                          SizedBox(
+                            width: 80,
+                            height: 80,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                const SizedBox(
+                                  width: 76,
+                                  height: 76,
+                                  child: CircularProgressIndicator(
+                                    value: 0.92,
+                                    strokeWidth: 6.0,
+                                    color: AppColors.iconGreen,
+                                    backgroundColor: AppColors.lightBackground,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                'This Month',
-                                style: TextStyle(
-                                  fontSize: AppValues.fontSizeCaption - 3,
-                                  color: AppColors.darkGrey,
-                                  fontWeight: FontWeight.w500,
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      '92%',
+                                      style: TextStyle(
+                                        fontSize: AppValues.fontSizeSubTitle,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.iconGreen,
+                                      ),
+                                    ),
+                                    const Text(
+                                      'This Month',
+                                      style: TextStyle(
+                                        fontSize: AppValues.fontSizeCaption - 2,
+                                        color: AppColors.darkGrey,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    const SizedBox(width: AppValues.paddingMedium),
                     Expanded(
+                      flex: 4,
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          _buildLegendItem(
-                            Icons.check_circle_outline_rounded,
-                            'Present',
-                            '22',
-                            AppColors.iconGreen,
+                          const Text(
+                            'Average Attendance',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: AppValues.fontSizeCaption + 1,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.darkGrey,
+                            ),
                           ),
-                          const SizedBox(height: AppValues.paddingXSmall),
-                          _buildLegendItem(
-                            Icons.cancel_outlined,
-                            'Absent',
-                            '2',
-                            AppColors.errorColor,
-                          ),
-                          const SizedBox(height: AppValues.paddingXSmall),
-                          _buildLegendItem(
-                            Icons.access_time_rounded,
-                            'Late',
-                            '1',
-                            AppColors.notificationAmberIcon,
+                          const SizedBox(height: AppValues.paddingSmall),
+                          SizedBox(
+                            width: 80,
+                            height: 80,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                const SizedBox(
+                                  width: 76,
+                                  height: 76,
+                                  child: CircularProgressIndicator(
+                                    value: 0.88,
+                                    strokeWidth: 6.0,
+                                    color: AppColors.primary,
+                                    backgroundColor: AppColors.lightBackground,
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Text(
+                                      '88%',
+                                      style: TextStyle(
+                                        fontSize: AppValues.fontSizeSubTitle,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.primary,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Average',
+                                      style: TextStyle(
+                                        fontSize: AppValues.fontSizeCaption - 2,
+                                        color: AppColors.darkGrey,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ],
+                      ),
+                    ),
+                    Container(
+                      width: 1,
+                      height: 90,
+                      color: AppColors.borderGrey.withValues(alpha: 0.5),
+                    ),
+                    Expanded(
+                      flex: 4,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 4.0),
+                        child: Column(
+                          children: [
+                            _buildLegendItem(
+                              Icons.check_circle_outline_rounded,
+                              'Present',
+                              '22',
+                              AppColors.notificationGreenIcon,
+                              AppColors.notificationGreenBg,
+                            ),
+                            const SizedBox(height: AppValues.paddingSmall),
+                            _buildLegendItem(
+                              Icons.cancel_outlined,
+                              'Absent',
+                              '2',
+                              AppColors.notificationRedIcon,
+                              AppColors.notificationRedBg,
+                            ),
+                            const SizedBox(height: AppValues.paddingSmall),
+                            _buildLegendItem(
+                              Icons.access_time_rounded,
+                              'Late',
+                              '1',
+                              AppColors.notificationAmberIcon,
+                              AppColors.notificationAmberBg,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
                 ),
-                const Spacer(),
+                const SizedBox(height: AppValues.paddingLarge),
                 const Divider(
                   height: AppValues.dividerHeight,
                   thickness: AppValues.dividerThickness / 2,
                 ),
-                const SizedBox(height: AppValues.paddingXSmall + 2),
+                const SizedBox(height: AppValues.paddingSmall + 2),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: const [
                     Text(
                       'View Attendance',
                       style: TextStyle(
-                        fontSize: AppValues.fontSizeCaption + 1,
+                        fontSize: AppValues.fontSizeBody - 1,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primary,
                       ),
@@ -482,7 +582,7 @@ class _HomePageState extends State<HomePage> {
                     Icon(
                       Icons.chevron_right_rounded,
                       color: AppColors.primary,
-                      size: AppValues.iconSizeSmall,
+                      size: AppValues.iconSizeMedium,
                     ),
                   ],
                 ),
@@ -498,26 +598,34 @@ class _HomePageState extends State<HomePage> {
     IconData icon,
     String label,
     String value,
-    Color color,
+    Color iconColor,
+    Color bgColor,
   ) {
     return Row(
       children: [
-        Icon(icon, size: AppValues.fontSizeCaption + 4, color: color),
-        const SizedBox(width: AppValues.paddingXSmall),
-        Expanded(
-          child: Text(
-            label,
-            style: const TextStyle(
-              fontSize: AppValues.fontSizeCaption,
-              fontWeight: FontWeight.w500,
-              color: AppColors.darkGrey,
-            ),
+        Container(
+          width: 28,
+          height: 28,
+          decoration: BoxDecoration(
+            color: bgColor,
+            borderRadius: BorderRadius.circular(AppValues.radiusSmall),
+          ),
+          child: Icon(icon, size: 16, color: iconColor),
+        ),
+        const SizedBox(width: 8),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: AppValues.fontSizeCaption + 1,
+            fontWeight: FontWeight.w500,
+            color: AppColors.darkText,
           ),
         ),
+        const Spacer(),
         Text(
           value,
           style: const TextStyle(
-            fontSize: AppValues.fontSizeCaption,
+            fontSize: AppValues.fontSizeCaption + 2,
             fontWeight: FontWeight.bold,
             color: AppColors.darkText,
           ),

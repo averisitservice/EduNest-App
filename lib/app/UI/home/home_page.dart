@@ -1,10 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edunest/app/UI/home/widgets/drawer_menu.dart';
 import 'package:edunest/app/UI/notifications/notification_page.dart';
-import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
-import 'package:edunest/app/data/model/student_model.dart';
+import 'package:edunest/app/data/model/student_home_model.dart';
+import 'package:edunest/app/data/repository/profile_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -17,36 +17,50 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  StudentModel? _student;
+  final ProfileRepo _profileRepo = ProfileRepo();
+
+  StudentHomeModel? _home;
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _loadStudentDetails();
+    _loadHome();
   }
 
-  Future<void> _loadStudentDetails() async {
+  Future<void> _loadHome() async {
+    if (mounted) setState(() => _isLoading = true);
     try {
-      final student = await CommonService.getStudent();
+      final home = await _profileRepo.getStudentHome();
       if (mounted) {
         setState(() {
-          _student = student;
+          _home = home;
           _isLoading = false;
         });
       }
     } catch (_) {
       if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
+        setState(() => _isLoading = false);
       }
+    }
+  }
+
+  String _todayLabel(String status) {
+    switch (status) {
+      case 'PRESENT':
+        return 'Present';
+      case 'ABSENT':
+        return 'Absent';
+      case 'LATE':
+        return 'Late';
+      default:
+        return 'Not Marked';
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final student = _student;
+    final home = _home;
     if (_isLoading) {
       return const Scaffold(
         body: Center(
@@ -54,7 +68,7 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     }
-    if (student == null) {
+    if (home == null) {
       return const Scaffold(
         body: Center(child: Text('Student details not found')),
       );
@@ -149,11 +163,11 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildProfileHeaderCard(student),
+                _buildProfileHeaderCard(home),
                 const SizedBox(height: 20),
                 _buildFeatureGrid(),
                 const SizedBox(height: 20),
-                _buildStatsRow(),
+                _buildStatsRow(home),
               ],
             ),
           ),
@@ -162,7 +176,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildProfileHeaderCard(StudentModel student) {
+  Widget _buildProfileHeaderCard(StudentHomeModel student) {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -237,9 +251,11 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     const SizedBox(height: 6),
-                    const Text(
-                      'Academic Year 2025-27',
-                      style: TextStyle(
+                    Text(
+                      student.academicYearName.isNotEmpty
+                          ? 'Academic Year ${student.academicYearName}'
+                          : '',
+                      style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
                         color: AppColors.primary,
@@ -335,7 +351,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildStatsRow() {
+  Widget _buildStatsRow(StudentHomeModel home) {
     return Row(
       children: [
         Expanded(
@@ -393,9 +409,9 @@ class _HomePageState extends State<HomePage> {
                           AppValues.radiusSmall + 4,
                         ),
                       ),
-                      child: const Text(
-                        'Present',
-                        style: TextStyle(
+                      child: Text(
+                        _todayLabel(home.todayStatus),
+                        style: const TextStyle(
                           color: AppColors.iconGreen,
                           fontSize: AppValues.fontSizeCaption + 1,
                           fontWeight: FontWeight.bold,
@@ -428,11 +444,11 @@ class _HomePageState extends State<HomePage> {
                             child: Stack(
                               alignment: Alignment.center,
                               children: [
-                                const SizedBox(
+                                SizedBox(
                                   width: 76,
                                   height: 76,
                                   child: CircularProgressIndicator(
-                                    value: 0.92,
+                                    value: home.thisMonthPercent / 100,
                                     strokeWidth: 6.0,
                                     color: AppColors.iconGreen,
                                     backgroundColor: AppColors.lightBackground,
@@ -441,9 +457,9 @@ class _HomePageState extends State<HomePage> {
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Text(
-                                      '92%',
-                                      style: TextStyle(
+                                    Text(
+                                      '${home.thisMonthPercent.toStringAsFixed(0)}%',
+                                      style: const TextStyle(
                                         fontSize: AppValues.fontSizeSubTitle,
                                         fontWeight: FontWeight.bold,
                                         color: AppColors.iconGreen,
@@ -485,11 +501,11 @@ class _HomePageState extends State<HomePage> {
                             child: Stack(
                               alignment: Alignment.center,
                               children: [
-                                const SizedBox(
+                                SizedBox(
                                   width: 76,
                                   height: 76,
                                   child: CircularProgressIndicator(
-                                    value: 0.88,
+                                    value: home.averagePercent / 100,
                                     strokeWidth: 6.0,
                                     color: AppColors.primary,
                                     backgroundColor: AppColors.lightBackground,
@@ -497,16 +513,16 @@ class _HomePageState extends State<HomePage> {
                                 ),
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  children: const [
+                                  children: [
                                     Text(
-                                      '88%',
-                                      style: TextStyle(
+                                      '${home.averagePercent.toStringAsFixed(0)}%',
+                                      style: const TextStyle(
                                         fontSize: AppValues.fontSizeSubTitle,
                                         fontWeight: FontWeight.bold,
                                         color: AppColors.primary,
                                       ),
                                     ),
-                                    Text(
+                                    const Text(
                                       'Average',
                                       style: TextStyle(
                                         fontSize: AppValues.fontSizeCaption - 2,
@@ -536,7 +552,7 @@ class _HomePageState extends State<HomePage> {
                             _buildLegendItem(
                               Icons.check_circle_outline_rounded,
                               'Present',
-                              '22',
+                              '${home.presentDays}',
                               AppColors.notificationGreenIcon,
                               AppColors.notificationGreenBg,
                             ),
@@ -544,7 +560,7 @@ class _HomePageState extends State<HomePage> {
                             _buildLegendItem(
                               Icons.cancel_outlined,
                               'Absent',
-                              '2',
+                              '${home.absentDays}',
                               AppColors.notificationRedIcon,
                               AppColors.notificationRedBg,
                             ),
@@ -552,7 +568,7 @@ class _HomePageState extends State<HomePage> {
                             _buildLegendItem(
                               Icons.access_time_rounded,
                               'Late',
-                              '1',
+                              '${home.lateDays}',
                               AppColors.notificationAmberIcon,
                               AppColors.notificationAmberBg,
                             ),

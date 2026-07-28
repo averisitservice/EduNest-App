@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edunest/app/UI/home/widgets/drawer_menu.dart';
 import 'package:edunest/app/UI/home/widgets/permission_dialog.dart';
 import 'package:edunest/app/UI/notifications/notification_page.dart';
-import 'package:edunest/app/UI/timetable/timetable_page.dart';
+import 'package:edunest/app/UI/features/timetable_page.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/student_home_model.dart';
@@ -56,7 +56,8 @@ class _HomePageState extends State<HomePage> {
     final prefs = await SharedPreferences.getInstance();
 
     // Check location permission prompt
-    final hasAskedLocation = prefs.getBool('has_asked_location_permission') ?? false;
+    final hasAskedLocation =
+        prefs.getBool('has_asked_location_permission') ?? false;
     if (!hasAskedLocation) {
       if (!mounted) return;
       final allowed = await showDialog<bool>(
@@ -80,7 +81,8 @@ class _HomePageState extends State<HomePage> {
     }
 
     // Check notification permission prompt
-    final hasAskedNotification = prefs.getBool('has_asked_notification_permission') ?? false;
+    final hasAskedNotification =
+        prefs.getBool('has_asked_notification_permission') ?? false;
     if (!hasAskedNotification) {
       if (!mounted) return;
       final allowed = await showDialog<bool>(

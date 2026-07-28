@@ -1,5 +1,6 @@
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
+import 'package:edunest/app/global_widgets/edunest_divider.dart';
 import 'package:flutter/material.dart';
 
 class CustomPermissionDialog extends StatelessWidget {
@@ -23,7 +24,7 @@ class CustomPermissionDialog extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppValues.radiusLarge),
       ),
       backgroundColor: AppColors.colorWhite,
-      clipBehavior: Clip.antiAlias, // Ensures the ink splash respects the border radius
+      clipBehavior: Clip.antiAlias,
       child: Container(
         constraints: const BoxConstraints(maxWidth: 300),
         child: Column(
@@ -31,16 +32,8 @@ class CustomPermissionDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: 24),
-            // Centered icon
-            Center(
-              child: Icon(
-                icon,
-                size: 32,
-                color: AppColors.primary,
-              ),
-            ),
+            Center(child: Icon(icon, size: 32, color: AppColors.primary)),
             const SizedBox(height: 20),
-            // Centered prompt text
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Text(
@@ -55,13 +48,11 @@ class CustomPermissionDialog extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            // First Divider before Allow button
-            const Divider(
-              height: AppValues.dividerHeight,
+            const EdunestDivider(
+              height: 0,
               thickness: AppValues.dividerThickness,
-              color: AppColors.borderGrey,
+              dividerColor: AppColors.borderGrey,
             ),
-            // Allow button
             InkWell(
               onTap: onAllow,
               child: Container(
@@ -77,13 +68,11 @@ class CustomPermissionDialog extends StatelessWidget {
                 ),
               ),
             ),
-            // Second Divider before Deny button
-            const Divider(
-              height: AppValues.dividerHeight,
+            const EdunestDivider(
+              height: 0,
               thickness: AppValues.dividerThickness,
-              color: AppColors.borderGrey,
+              dividerColor: AppColors.borderGrey,
             ),
-            // Deny button
             InkWell(
               onTap: onDeny,
               child: Container(

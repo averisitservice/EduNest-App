@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edunest/app/UI/home/widgets/drawer_menu.dart';
+import 'package:edunest/app/UI/home/widgets/permission_dialog.dart';
 import 'package:edunest/app/UI/notifications/notification_page.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
@@ -8,6 +9,8 @@ import 'package:edunest/app/data/repository/profile_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -37,10 +40,65 @@ class _HomePageState extends State<HomePage> {
           _home = home;
           _isLoading = false;
         });
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _checkAndShowPermissionPrompts();
+        });
       }
     } catch (_) {
       if (mounted) {
         setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  Future<void> _checkAndShowPermissionPrompts() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    // Check location permission prompt
+    final hasAskedLocation = prefs.getBool('has_asked_location_permission') ?? false;
+    if (!hasAskedLocation) {
+      if (!mounted) return;
+      final allowed = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => CustomPermissionDialog(
+          icon: Icons.location_on_outlined,
+          message: 'Allow EduNest to access this device\'s location?',
+          onAllow: () => Navigator.pop(context, true),
+          onDeny: () => Navigator.pop(context, false),
+        ),
+      );
+
+      await prefs.setBool('has_asked_location_permission', true);
+
+      if (allowed == true) {
+        try {
+          await Permission.location.request();
+        } catch (_) {}
+      }
+    }
+
+    // Check notification permission prompt
+    final hasAskedNotification = prefs.getBool('has_asked_notification_permission') ?? false;
+    if (!hasAskedNotification) {
+      if (!mounted) return;
+      final allowed = await showDialog<bool>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => CustomPermissionDialog(
+          icon: Icons.notifications_none_outlined,
+          message: 'Allow EduNest to send you notifications?',
+          onAllow: () => Navigator.pop(context, true),
+          onDeny: () => Navigator.pop(context, false),
+        ),
+      );
+
+      await prefs.setBool('has_asked_notification_permission', true);
+
+      if (allowed == true) {
+        try {
+          await Permission.notification.request();
+        } catch (_) {}
       }
     }
   }

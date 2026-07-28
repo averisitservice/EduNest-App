@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edunest/app/UI/home/widgets/drawer_menu.dart';
 import 'package:edunest/app/UI/home/widgets/permission_dialog.dart';
 import 'package:edunest/app/UI/notifications/notification_page.dart';
+import 'package:edunest/app/UI/timetable/timetable_page.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/student_home_model.dart';
@@ -340,6 +341,9 @@ class _HomePageState extends State<HomePage> {
                 'Time Table',
                 AppColors.blueBackground,
                 AppColors.primary,
+                onTap: () {
+                  Get.to(() => const TimetablePage());
+                },
               ),
             ),
             Expanded(
@@ -712,34 +716,42 @@ class _HomePageState extends State<HomePage> {
     IconData icon,
     String title,
     Color bgColor,
-    Color iconColor,
-  ) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 54.0,
-          height: 54.0,
-          decoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
-          child: Icon(
-            icon,
-            color: iconColor,
-            size: AppValues.appBarIconSize - 6,
-          ),
+    Color iconColor, {
+    VoidCallback? onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 54.0,
+              height: 54.0,
+              decoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
+              child: Icon(
+                icon,
+                color: iconColor,
+                size: AppValues.appBarIconSize - 6,
+              ),
+            ),
+            const SizedBox(height: AppValues.paddingSmall),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              style: const TextStyle(
+                fontSize: AppValues.fontSizeCaption + 1,
+                fontWeight: FontWeight.bold,
+                color: AppColors.darkText,
+                height: 1.2,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: AppValues.paddingSmall),
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          maxLines: 2,
-          style: const TextStyle(
-            fontSize: AppValues.fontSizeCaption + 1,
-            fontWeight: FontWeight.bold,
-            color: AppColors.darkText,
-            height: 1.2,
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

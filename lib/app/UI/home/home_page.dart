@@ -3,6 +3,7 @@ import 'package:edunest/app/UI/home/widgets/drawer_menu.dart';
 import 'package:edunest/app/UI/home/widgets/permission_dialog.dart';
 import 'package:edunest/app/UI/notifications/notification_page.dart';
 import 'package:edunest/app/UI/features/timetable_page.dart';
+import 'package:edunest/app/UI/features/exam_schedule_page.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/student_home_model.dart';
@@ -350,6 +351,17 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: _buildFeatureItem(
+                Icons.calendar_today_rounded,
+                'Exam Schedule',
+                AppColors.notificationOrangeBg,
+                AppColors.notificationOrangeIcon,
+                onTap: () {
+                  Get.to(() => const ExamSchedulePage());
+                },
+              ),
+            ),
+            Expanded(
+              child: _buildFeatureItem(
                 Icons.assignment_turned_in_rounded,
                 'Homework',
                 AppColors.notificationPurpleBg,
@@ -362,14 +374,6 @@ class _HomePageState extends State<HomePage> {
                 'My Subjects',
                 AppColors.notificationGreenBg,
                 AppColors.notificationGreenIcon,
-              ),
-            ),
-            Expanded(
-              child: _buildFeatureItem(
-                Icons.calendar_today_rounded,
-                'Exam Schedule',
-                AppColors.notificationOrangeBg,
-                AppColors.notificationOrangeIcon,
               ),
             ),
           ],

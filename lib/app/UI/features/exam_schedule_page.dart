@@ -1,10 +1,10 @@
+import 'package:edunest/app/core/helper/date_util.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/exam_schedule_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:edunest/app/core/helper/date_util.dart';
 
 class ExamSchedulePage extends StatefulWidget {
   const ExamSchedulePage({super.key});
@@ -102,7 +102,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
           Text(
             _selectedTabIndex == 0 ? 'Upcoming Exams' : 'Past Exams',
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: AppValues.fontSizeDefault,
               fontWeight: FontWeight.bold,
               color: AppColors.darkText,
             ),
@@ -117,7 +117,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
                     ? 'No upcoming exams.'
                     : 'No past exams.',
                 style: const TextStyle(
-                  fontSize: 14,
+                  fontSize: AppValues.fontSizeBody,
                   color: AppColors.darkGrey,
                   fontWeight: FontWeight.w500,
                 ),
@@ -143,7 +143,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
   Widget _buildTabSwitcher() {
     return Container(
       height: 48,
-      padding: const EdgeInsets.all(4),
+      padding: const EdgeInsets.all(AppValues.margin4),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
         borderRadius: BorderRadius.circular(14),
@@ -179,7 +179,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
           child: Text(
             label,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: AppValues.fontSizeBody,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
               color: isSelected ? AppColors.colorWhite : AppColors.darkGrey,
             ),
@@ -193,16 +193,16 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
     final isUpcoming = item.status == 'Upcoming';
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.only(bottom: AppValues.radius12),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppValues.radiusLarge),
         border: Border.all(color: AppColors.lightBackground),
         boxShadow: [
           BoxShadow(
             color: AppColors.colorBlack.withValues(alpha: 0.02),
-            blurRadius: 8,
+            blurRadius: AppValues.smallMargin,
             offset: const Offset(0, 2),
           ),
         ],
@@ -232,7 +232,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
                 Text(
                   DateUtil.getMonth(item.examDate),
                   style: const TextStyle(
-                    fontSize: 12,
+                    fontSize: AppValues.fontSizeSmall,
                     fontWeight: FontWeight.w500,
                     color: AppColors.darkText,
                   ),
@@ -255,7 +255,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
                 Text(
                   item.subjectName,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: AppValues.fontSizeDefault,
                     fontWeight: FontWeight.bold,
                     color: AppColors.darkText,
                   ),
@@ -313,7 +313,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
               color: isUpcoming
                   ? AppColors.notificationOrangeBg
                   : AppColors.notificationGreenBg,
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(AppValues.radius20),
             ),
             child: Text(
               item.status,
@@ -334,10 +334,10 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
   Widget _buildSummaryCard(List<ExamItem> upcoming) {
     final next = upcoming.first;
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppValues.paddingDefault),
       decoration: BoxDecoration(
         color: AppColors.blueBackground,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppValues.radiusLarge),
         border: Border.all(color: AppColors.lightBackground),
       ),
       child: Row(
@@ -355,7 +355,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
                   child: const Icon(
                     Icons.calendar_month_rounded,
                     color: AppColors.primary,
-                    size: 22,
+                    size: AppValues.iconSize22,
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -377,7 +377,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
                       Text(
                         '${upcoming.length}',
                         style: const TextStyle(
-                          fontSize: 20,
+                          fontSize: AppValues.fontSizeTitle,
                           fontWeight: FontWeight.bold,
                           color: AppColors.darkText,
                         ),
@@ -390,8 +390,10 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
           ),
           Container(
             width: 1,
-            height: 44,
-            margin: const EdgeInsets.symmetric(horizontal: 8),
+            height: AppValues.iconLargeSize,
+            margin: const EdgeInsets.symmetric(
+              horizontal: AppValues.smallMargin,
+            ),
             color: AppColors.borderGrey,
           ),
           Expanded(
@@ -407,7 +409,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
                   child: const Icon(
                     Icons.access_time_rounded,
                     color: AppColors.primary,
-                    size: 22,
+                    size: AppValues.iconSize22,
                   ),
                 ),
                 const SizedBox(width: 10),

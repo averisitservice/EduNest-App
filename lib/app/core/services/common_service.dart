@@ -51,4 +51,33 @@ class CommonService {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
   }
+
+  static Future<bool> hasAskedLocationPermission() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('has_asked_location_permission') ?? false;
+  }
+
+  static Future<void> setAskedLocationPermission(bool value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('has_asked_location_permission', value);
+  }
+
+  static Future<bool> hasAskedNotificationPermission() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('has_asked_notification_permission') ?? false;
+  }
+
+  static Future<void> setAskedNotificationPermission(bool value) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('has_asked_notification_permission', value);
+  }
+
+  static String getTodayStatusLabel(String status) {
+    return switch (status) {
+      'PRESENT' => 'Present',
+      'ABSENT' => 'Absent',
+      'LATE' => 'Late',
+      _ => 'Not Marked',
+    };
+  }
 }

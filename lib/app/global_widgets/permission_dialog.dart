@@ -3,13 +3,13 @@ import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/global_widgets/edunest_divider.dart';
 import 'package:flutter/material.dart';
 
-class CustomPermissionDialog extends StatelessWidget {
+class PermissionDialog extends StatelessWidget {
   final IconData icon;
   final String message;
   final VoidCallback onAllow;
   final VoidCallback onDeny;
 
-  const CustomPermissionDialog({
+  const PermissionDialog({
     super.key,
     required this.icon,
     required this.message,

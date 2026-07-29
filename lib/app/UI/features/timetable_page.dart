@@ -1,3 +1,5 @@
+import 'package:edunest/app/core/helper/date_util.dart';
+import 'package:edunest/app/core/utils/app_constants.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/timetable_model.dart';
@@ -27,16 +29,21 @@ class _TimetablePageState extends State<TimetablePage> {
     _fetchTimetable();
   }
 
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   Future<void> _fetchTimetable({String? day}) async {
-    if (mounted) {
-      setState(() {
-        if (day == null) {
-          _isLoading = true;
-        } else {
-          _dayLoading = true;
-        }
-      });
-    }
+    if (!mounted) return;
+    setState(() {
+      if (day == null) {
+        _isLoading = true;
+      } else {
+        _dayLoading = true;
+      }
+    });
 
     try {
       final timetable = await featuresRepo.getStudentTimetable(day: day);
@@ -64,21 +71,20 @@ class _TimetablePageState extends State<TimetablePage> {
     final timetable = _timetable;
     if (timetable == null) return;
 
-    final dayName = timetable.days[index].dayName;
-    setState(() {
-      _selectedDay = index;
-    });
+    setState(() => _selectedDay = index);
     _scrollToIndex(index);
 
-    await _fetchTimetable(day: dayName);
+    await _fetchTimetable(day: timetable.days[index].dayName);
   }
 
   void _scrollToIndex(int index) {
     if (_scrollController.hasClients) {
       final targetOffset = index * 125.0 - 60.0;
-      final maxScroll = _scrollController.position.maxScrollExtent;
-      final minScroll = _scrollController.position.minScrollExtent;
-      final offset = targetOffset.clamp(minScroll, maxScroll);
+      final position = _scrollController.position;
+      final offset = targetOffset.clamp(
+        position.minScrollExtent,
+        position.maxScrollExtent,
+      );
       _scrollController.animateTo(
         offset,
         duration: const Duration(milliseconds: 500),
@@ -88,41 +94,11 @@ class _TimetablePageState extends State<TimetablePage> {
   }
 
   int _defaultDayIndex(TimetableModel timetable) {
-    final todayName = _weekdayName(DateTime.now().weekday);
+    final todayName = AppConstants.weekdays[(DateTime.now().weekday - 1) % 7];
     final index = timetable.days.indexWhere(
       (d) => d.dayName.toLowerCase() == todayName.toLowerCase(),
     );
     return index >= 0 ? index : 0;
-  }
-
-  String _weekdayName(int weekday) {
-    const names = [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday',
-    ];
-    return names[(weekday - 1) % 7];
-  }
-
-  Map<String, String> _formatTime(String rawTime) {
-    if (rawTime.isEmpty) return {'time': '', 'ampm': ''};
-    try {
-      final parts = rawTime.split(':');
-      final hour = int.parse(parts[0]);
-      final minute = parts.length > 1 ? parts[1] : '00';
-
-      final int hour12 = hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour);
-      final String ampm = hour >= 12 ? 'PM' : 'AM';
-      final String hourStr = hour12.toString().padLeft(2, '0');
-
-      return {'time': '$hourStr:$minute', 'ampm': ampm};
-    } catch (_) {
-      return {'time': rawTime, 'ampm': ''};
-    }
   }
 
   @override
@@ -174,310 +150,278 @@ class _TimetablePageState extends State<TimetablePage> {
       return const Center(
         child: Text(
           'No timetable available.',
-          style: TextStyle(color: AppColors.darkGrey, fontSize: 16),
+          style: TextStyle(
+            color: AppColors.darkGrey,
+            fontSize: AppValues.fontSizeDefault,
+          ),
         ),
       );
     }
 
     final day = timetable.days[_selectedDay];
 
-    return Column(
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(
-                        Icons.chevron_left_rounded,
-                        color: AppColors.primary,
-                        size: 28,
-                      ),
-                      onPressed: () {
-                        if (_selectedDay > 0) {
-                          _onDaySelected(_selectedDay - 1);
-                        }
-                      },
-                    ),
-                    Expanded(
-                      child: SizedBox(
-                        height: 42,
-                        child: ListView.separated(
-                          controller: _scrollController,
-                          scrollDirection: Axis.horizontal,
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: timetable.days.length,
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(width: 8),
-                          itemBuilder: (context, index) {
-                            final dayData = timetable.days[index];
-                            final isSelected = index == _selectedDay;
-
-                            return InkWell(
-                              onTap: () => _onDaySelected(index),
-                              borderRadius: BorderRadius.circular(
-                                AppValues.radiusDefault,
-                              ),
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 200),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 10,
-                                ),
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? AppColors.primary
-                                      : AppColors.colorWhite,
-                                  borderRadius: BorderRadius.circular(
-                                    AppValues.radiusDefault,
-                                  ),
-                                  border: isSelected
-                                      ? null
-                                      : Border.all(color: AppColors.borderGrey),
-                                  boxShadow: isSelected
-                                      ? [
-                                          BoxShadow(
-                                            color: AppColors.primary.withValues(
-                                              alpha: 0.3,
-                                            ),
-                                            blurRadius: 8,
-                                            offset: const Offset(0, 3),
-                                          ),
-                                        ]
-                                      : null,
-                                ),
-                                child: Text(
-                                  dayData.dayName.toUpperCase(),
-                                  style: TextStyle(
-                                    fontSize: 12.5,
-                                    fontWeight: FontWeight.bold,
-                                    color: isSelected
-                                        ? AppColors.colorWhite
-                                        : AppColors.darkGrey,
-                                    letterSpacing: 0.5,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.chevron_right_rounded,
-                        color: AppColors.primary,
-                        size: 28,
-                      ),
-                      onPressed: () {
-                        if (_selectedDay < timetable.days.length - 1) {
-                          _onDaySelected(_selectedDay + 1);
-                        }
-                      },
-                    ),
-                  ],
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildDaySelector(timetable),
+          const SizedBox(height: 18),
+          if (_dayLoading)
+            Container(
+              height: AppValues.listBottomEmptySpace,
+              alignment: Alignment.center,
+              child: const CircularProgressIndicator(color: AppColors.primary),
+            )
+          else if (day.periods.isEmpty)
+            Container(
+              height: AppValues.listBottomEmptySpace,
+              alignment: Alignment.center,
+              child: const Text(
+                'No periods scheduled for this day.',
+                style: TextStyle(
+                  fontSize: AppValues.fontSizeBody,
+                  color: AppColors.darkGrey,
+                  fontWeight: FontWeight.w500,
                 ),
-                const SizedBox(height: 18),
+              ),
+            )
+          else
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: day.periods.length,
+              itemBuilder: (context, index) =>
+                  _buildPeriodCard(day.periods[index]),
+            ),
+          const SizedBox(height: 12),
+        ],
+      ),
+    );
+  }
 
-                _dayLoading
-                    ? Container(
-                        height: 200,
-                        alignment: Alignment.center,
-                        child: const CircularProgressIndicator(
-                          color: AppColors.primary,
-                        ),
-                      )
-                    : day.periods.isEmpty
-                    ? Container(
-                        height: 200,
-                        alignment: Alignment.center,
-                        child: const Text(
-                          'No periods scheduled for this day.',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: AppColors.darkGrey,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: day.periods.length,
-                        itemBuilder: (context, index) {
-                          final period = day.periods[index];
-                          final bool isBreak = period.isBreak;
-                          final Color barColor = isBreak
-                              ? const Color(0xFFA855F7)
-                              : AppColors.primary;
-                          final startFormatted = _formatTime(period.startTime);
-                          final endFormatted = _formatTime(period.endTime);
+  Widget _buildDaySelector(TimetableModel timetable) {
+    return Row(
+      children: [
+        IconButton(
+          icon: const Icon(
+            Icons.chevron_left_rounded,
+            color: AppColors.primary,
+            size: 28,
+          ),
+          onPressed: _selectedDay > 0
+              ? () => _onDaySelected(_selectedDay - 1)
+              : null,
+        ),
+        Expanded(
+          child: SizedBox(
+            height: 42,
+            child: ListView.separated(
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              physics: const BouncingScrollPhysics(),
+              itemCount: timetable.days.length,
+              separatorBuilder: (context, index) => const SizedBox(width: 8),
+              itemBuilder: (context, index) {
+                final dayData = timetable.days[index];
+                final isSelected = index == _selectedDay;
 
-                          return Container(
-                            margin: const EdgeInsets.only(bottom: 10),
-                            decoration: BoxDecoration(
-                              color: AppColors.colorWhite,
-                              borderRadius: BorderRadius.circular(
-                                AppValues.radius12,
-                              ),
-                              border: Border.all(
-                                color: AppColors.lightBackground,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.colorBlack.withValues(
-                                    alpha: 0.02,
-                                  ),
-                                  blurRadius: 6,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: IntrinsicHeight(
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 4,
-                                    decoration: BoxDecoration(
-                                      color: barColor,
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(12),
-                                        bottomLeft: Radius.circular(12),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 14),
-
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      vertical: 14.0,
-                                    ),
-                                    child: SizedBox(
-                                      width: 70,
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            '${startFormatted['time']} ${(startFormatted['ampm'] ?? '').toLowerCase()}',
-                                            style: const TextStyle(
-                                              fontSize: 12.5,
-                                              fontWeight: FontWeight.bold,
-                                              color: AppColors.darkText,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 2),
-                                          const Text(
-                                            'to',
-                                            style: TextStyle(
-                                              fontSize: 11,
-                                              fontWeight: FontWeight.w500,
-                                              color: AppColors.textMuted,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 2),
-                                          Text(
-                                            '${endFormatted['time']} ${(endFormatted['ampm'] ?? '').toLowerCase()}',
-                                            style: const TextStyle(
-                                              fontSize: 12.5,
-                                              fontWeight: FontWeight.bold,
-                                              color: AppColors.darkText,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-
-                                  Container(
-                                    width: 1,
-                                    margin: const EdgeInsets.symmetric(
-                                      vertical: 10,
-                                    ),
-                                    color: AppColors.borderGrey,
-                                  ),
-                                  const SizedBox(width: 14),
-
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                        top: 14.0,
-                                        bottom: 14.0,
-                                        right: 14.0,
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            isBreak
-                                                ? period.slotName
-                                                : (period.subjectName.isNotEmpty
-                                                      ? period.subjectName
-                                                      : period.slotName),
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: isBreak
-                                                  ? const Color(0xFFA855F7)
-                                                  : AppColors.darkText,
-                                            ),
-                                          ),
-                                          if (!isBreak) ...[
-                                            const SizedBox(height: 8),
-                                            Row(
-                                              children: [
-                                                const Icon(
-                                                  Icons.person_outline_rounded,
-                                                  size: 15,
-                                                  color: AppColors.darkGrey,
-                                                ),
-                                                const SizedBox(width: 5),
-                                                Expanded(
-                                                  child: Text(
-                                                    period.teacherName,
-                                                    style: const TextStyle(
-                                                      fontSize: 12.5,
-                                                      color: AppColors.darkGrey,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                    ),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
+                return InkWell(
+                  onTap: () => _onDaySelected(index),
+                  borderRadius: BorderRadius.circular(AppValues.radiusDefault),
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? AppColors.primary
+                          : AppColors.colorWhite,
+                      borderRadius: BorderRadius.circular(
+                        AppValues.radiusDefault,
                       ),
-                const SizedBox(height: 12),
-              ],
+                      border: isSelected
+                          ? null
+                          : Border.all(color: AppColors.borderGrey),
+                      boxShadow: isSelected
+                          ? [
+                              BoxShadow(
+                                color: AppColors.primary.withValues(alpha: 0.3),
+                                blurRadius: AppValues.smallMargin,
+                                offset: const Offset(0, 3),
+                              ),
+                            ]
+                          : null,
+                    ),
+                    child: Text(
+                      dayData.dayName.toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.bold,
+                        color: isSelected
+                            ? AppColors.colorWhite
+                            : AppColors.darkGrey,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ),
+        IconButton(
+          icon: const Icon(
+            Icons.chevron_right_rounded,
+            color: AppColors.primary,
+            size: 28,
+          ),
+          onPressed: _selectedDay < timetable.days.length - 1
+              ? () => _onDaySelected(_selectedDay + 1)
+              : null,
+        ),
       ],
+    );
+  }
+
+  Widget _buildPeriodCard(Period period) {
+    final bool isBreak = period.isBreak;
+    final Color barColor = isBreak ? AppColors.colorPurple : AppColors.primary;
+    final String startTime = DateUtil.getTime(period.startTime);
+    final String endTime = DateUtil.getTime(period.endTime);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: AppValues.margin10),
+      decoration: BoxDecoration(
+        color: AppColors.colorWhite,
+        borderRadius: BorderRadius.circular(AppValues.radius12),
+        border: Border.all(color: AppColors.lightBackground),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.colorBlack.withValues(alpha: 0.02),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: IntrinsicHeight(
+        child: Row(
+          children: [
+            Container(
+              width: 4,
+              decoration: BoxDecoration(
+                color: barColor,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(AppValues.radius12),
+                  bottomLeft: Radius.circular(AppValues.radius12),
+                ),
+              ),
+            ),
+            const SizedBox(width: 14),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 14.0),
+              child: SizedBox(
+                width: 70,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      startTime,
+                      style: const TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.darkText,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    const Text(
+                      'to',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.textMuted,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      endTime,
+                      style: const TextStyle(
+                        fontSize: 12.5,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.darkText,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              width: 1,
+              margin: const EdgeInsets.symmetric(vertical: AppValues.margin10),
+              color: AppColors.borderGrey,
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                  top: 14.0,
+                  bottom: 14.0,
+                  right: 14.0,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      isBreak
+                          ? period.slotName
+                          : (period.subjectName.isNotEmpty
+                                ? period.subjectName
+                                : period.slotName),
+                      style: TextStyle(
+                        fontSize: AppValues.fontSizeDefault,
+                        fontWeight: FontWeight.bold,
+                        color: isBreak
+                            ? AppColors.colorPurple
+                            : AppColors.darkText,
+                      ),
+                    ),
+                    if (!isBreak) ...[
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.person_outline_rounded,
+                            size: 15,
+                            color: AppColors.darkGrey,
+                          ),
+                          const SizedBox(width: 5),
+                          Expanded(
+                            child: Text(
+                              period.teacherName,
+                              style: const TextStyle(
+                                fontSize: 12.5,
+                                color: AppColors.darkGrey,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

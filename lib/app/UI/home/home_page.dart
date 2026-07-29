@@ -323,7 +323,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             Expanded(
               child: _buildFeatureItem(
-                Icons.menu_book_rounded,
+                Icons.calendar_month_rounded,
                 'Time Table',
                 AppColors.blueBackground,
                 AppColors.primary,
@@ -334,8 +334,8 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: _buildFeatureItem(
-                Icons.calendar_today_rounded,
-                'Exam Schedule',
+                Icons.assignment_rounded,
+                'Exam',
                 AppColors.notificationOrangeBg,
                 AppColors.notificationOrangeIcon,
                 onTap: () {
@@ -345,29 +345,31 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: _buildFeatureItem(
-                Icons.assignment_turned_in_rounded,
-                'Homework',
+                Icons.campaign_rounded,
+                'Circular',
                 AppColors.notificationPurpleBg,
                 AppColors.notificationPurpleIcon,
-              ),
-            ),
-            Expanded(
-              child: _buildFeatureItem(
-                Icons.book_rounded,
-                'My Subjects',
-                AppColors.notificationGreenBg,
-                AppColors.notificationGreenIcon,
+                onTap: () {
+                  Get.to(() => const NotificationPage());
+                },
               ),
             ),
           ],
         ),
-        const SizedBox(height: AppValues.paddingDefault),
         Row(
           children: [
             Expanded(
               child: _buildFeatureItem(
+                Icons.note_alt_rounded,
+                'Home Work',
+                AppColors.notificationGreenBg,
+                AppColors.notificationGreenIcon,
+              ),
+            ),
+            Expanded(
+              child: _buildFeatureItem(
                 Icons.bar_chart_rounded,
-                'Marks & Report',
+                'Marks & Results',
                 AppColors.notificationRedBg,
                 AppColors.notificationRedIcon,
               ),
@@ -380,12 +382,24 @@ class _HomePageState extends State<HomePage> {
                 AppColors.notificationAmberIcon,
               ),
             ),
+          ],
+        ),
+        Row(
+          children: [
             Expanded(
               child: _buildFeatureItem(
-                Icons.campaign_rounded,
+                Icons.volume_up_rounded,
                 'Announcements',
                 AppColors.notificationCyanBg,
                 AppColors.notificationCyanIcon,
+              ),
+            ),
+            Expanded(
+              child: _buildFeatureItem(
+                Icons.book_rounded,
+                'My Subject',
+                AppColors.lightGreen,
+                AppColors.iconGreen,
               ),
             ),
             Expanded(
@@ -710,30 +724,29 @@ class _HomePageState extends State<HomePage> {
   }) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(16),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 4.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              width: 54.0,
-              height: 54.0,
+              width: 64.0,
+              height: 64.0,
               decoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
-              child: Icon(
-                icon,
-                color: iconColor,
-                size: AppValues.appBarIconSize - 6,
-              ),
+              child: Icon(icon, color: iconColor, size: 28.0),
             ),
-            const SizedBox(height: AppValues.paddingSmall),
+            const SizedBox(height: 8.0),
             Text(
               title,
               textAlign: TextAlign.center,
               maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                fontSize: AppValues.fontSizeCaption + 1,
-                fontWeight: FontWeight.bold,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
                 color: AppColors.darkText,
                 height: 1.2,
               ),

@@ -1,7 +1,7 @@
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/timetable_model.dart';
-import 'package:edunest/app/data/repository/profile_repo.dart';
+import 'package:edunest/app/data/repository/features_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -13,7 +13,7 @@ class TimetablePage extends StatefulWidget {
 }
 
 class _TimetablePageState extends State<TimetablePage> {
-  final ProfileRepo _profileRepo = ProfileRepo();
+  final FeaturesRepo featuresRepo = FeaturesRepo();
   final ScrollController _scrollController = ScrollController();
 
   TimetableModel? _timetable;
@@ -39,7 +39,7 @@ class _TimetablePageState extends State<TimetablePage> {
     }
 
     try {
-      final timetable = await _profileRepo.getStudentTimetable(day: day);
+      final timetable = await featuresRepo.getStudentTimetable(day: day);
       if (!mounted) return;
       setState(() {
         _timetable = timetable;

@@ -1,7 +1,7 @@
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/exam_schedule_model.dart';
-import 'package:edunest/app/data/repository/profile_repo.dart';
+import 'package:edunest/app/data/repository/features_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -14,7 +14,7 @@ class ExamSchedulePage extends StatefulWidget {
 }
 
 class _ExamSchedulePageState extends State<ExamSchedulePage> {
-  final ProfileRepo _profileRepo = ProfileRepo();
+  final FeaturesRepo featuresRepo = FeaturesRepo();
 
   int _selectedTabIndex = 0;
   ExamsModel? _exams;
@@ -32,7 +32,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
     });
 
     try {
-      final exams = await _profileRepo.getStudentExams();
+      final exams = await featuresRepo.getStudentExams();
       if (!mounted) return;
       setState(() => _exams = exams);
     } finally {

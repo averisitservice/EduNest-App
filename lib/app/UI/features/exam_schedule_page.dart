@@ -4,7 +4,7 @@ import 'package:edunest/app/data/model/exam_schedule_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
+import 'package:edunest/app/core/helper/date_util.dart';
 
 class ExamSchedulePage extends StatefulWidget {
   const ExamSchedulePage({super.key});
@@ -40,30 +40,6 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
         setState(() => _isLoading = false);
       }
     }
-  }
-
-  DateTime? _parseDate(String raw) {
-    if (raw.isEmpty) return null;
-    try {
-      return DateTime.parse(raw);
-    } catch (_) {
-      return null;
-    }
-  }
-
-  String _day(String raw) {
-    final date = _parseDate(raw);
-    return date != null ? DateFormat('dd').format(date) : '--';
-  }
-
-  String _month(String raw) {
-    final date = _parseDate(raw);
-    return date != null ? DateFormat('MMM').format(date) : '';
-  }
-
-  String _year(String raw) {
-    final date = _parseDate(raw);
-    return date != null ? DateFormat('yyyy').format(date) : '';
   }
 
   @override
@@ -244,7 +220,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  _day(item.examDate),
+                  DateUtil.getDay(item.examDate),
                   style: const TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
@@ -254,7 +230,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  _month(item.examDate),
+                  DateUtil.getMonth(item.examDate),
                   style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
@@ -262,7 +238,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
                   ),
                 ),
                 Text(
-                  _year(item.examDate),
+                  DateUtil.getYear(item.examDate),
                   style: const TextStyle(
                     fontSize: 11,
                     color: AppColors.textMuted,
@@ -449,7 +425,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        '${_day(next.examDate)} ${_month(next.examDate)}',
+                        '${DateUtil.getDay(next.examDate)} ${DateUtil.getMonth(next.examDate)}',
                         style: const TextStyle(
                           fontSize: 13.5,
                           fontWeight: FontWeight.bold,

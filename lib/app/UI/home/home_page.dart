@@ -4,6 +4,7 @@ import 'package:edunest/app/global_widgets/permission_dialog.dart';
 import 'package:edunest/app/UI/notifications/notification_page.dart';
 import 'package:edunest/app/UI/features/timetable_page.dart';
 import 'package:edunest/app/UI/features/exam_schedule_page.dart';
+import 'package:edunest/app/UI/features/homework_page.dart';
 import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
@@ -345,6 +346,14 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: _buildFeatureItem(
+                Icons.bar_chart_rounded,
+                'Marks & Results',
+                AppColors.notificationRedBg,
+                AppColors.notificationRedIcon,
+              ),
+            ),
+            Expanded(
+              child: _buildFeatureItem(
                 Icons.campaign_rounded,
                 'Circular',
                 AppColors.notificationPurpleBg,
@@ -364,14 +373,17 @@ class _HomePageState extends State<HomePage> {
                 'Home Work',
                 AppColors.notificationGreenBg,
                 AppColors.notificationGreenIcon,
+                onTap: () {
+                  Get.to(() => const HomeworkPage());
+                },
               ),
             ),
             Expanded(
               child: _buildFeatureItem(
-                Icons.bar_chart_rounded,
-                'Marks & Results',
-                AppColors.notificationRedBg,
-                AppColors.notificationRedIcon,
+                Icons.book_rounded,
+                'Notes',
+                AppColors.lightGreen,
+                AppColors.iconGreen,
               ),
             ),
             Expanded(
@@ -382,32 +394,12 @@ class _HomePageState extends State<HomePage> {
                 AppColors.notificationAmberIcon,
               ),
             ),
-          ],
-        ),
-        Row(
-          children: [
             Expanded(
               child: _buildFeatureItem(
                 Icons.volume_up_rounded,
                 'Announcements',
                 AppColors.notificationCyanBg,
                 AppColors.notificationCyanIcon,
-              ),
-            ),
-            Expanded(
-              child: _buildFeatureItem(
-                Icons.book_rounded,
-                'My Subject',
-                AppColors.lightGreen,
-                AppColors.iconGreen,
-              ),
-            ),
-            Expanded(
-              child: _buildFeatureItem(
-                Icons.image_rounded,
-                'Gallery',
-                AppColors.lightPurple,
-                AppColors.colorPurple,
               ),
             ),
           ],

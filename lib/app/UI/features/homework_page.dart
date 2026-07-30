@@ -155,7 +155,7 @@ class _HomeworkPageState extends State<HomeworkPage> {
           ],
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
               child: Column(
@@ -181,11 +181,11 @@ class _HomeworkPageState extends State<HomeworkPage> {
                 ],
               ),
             ),
-            if (displayDate.isNotEmpty) ...[
-              const SizedBox(width: 12),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
+            const SizedBox(width: 12),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (displayDate.isNotEmpty) ...[
                   const Icon(
                     Icons.calendar_today_outlined,
                     size: 14,
@@ -200,9 +200,15 @@ class _HomeworkPageState extends State<HomeworkPage> {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
+                  const SizedBox(width: 8),
                 ],
-              ),
-            ],
+                const Icon(
+                  Icons.chevron_right_rounded,
+                  color: AppColors.darkGrey,
+                  size: 20,
+                ),
+              ],
+            ),
           ],
         ),
       ),

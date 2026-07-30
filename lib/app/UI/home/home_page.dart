@@ -356,12 +356,10 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: _buildFeatureItem(
                 Icons.campaign_rounded,
-                'Circular',
+                'Announcements',
                 AppColors.notificationPurpleBg,
                 AppColors.notificationPurpleIcon,
-                onTap: () {
-                  Get.to(() => const NotificationPage());
-                },
+                onTap: () {},
               ),
             ),
           ],
@@ -400,10 +398,11 @@ class _HomePageState extends State<HomePage> {
             ),
             Expanded(
               child: _buildFeatureItem(
-                Icons.volume_up_rounded,
-                'Announcements',
+                Icons.exit_to_app_rounded,
+                'Request Leave',
                 AppColors.notificationCyanBg,
                 AppColors.notificationCyanIcon,
+                onTap: () {},
               ),
             ),
           ],

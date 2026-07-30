@@ -197,13 +197,23 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
                         ),
                       ),
                       const SizedBox(height: 12),
-                      Text(
-                        item.teacherName,
-                        style: const TextStyle(
-                          color: AppColors.darkGrey,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.person_rounded,
+                            size: 16,
+                            color: AppColors.primary,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            item.teacherName,
+                            style: const TextStyle(
+                              color: AppColors.darkGrey,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -213,13 +223,24 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
-                        displayDate,
-                        style: const TextStyle(
-                          color: AppColors.primary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.calendar_today_outlined,
+                            size: 14,
+                            color: AppColors.primary,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            displayDate,
+                            style: const TextStyle(
+                              color: AppColors.primary,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 4),
                       Text(

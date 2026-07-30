@@ -179,7 +179,7 @@ class _NotesPageState extends State<NotesPage> {
           ],
         ),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Expanded(
               child: Column(
@@ -204,6 +204,12 @@ class _NotesPageState extends State<NotesPage> {
                   ),
                 ],
               ),
+            ),
+            const SizedBox(width: 12),
+            const Icon(
+              Icons.chevron_right_rounded,
+              color: AppColors.darkGrey,
+              size: 20,
             ),
           ],
         ),

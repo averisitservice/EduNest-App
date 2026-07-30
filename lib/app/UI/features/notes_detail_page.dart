@@ -170,13 +170,23 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                Text(
-                  item.teacherName,
-                  style: const TextStyle(
-                    color: AppColors.darkGrey,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                  ),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.person_rounded,
+                      size: 16,
+                      color: AppColors.primary,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      item.teacherName,
+                      style: const TextStyle(
+                        color: AppColors.darkGrey,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

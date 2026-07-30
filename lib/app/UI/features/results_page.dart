@@ -107,18 +107,6 @@ class ResultsPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.filter_list_rounded,
-              color: AppColors.darkText,
-            ),
-            onPressed: () {
-              // Open filter logic
-            },
-          ),
-          const SizedBox(width: 8),
-        ],
       ),
       body: Container(
         width: double.infinity,

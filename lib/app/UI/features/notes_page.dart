@@ -1,4 +1,4 @@
-import 'package:edunest/app/UI/features/homework_item_card.dart';
+import 'package:edunest/app/UI/features/notes_detail_page.dart';
 import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
@@ -6,6 +6,7 @@ import 'package:edunest/app/data/model/homework_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 class NotesPage extends StatefulWidget {
   const NotesPage({super.key});
@@ -148,8 +149,64 @@ class _NotesPageState extends State<NotesPage> {
           parent: BouncingScrollPhysics(),
         ),
         itemCount: _notes.length,
-        itemBuilder: (context, index) =>
-            HomeworkItemCard(item: _notes[index], showDueDate: false),
+        itemBuilder: (context, index) {
+          final item = _notes[index];
+          return _buildNoteCard(context, item);
+        },
+      ),
+    );
+  }
+
+  Widget _buildNoteCard(BuildContext context, HomeworkModelItem item) {
+    return InkWell(
+      onTap: () {
+        Get.to(() => NotesDetailPage(noteId: item.id));
+      },
+      borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: AppValues.radius12),
+        padding: const EdgeInsets.all(AppValues.paddingDefault),
+        decoration: BoxDecoration(
+          color: AppColors.colorWhite,
+          borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+          border: Border.all(color: AppColors.lightBackground),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.colorBlack.withValues(alpha: 0.02),
+              blurRadius: AppValues.smallMargin,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.subjectName,
+                    style: const TextStyle(
+                      color: AppColors.darkText,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    item.title,
+                    style: const TextStyle(
+                      color: AppColors.darkGrey,
+                      fontSize: 13.5,
+                      height: 1.3,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

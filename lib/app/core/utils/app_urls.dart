@@ -18,7 +18,13 @@ class AppUrls {
 
   static String getStudentHomework() => "$baseUrl/api/student/homework";
 
+  static String getStudentHomeworkDetail(int homeworkId) =>
+      "$baseUrl/api/student/homework/$homeworkId";
+
   static String getStudentNotes() => "$baseUrl/api/student/notes";
+
+  static String getStudentNoteDetail(int noteId) =>
+      "$baseUrl/api/student/notes/$noteId";
 
   static String getStudentDetailsById(int studentId) =>
       "$baseUrl/api/student/$studentId";

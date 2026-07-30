@@ -36,6 +36,28 @@ class FeaturesRepo extends BaseRepo {
     }
   }
 
+  Future<HomeworkDetailModel> getHomeworkDetail(int homeworkId) async {
+    try {
+      var res = await DioClient.getInstance().get(
+        AppUrls.getStudentHomeworkDetail(homeworkId),
+      );
+      return HomeworkDetailModel.fromJson(res.data['data']);
+    } catch (e) {
+      throw ErrorHelper.toApiException(e);
+    }
+  }
+
+  Future<HomeworkDetailModel> getNoteDetail(int noteId) async {
+    try {
+      var res = await DioClient.getInstance().get(
+        AppUrls.getStudentNoteDetail(noteId),
+      );
+      return HomeworkDetailModel.fromJson(res.data['data']);
+    } catch (e) {
+      throw ErrorHelper.toApiException(e);
+    }
+  }
+
   Future<TimetableModel> getStudentTimetable({String? day}) async {
     try {
       var res = await DioClient.getInstance().get(

@@ -32,3 +32,41 @@ class HomeworkModelItem {
     );
   }
 }
+
+class HomeworkDetailModel {
+  final int id;
+  final int? subjectId;
+  final String subjectName;
+  final String title;
+  final String description;
+  final String dueDate;
+  final String? attachmentUrl;
+  final String teacherName;
+  final String updatedDate;
+
+  const HomeworkDetailModel({
+    required this.id,
+    required this.subjectId,
+    required this.subjectName,
+    required this.title,
+    required this.description,
+    required this.dueDate,
+    required this.attachmentUrl,
+    required this.teacherName,
+    required this.updatedDate,
+  });
+
+  factory HomeworkDetailModel.fromJson(Map<String, dynamic> json) {
+    return HomeworkDetailModel(
+      id: json['homeworkId'] ?? json['noteId'] ?? 0,
+      subjectId: json['subjectId'],
+      subjectName: json['subjectName'] ?? 'General',
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      dueDate: json['dueDate'] ?? '',
+      attachmentUrl: json['attachmentUrl'],
+      teacherName: json['teacherName'] ?? 'Subject Teacher',
+      updatedDate: json['updatedDate'] ?? '',
+    );
+  }
+}

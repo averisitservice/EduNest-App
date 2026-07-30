@@ -1,10 +1,12 @@
-import 'package:edunest/app/UI/features/homework_item_card.dart';
+import 'package:edunest/app/UI/features/homework_detail_page.dart';
+import 'package:edunest/app/core/helper/date_util.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/homework_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 class HomeworkPage extends StatefulWidget {
   const HomeworkPage({super.key});
@@ -119,8 +121,90 @@ class _HomeworkPageState extends State<HomeworkPage> {
           parent: BouncingScrollPhysics(),
         ),
         itemCount: _homework.length,
-        itemBuilder: (context, index) =>
-            HomeworkItemCard(item: _homework[index]),
+        itemBuilder: (context, index) {
+          final item = _homework[index];
+          return _buildHomeworkCard(context, item);
+        },
+      ),
+    );
+  }
+
+  Widget _buildHomeworkCard(BuildContext context, HomeworkModelItem item) {
+    final displayDate = item.dueDate.isNotEmpty
+        ? '${DateUtil.getDay(item.dueDate)} ${DateUtil.getMonth(item.dueDate)} ${DateUtil.getYear(item.dueDate)}'
+        : '';
+
+    return InkWell(
+      onTap: () {
+        Get.to(() => HomeworkDetailPage(homeworkId: item.id));
+      },
+      borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: AppValues.radius12),
+        padding: const EdgeInsets.all(AppValues.paddingDefault),
+        decoration: BoxDecoration(
+          color: AppColors.colorWhite,
+          borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+          border: Border.all(color: AppColors.lightBackground),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.colorBlack.withValues(alpha: 0.02),
+              blurRadius: AppValues.smallMargin,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.subjectName,
+                    style: const TextStyle(
+                      color: AppColors.darkText,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    item.title,
+                    style: const TextStyle(
+                      color: AppColors.darkGrey,
+                      fontSize: 13.5,
+                      height: 1.3,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (displayDate.isNotEmpty) ...[
+              const SizedBox(width: 12),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.calendar_today_outlined,
+                    size: 14,
+                    color: AppColors.darkGrey,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    displayDate,
+                    style: const TextStyle(
+                      color: AppColors.darkGrey,
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }

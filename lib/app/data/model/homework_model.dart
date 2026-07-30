@@ -1,5 +1,5 @@
 class HomeworkModelItem {
-  final int homeworkId;
+  final int id;
   final int? subjectId;
   final String subjectName;
   final String title;
@@ -9,7 +9,7 @@ class HomeworkModelItem {
   final String updatedDate;
 
   const HomeworkModelItem({
-    required this.homeworkId,
+    required this.id,
     required this.subjectId,
     required this.subjectName,
     required this.title,
@@ -21,7 +21,7 @@ class HomeworkModelItem {
 
   factory HomeworkModelItem.fromJson(Map<String, dynamic> json) {
     return HomeworkModelItem(
-      homeworkId: json['homeworkId'] ?? 0,
+      id: json['homeworkId'] ?? json['noteId'] ?? 0,
       subjectId: json['subjectId'],
       subjectName: json['subjectName'] ?? 'General',
       title: json['title'] ?? '',

@@ -1,5 +1,4 @@
 import 'package:edunest/app/UI/features/homework_item_card.dart';
-import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/homework_model.dart';
@@ -19,7 +18,6 @@ class _HomeworkPageState extends State<HomeworkPage> {
 
   List<HomeworkModelItem> _homework = [];
   bool _isLoading = true;
-  String? _errorMessage;
 
   @override
   void initState() {
@@ -30,16 +28,12 @@ class _HomeworkPageState extends State<HomeworkPage> {
   Future<void> _loadHomework() async {
     setState(() {
       _isLoading = true;
-      _errorMessage = null;
     });
 
     try {
       final homework = await featuresRepo.getStudentHomework();
       if (!mounted) return;
       setState(() => _homework = homework);
-    } on ApiException catch (e) {
-      if (!mounted) return;
-      setState(() => _errorMessage = e.message);
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -88,32 +82,6 @@ class _HomeworkPageState extends State<HomeworkPage> {
     if (_isLoading) {
       return const Center(
         child: CircularProgressIndicator(color: AppColors.primary),
-      );
-    }
-
-    if (_errorMessage != null) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                _errorMessage!,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: AppValues.fontSizeBody,
-                  color: AppColors.darkGrey,
-                ),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: _loadHomework,
-                child: const Text('Retry'),
-              ),
-            ],
-          ),
-        ),
       );
     }
 

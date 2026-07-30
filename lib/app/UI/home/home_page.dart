@@ -5,6 +5,7 @@ import 'package:edunest/app/UI/notifications/notification_page.dart';
 import 'package:edunest/app/UI/features/timetable_page.dart';
 import 'package:edunest/app/UI/features/exam_schedule_page.dart';
 import 'package:edunest/app/UI/features/homework_page.dart';
+import 'package:edunest/app/UI/features/notes_page.dart';
 import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
@@ -384,6 +385,9 @@ class _HomePageState extends State<HomePage> {
                 'Notes',
                 AppColors.lightGreen,
                 AppColors.iconGreen,
+                onTap: () {
+                  Get.to(() => const NotesPage());
+                },
               ),
             ),
             Expanded(

@@ -53,4 +53,76 @@ class SubjectIconService {
     }
     return _icons[subjectName.trim().toLowerCase()] ?? defaultIcon;
   }
+
+  static Color colorFor(String? subjectName) {
+    if (subjectName == null || subjectName.trim().isEmpty) {
+      return const Color(0xFF0F65D6);
+    }
+    final name = subjectName.trim().toLowerCase();
+    if (name.contains('math')) {
+      return const Color(0xFF4CAF50); // Green
+    }
+    if (name.contains('scie') ||
+        name.contains('phys') ||
+        name.contains('chem') ||
+        name.contains('biol')) {
+      return const Color(0xFFFF9800); // Orange
+    }
+    if (name.contains('engl')) {
+      return const Color(0xFFE91E63); // Pink
+    }
+    if (name.contains('hind')) {
+      return const Color(0xFF009688); // Teal
+    }
+    if (name.contains('social') ||
+        name.contains('hist') ||
+        name.contains('geog') ||
+        name.contains('civi') ||
+        name.contains('econ')) {
+      return const Color(0xFF2196F3); // Blue
+    }
+    if (name.contains('art') ||
+        name.contains('draw') ||
+        name.contains('fine') ||
+        name.contains('musi')) {
+      return const Color(0xFF9C27B0); // Purple
+    }
+    return const Color(0xFF0F65D6); // Default primary blue
+  }
+
+  static Color bgColorFor(String? subjectName) {
+    if (subjectName == null || subjectName.trim().isEmpty) {
+      return const Color(0xFFEAF4FC);
+    }
+    final name = subjectName.trim().toLowerCase();
+    if (name.contains('math')) {
+      return const Color(0xFFE8F5E9); // Light Green
+    }
+    if (name.contains('scie') ||
+        name.contains('phys') ||
+        name.contains('chem') ||
+        name.contains('biol')) {
+      return const Color(0xFFFFF3E0); // Light Orange
+    }
+    if (name.contains('engl')) {
+      return const Color(0xFFFCE4EC); // Light Pink
+    }
+    if (name.contains('hind')) {
+      return const Color(0xFFE0F2F1); // Light Teal
+    }
+    if (name.contains('social') ||
+        name.contains('hist') ||
+        name.contains('geog') ||
+        name.contains('civi') ||
+        name.contains('econ')) {
+      return const Color(0xFFE3F2FD); // Light Blue
+    }
+    if (name.contains('art') ||
+        name.contains('draw') ||
+        name.contains('fine') ||
+        name.contains('musi')) {
+      return const Color(0xFFF3E5F5); // Light Purple
+    }
+    return const Color(0xFFEAF4FC); // Default light blue
+  }
 }

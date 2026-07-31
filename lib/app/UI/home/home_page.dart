@@ -7,7 +7,7 @@ import 'package:edunest/app/UI/features/exam_schedule_page.dart';
 import 'package:edunest/app/UI/features/homework_page.dart';
 import 'package:edunest/app/UI/features/notes_page.dart';
 import 'package:edunest/app/UI/features/results_page.dart';
-import 'package:edunest/app/UI/features/fee_payment_page.dart';
+import 'package:edunest/app/UI/features/fee/fee_payment_page.dart';
 import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';

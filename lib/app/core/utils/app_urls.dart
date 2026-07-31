@@ -30,4 +30,8 @@ class AppUrls {
       "$baseUrl/api/student/$studentId";
 
   static String getSchoolContact() => "$baseUrl/api/school/contact";
+
+  static String createFeeOrder() => "$baseUrl/api/student/fee/create-order";
+
+  static String verifyFeePayment() => "$baseUrl/api/student/fee/verify-payment";
 }

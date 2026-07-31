@@ -20,6 +20,7 @@ dependencies:
   cached_network_image: ^3.4.1
   device_info_plus: ^11.2.0
   permission_handler: ^11.3.1
+  razorpay_flutter: ^1.4.0
 
 dev_dependencies:
   flutter_test:

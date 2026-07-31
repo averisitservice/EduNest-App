@@ -51,7 +51,52 @@ class SubjectIconService {
     if (subjectName == null || subjectName.trim().isEmpty) {
       return defaultIcon;
     }
-    return _icons[subjectName.trim().toLowerCase()] ?? defaultIcon;
+    final name = subjectName.trim().toLowerCase();
+
+    final exact = _icons[name];
+    if (exact != null) return exact;
+
+    if (name.contains('math')) return Icons.calculate_rounded;
+    if (name.contains('comp')) return Icons.computer_rounded;
+    if (name.contains('phys') && !name.contains('education')) {
+      return Icons.bolt_rounded;
+    }
+    if (name.contains('chem')) return Icons.biotech_rounded;
+    if (name.contains('biol')) return Icons.eco_rounded;
+    if (name.contains('scie')) return Icons.science_rounded;
+    if (name.contains('engl')) return Icons.menu_book_rounded;
+    if (name.contains('hind')) return Icons.translate_rounded;
+    if (name.contains('guja')) return Icons.language_rounded;
+    if (name.contains('sanskrit')) return Icons.auto_stories_rounded;
+    if (name.contains('evs') || name.contains('environ')) {
+      return Icons.park_rounded;
+    }
+    if (name.contains('value') || name.contains('moral')) {
+      return Icons.favorite_rounded;
+    }
+    if (name.contains('art') || name.contains('draw')) {
+      return Icons.brush_rounded;
+    }
+    if (name.contains('fine')) return Icons.palette_rounded;
+    if (name.contains('musi')) return Icons.music_note_rounded;
+    if (name.contains('physical') || name.contains('sport')) {
+      return Icons.sports_soccer_rounded;
+    }
+    if (name.contains('psychol')) return Icons.psychology_rounded;
+    if (name.contains('sociol')) return Icons.people_alt_rounded;
+    if (name.contains('philosoph')) return Icons.lightbulb_rounded;
+    if (name.contains('account')) return Icons.account_balance_wallet_rounded;
+    if (name.contains('business')) return Icons.business_center_rounded;
+    if (name.contains('stat')) return Icons.bar_chart_rounded;
+    if (name.contains('social') ||
+        name.contains('hist') ||
+        name.contains('geog') ||
+        name.contains('civi') ||
+        name.contains('econ')) {
+      return Icons.groups_rounded;
+    }
+
+    return defaultIcon;
   }
 
   static Color colorFor(String? subjectName) {

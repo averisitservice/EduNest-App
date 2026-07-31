@@ -4,7 +4,7 @@ import 'package:edunest/app/global_widgets/permission_dialog.dart';
 import 'package:edunest/app/UI/notifications/notification_page.dart';
 import 'package:edunest/app/UI/features/timetable_page.dart';
 import 'package:edunest/app/UI/features/exam_schedule_page.dart';
-import 'package:edunest/app/UI/features/homework_page.dart';
+import 'package:edunest/app/UI/features/homework/homework_page.dart';
 import 'package:edunest/app/UI/features/notes_page.dart';
 import 'package:edunest/app/UI/features/results_page.dart';
 import 'package:edunest/app/UI/features/fee/fee_payment_page.dart';

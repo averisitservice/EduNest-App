@@ -73,8 +73,21 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
     return path.split('/').last;
   }
 
+  bool _isImageAttachment(String url) {
+    final lower = url.toLowerCase();
+    return lower.contains('.jpg') ||
+        lower.contains('.jpeg') ||
+        lower.contains('.png') ||
+        lower.contains('.gif') ||
+        lower.contains('.webp');
+  }
+
   @override
   Widget build(BuildContext context) {
+    final titleSubject = _detail != null
+        ? '${_detail!.subjectName} Homework'
+        : 'Homework Details';
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -86,9 +99,9 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
           icon: const Icon(Icons.arrow_back_rounded, color: AppColors.darkText),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'Homework Details',
-          style: TextStyle(
+        title: Text(
+          titleSubject,
+          style: const TextStyle(
             color: AppColors.darkText,
             fontSize: AppValues.fontSizeTitle,
             fontWeight: FontWeight.bold,
@@ -152,12 +165,18 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
     final hasAttachment =
         item.attachmentUrl != null && item.attachmentUrl!.isNotEmpty;
 
+    final subjectColor = SubjectIconService.colorFor(item.subjectName);
+    final subjectBg = SubjectIconService.bgColorFor(item.subjectName);
+    final themeColor = AppColors.primary;
+    final themeBg = AppColors.blueBackground;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       physics: const BouncingScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Header Card
           Container(
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
@@ -174,51 +193,51 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  width: 44,
-                  height: 44,
-                  decoration: const BoxDecoration(
-                    color: AppColors.blueBackground,
-                    shape: BoxShape.circle,
+                  width: 52,
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: subjectBg,
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   alignment: Alignment.center,
                   child: Icon(
                     SubjectIconService.iconFor(item.subjectName),
-                    color: AppColors.primary,
-                    size: 22,
+                    color: subjectColor,
+                    size: 24,
                   ),
                 ),
-                const SizedBox(width: 12),
+                const SizedBox(width: 14),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        item.subjectName,
-                        style: const TextStyle(
-                          color: AppColors.darkText,
-                          fontSize: 18,
+                        item.subjectName.toUpperCase(),
+                        style: TextStyle(
+                          color: subjectColor,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
+                          letterSpacing: 0.5,
                         ),
                       ),
-                      const SizedBox(height: 6),
+                      const SizedBox(height: 4),
                       Text(
                         item.title,
                         style: const TextStyle(
-                          color: AppColors.darkGrey,
-                          fontSize: 13.5,
-                          height: 1.3,
+                          color: AppColors.darkText,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 12),
                       Row(
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.person_rounded,
                             size: 16,
-                            color: AppColors.primary,
+                            color: themeColor,
                           ),
                           const SizedBox(width: 6),
                           Text(
@@ -242,17 +261,17 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.calendar_today_outlined,
-                            size: 14,
-                            color: AppColors.primary,
+                            size: 13,
+                            color: themeColor,
                           ),
                           const SizedBox(width: 4),
                           Text(
                             displayDate,
-                            style: const TextStyle(
-                              color: AppColors.primary,
-                              fontSize: 12,
+                            style: TextStyle(
+                              color: themeColor,
+                              fontSize: 11.5,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -263,7 +282,7 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
                         dayOfWeek,
                         style: const TextStyle(
                           color: AppColors.darkGrey,
-                          fontSize: 11.5,
+                          fontSize: 11,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -275,6 +294,7 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
           ),
           const SizedBox(height: 16),
 
+          // Description Card
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16.0),
@@ -297,7 +317,7 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
                   'Description',
                   style: TextStyle(
                     color: AppColors.darkText,
-                    fontSize: 16,
+                    fontSize: 15,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -308,8 +328,8 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
                       : 'No description provided.',
                   style: const TextStyle(
                     color: AppColors.darkGrey,
-                    fontSize: 14,
-                    height: 1.4,
+                    fontSize: 13.5,
+                    height: 1.45,
                   ),
                 ),
               ],
@@ -317,6 +337,7 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
           ),
           const SizedBox(height: 16),
 
+          // Attachments Card (if any)
           if (hasAttachment) ...[
             Container(
               width: double.infinity,
@@ -340,11 +361,57 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
                     'Attachments',
                     style: TextStyle(
                       color: AppColors.darkText,
-                      fontSize: 16,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 12),
+                  if (_isImageAttachment(item.attachmentUrl!)) ...[
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        height: 200,
+                        width: double.infinity,
+                        color: const Color(0xFFF8FAFC),
+                        child: Image.network(
+                          item.attachmentUrl!,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: AppColors.primary,
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.broken_image_outlined,
+                                    color: AppColors.darkGrey,
+                                    size: 40,
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    'Failed to load preview',
+                                    style: TextStyle(
+                                      color: AppColors.darkGrey,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                  ],
                   Container(
                     padding: const EdgeInsets.all(12.0),
                     decoration: BoxDecoration(
@@ -376,7 +443,7 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
                             filename,
                             style: const TextStyle(
                               color: AppColors.darkText,
-                              fontSize: 14,
+                              fontSize: 13.5,
                               fontWeight: FontWeight.bold,
                             ),
                             maxLines: 1,
@@ -394,7 +461,48 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
                 ],
               ),
             ),
+            const SizedBox(height: 16),
           ],
+
+          // Note Card
+          Container(
+            padding: const EdgeInsets.all(16.0),
+            decoration: BoxDecoration(
+              color: themeBg,
+              borderRadius: BorderRadius.circular(14.0),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(Icons.info_outline_rounded, color: themeColor, size: 22),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Note',
+                        style: TextStyle(
+                          color: themeColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      const Text(
+                        'Make sure to complete your homework neatly and submit it on time.',
+                        style: TextStyle(
+                          color: AppColors.darkGrey,
+                          fontSize: 12,
+                          height: 1.35,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

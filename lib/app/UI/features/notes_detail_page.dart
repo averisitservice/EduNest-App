@@ -1,4 +1,5 @@
 import 'package:edunest/app/core/network/error_helper.dart';
+import 'package:edunest/app/core/services/subject_icon_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/homework_model.dart';
@@ -149,44 +150,66 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                 ),
               ],
             ),
-            child: Column(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  item.subjectName,
-                  style: const TextStyle(
-                    color: AppColors.darkText,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: const BoxDecoration(
+                    color: AppColors.blueBackground,
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: Icon(
+                    SubjectIconService.iconFor(item.subjectName),
+                    color: AppColors.primary,
+                    size: 22,
                   ),
                 ),
-                const SizedBox(height: 6),
-                Text(
-                  item.title,
-                  style: const TextStyle(
-                    color: AppColors.darkGrey,
-                    fontSize: 13.5,
-                    height: 1.3,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    const Icon(
-                      Icons.person_rounded,
-                      size: 16,
-                      color: AppColors.primary,
-                    ),
-                    const SizedBox(width: 6),
-                    Text(
-                      item.teacherName,
-                      style: const TextStyle(
-                        color: AppColors.darkGrey,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.subjectName,
+                        style: const TextStyle(
+                          color: AppColors.darkText,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(height: 6),
+                      Text(
+                        item.title,
+                        style: const TextStyle(
+                          color: AppColors.darkGrey,
+                          fontSize: 13.5,
+                          height: 1.3,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.person_rounded,
+                            size: 16,
+                            color: AppColors.primary,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            item.teacherName,
+                            style: const TextStyle(
+                              color: AppColors.darkGrey,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

@@ -1,5 +1,6 @@
 import 'package:edunest/app/core/helper/date_util.dart';
 import 'package:edunest/app/core/network/error_helper.dart';
+import 'package:edunest/app/core/services/subject_icon_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/homework_model.dart';
@@ -175,6 +176,21 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: const BoxDecoration(
+                    color: AppColors.blueBackground,
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
+                  child: Icon(
+                    SubjectIconService.iconFor(item.subjectName),
+                    color: AppColors.primary,
+                    size: 22,
+                  ),
+                ),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

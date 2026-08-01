@@ -2,7 +2,7 @@ import 'package:edunest/app/core/helper/date_util.dart';
 import 'package:edunest/app/core/utils/app_constants.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
-import 'package:edunest/app/data/model/timetable_model.dart';
+import 'package:edunest/app/data/model/timetable/timetable_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

@@ -4,7 +4,7 @@ import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
-import 'package:edunest/app/data/model/tenant_model.dart';
+import 'package:edunest/app/data/model/auth/tenant_model.dart';
 import 'package:edunest/app/data/repository/tenant_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_button.dart';
 import 'package:edunest/app/global_widgets/edunest_divider.dart';

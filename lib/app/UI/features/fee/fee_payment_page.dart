@@ -4,7 +4,7 @@ import 'package:edunest/app/core/helper/date_util.dart';
 import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
-import 'package:edunest/app/data/model/fee_detail_model.dart';
+import 'package:edunest/app/data/model/fee/fee_detail_model.dart';
 import 'package:edunest/app/data/repository/fee_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_button.dart';
 import 'package:flutter/material.dart';

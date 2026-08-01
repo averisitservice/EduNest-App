@@ -2,8 +2,8 @@ import 'package:edunest/app/core/base/base_repo.dart';
 import 'package:edunest/app/core/network/dio_client.dart';
 import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/utils/app_urls.dart';
-import 'package:edunest/app/data/model/fee_detail_model.dart';
-import 'package:edunest/app/data/model/fee_order_model.dart';
+import 'package:edunest/app/data/model/fee/fee_detail_model.dart';
+import 'package:edunest/app/data/model/fee/fee_order_model.dart';
 
 class FeeRepo extends BaseRepo {
   Future<FeeDetailModel> getFeeDetail() async {

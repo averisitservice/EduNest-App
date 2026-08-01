@@ -1,7 +1,7 @@
 import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
-import 'package:edunest/app/data/model/school_contact_model.dart';
+import 'package:edunest/app/data/model/profile/school_contact_model.dart';
 import 'package:edunest/app/data/repository/profile_repo.dart';
 import 'package:flutter/material.dart';
 

@@ -2,9 +2,9 @@ import 'package:edunest/app/core/base/base_repo.dart';
 import 'package:edunest/app/core/network/dio_client.dart';
 import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/utils/app_urls.dart';
-import 'package:edunest/app/data/model/exam_schedule_model.dart';
-import 'package:edunest/app/data/model/homework_model.dart';
-import 'package:edunest/app/data/model/timetable_model.dart';
+import 'package:edunest/app/data/model/exam/exam_schedule_model.dart';
+import 'package:edunest/app/data/model/homework/homework_model.dart';
+import 'package:edunest/app/data/model/timetable/timetable_model.dart';
 import 'package:intl/intl.dart';
 
 class FeaturesRepo extends BaseRepo {

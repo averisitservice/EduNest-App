@@ -3,7 +3,7 @@ import 'package:edunest/app/core/helper/homework_status_helper.dart';
 import 'package:edunest/app/core/services/subject_icon_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
-import 'package:edunest/app/data/model/homework_model.dart';
+import 'package:edunest/app/data/model/homework/homework_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';

@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:edunest/app/data/model/student_model.dart';
-import 'package:edunest/app/data/model/tenant_model.dart';
+import 'package:edunest/app/data/model/student/student_model.dart';
+import 'package:edunest/app/data/model/auth/tenant_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CommonService {

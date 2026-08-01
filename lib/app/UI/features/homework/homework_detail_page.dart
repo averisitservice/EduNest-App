@@ -7,6 +7,7 @@ import 'package:edunest/app/data/model/homework/homework_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeworkDetailPage extends StatefulWidget {
   final int homeworkId;
@@ -62,6 +63,18 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
         lower.contains('.png') ||
         lower.contains('.gif') ||
         lower.contains('.webp');
+  }
+
+  Future<void> _openAttachment(String url) async {
+    final uri = Uri.tryParse(url);
+    if (uri == null) return;
+
+    final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (!launched && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Unable to open attachment.')),
+      );
+    }
   }
 
   bool _isOverdue(String dueDateStr) {
@@ -414,95 +427,103 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
           ),
           const SizedBox(height: 12),
           if (_isImageAttachment(item.attachmentUrl!)) ...[
-            ClipRRect(
+            InkWell(
               borderRadius: BorderRadius.circular(12),
-              child: Container(
-                height: 200,
-                width: double.infinity,
-                color: AppColors.lightBackground,
-                child: Image.network(
-                  item.attachmentUrl!,
-                  fit: BoxFit.cover,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) return child;
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: AppColors.primary,
-                      ),
-                    );
-                  },
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.broken_image_outlined,
-                            color: AppColors.darkGrey,
-                            size: 40,
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Failed to load preview',
-                            style: TextStyle(
+              onTap: () => _openAttachment(item.attachmentUrl!),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  height: 200,
+                  width: double.infinity,
+                  color: AppColors.lightBackground,
+                  child: Image.network(
+                    item.attachmentUrl!,
+                    fit: BoxFit.cover,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: AppColors.primary,
+                        ),
+                      );
+                    },
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.broken_image_outlined,
                               color: AppColors.darkGrey,
-                              fontSize: 12,
+                              size: 40,
                             ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                            SizedBox(height: 8),
+                            Text(
+                              'Failed to load preview',
+                              style: TextStyle(
+                                color: AppColors.darkGrey,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
             const SizedBox(height: 12),
           ],
-          Container(
-            padding: const EdgeInsets.all(12.0),
-            decoration: BoxDecoration(
-              color: AppColors.lightBackground,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.borderGrey),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.blueBackground,
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: AppColors.inputBorder),
-                  ),
-                  child: const Icon(
-                    Icons.description_outlined,
-                    color: AppColors.primary,
-                    size: 22,
-                  ),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Text(
-                    filename,
-                    style: const TextStyle(
-                      color: AppColors.darkText,
-                      fontSize: 13.5,
-                      fontWeight: FontWeight.bold,
+          InkWell(
+            borderRadius: BorderRadius.circular(12),
+            onTap: () => _openAttachment(item.attachmentUrl!),
+            child: Container(
+              padding: const EdgeInsets.all(12.0),
+              decoration: BoxDecoration(
+                color: AppColors.lightBackground,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.borderGrey),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 6,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                    decoration: BoxDecoration(
+                      color: AppColors.blueBackground,
+                      borderRadius: BorderRadius.circular(6),
+                      border: Border.all(color: AppColors.inputBorder),
+                    ),
+                    child: const Icon(
+                      Icons.description_outlined,
+                      color: AppColors.primary,
+                      size: 22,
+                    ),
                   ),
-                ),
-                const Icon(
-                  Icons.file_download_outlined,
-                  color: AppColors.primary,
-                  size: 24,
-                ),
-              ],
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Text(
+                      filename,
+                      style: const TextStyle(
+                        color: AppColors.darkText,
+                        fontSize: 13.5,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const Icon(
+                    Icons.file_download_outlined,
+                    color: AppColors.primary,
+                    size: 24,
+                  ),
+                ],
+              ),
             ),
           ),
         ],

@@ -29,7 +29,7 @@ class AppUrls {
   static String getStudentDetailsById(int studentId) =>
       "$baseUrl/api/student/$studentId";
 
-  static String getSchoolContact() => "$baseUrl/api/school/contact";
+  static String getSchoolContact() => "$baseUrl/api/auth/school/contact";
 
   static String getFeeDetail() => "$baseUrl/api/student/fee/detail";
 

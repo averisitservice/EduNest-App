@@ -159,134 +159,135 @@ class _HomeworkSubjectWiseState extends State<HomeworkSubjectWise> {
         if (isExpanded)
           Padding(
             padding: const EdgeInsets.only(left: 4.0, right: 4.0, bottom: 12.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.colorWhite,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFE2E8F0)),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.colorBlack.withValues(alpha: 0.02),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: items.isEmpty
-                  ? const Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 16.0,
-                        horizontal: 16.0,
-                      ),
-                      child: Text(
-                        'No homework for this subject.',
-                        style: TextStyle(
-                          color: AppColors.darkGrey,
-                          fontSize: 12.5,
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                    )
-                  : Column(
-                      children: [
-                        for (int i = 0; i < items.length; i++) ...[
-                          _buildHomeworkRowItem(items[i]),
-                          if (i != items.length - 1)
-                            const Divider(
-                              height: 1,
-                              thickness: 0.8,
-                              color: AppColors.lightBackground,
-                            ),
-                        ],
-                      ],
+            child: items.isEmpty
+                ? const Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 16.0,
+                      horizontal: 16.0,
                     ),
-            ),
+                    child: Text(
+                      'No homework for this subject.',
+                      style: TextStyle(
+                        color: AppColors.darkGrey,
+                        fontSize: 12.5,
+                        fontStyle: FontStyle.italic,
+                      ),
+                    ),
+                  )
+                : Column(
+                    children: [
+                      for (final item in items) _buildHomeworkCard(item),
+                    ],
+                  ),
           ),
       ],
     );
   }
 
-  Widget _buildHomeworkRowItem(HomeworkModelItem item) {
+  Widget _buildHomeworkCard(HomeworkModelItem item) {
     final subColor = SubjectIconService.colorFor(item.subjectName);
+    final subBg = SubjectIconService.bgColorFor(item.subjectName);
 
-    return InkWell(
-      onTap: () {
-        Get.to(() => HomeworkDetailPage(homeworkId: item.id));
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12.0),
+      decoration: BoxDecoration(
+        color: AppColors.colorWhite,
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: const Color(0xFFE2E8F0)),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.colorBlack.withValues(alpha: 0.03),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () {
+          Get.to(() => HomeworkDetailPage(homeworkId: item.id));
+        },
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Row(
-              children: [
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: subColor,
-                    borderRadius: BorderRadius.circular(8),
+            // Top Section (Tinted Subject Header)
+            Container(
+              color: subBg,
+              padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0),
+              child: Row(
+                children: [
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: subColor,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    alignment: Alignment.center,
+                    child: Icon(
+                      SubjectIconService.iconFor(item.subjectName),
+                      color: AppColors.colorWhite,
+                      size: 20,
+                    ),
                   ),
-                  alignment: Alignment.center,
-                  child: Icon(
-                    SubjectIconService.iconFor(item.subjectName),
-                    color: AppColors.colorWhite,
-                    size: 18,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        item.subjectName,
-                        style: const TextStyle(
-                          color: AppColors.darkText,
-                          fontSize: 13.5,
-                          fontWeight: FontWeight.bold,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.subjectName,
+                          style: const TextStyle(
+                            color: AppColors.darkText,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        _getSubtitle(item.subjectName),
-                        style: const TextStyle(
-                          color: AppColors.darkGrey,
-                          fontSize: 10.5,
-                          fontWeight: FontWeight.w500,
+                        const SizedBox(height: 2),
+                        Text(
+                          _getSubtitle(item.subjectName),
+                          style: const TextStyle(
+                            color: AppColors.darkGrey,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const Icon(
-                  Icons.chevron_right_rounded,
-                  color: AppColors.darkGrey,
-                  size: 20,
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Text(
-              item.title,
-              style: const TextStyle(
-                color: AppColors.darkText,
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
+                ],
               ),
             ),
-            if (item.description.isNotEmpty) ...[
-              const SizedBox(height: 4),
-              Text(
-                item.description,
-                style: const TextStyle(
-                  color: AppColors.darkGrey,
-                  fontSize: 12,
-                  height: 1.35,
-                ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+            // Bottom Section (Homework Title & Description)
+            Padding(
+              padding: const EdgeInsets.all(14.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.title,
+                    style: const TextStyle(
+                      color: AppColors.darkText,
+                      fontSize: 13.5,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  if (item.description.isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      item.description,
+                      style: const TextStyle(
+                        color: AppColors.darkGrey,
+                        fontSize: 12,
+                        height: 1.35,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ],
               ),
-            ],
+            ),
           ],
         ),
       ),

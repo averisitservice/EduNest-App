@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edunest/app/UI/home/widgets/drawer_menu.dart';
-import 'package:edunest/app/global_widgets/permission_dialog.dart';
 import 'package:edunest/app/UI/notifications/notification_page.dart';
 import 'package:edunest/app/UI/features/timetable_page.dart';
 import 'package:edunest/app/UI/features/exam_schedule_page.dart';
@@ -57,53 +56,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _checkAndShowPermissionPrompts() async {
-    // Check location permission prompt
     final hasAskedLocation = await CommonService.hasAskedLocationPermission();
     if (!hasAskedLocation) {
-      if (!mounted) return;
-      final allowed = await showDialog<bool>(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => PermissionDialog(
-          icon: Icons.location_on_outlined,
-          message: 'Allow EduNest to access this device\'s location?',
-          onAllow: () => Navigator.pop(context, true),
-          onDeny: () => Navigator.pop(context, false),
-        ),
-      );
-
       await CommonService.setAskedLocationPermission(true);
-
-      if (allowed == true) {
-        try {
-          await Permission.location.request();
-        } catch (_) {}
-      }
+      try {
+        await Permission.location.request();
+      } catch (_) {}
     }
 
-    // Check notification permission prompt
     final hasAskedNotification =
         await CommonService.hasAskedNotificationPermission();
     if (!hasAskedNotification) {
-      if (!mounted) return;
-      final allowed = await showDialog<bool>(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => PermissionDialog(
-          icon: Icons.notifications_none_outlined,
-          message: 'Allow EduNest to send you notifications?',
-          onAllow: () => Navigator.pop(context, true),
-          onDeny: () => Navigator.pop(context, false),
-        ),
-      );
-
       await CommonService.setAskedNotificationPermission(true);
-
-      if (allowed == true) {
-        try {
-          await Permission.notification.request();
-        } catch (_) {}
-      }
+      try {
+        await Permission.notification.request();
+      } catch (_) {}
     }
   }
 

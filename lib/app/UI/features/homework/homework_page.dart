@@ -22,18 +22,12 @@ class _HomeworkPageState extends State<HomeworkPage> {
   List<HomeworkModelItem> _homework = [];
   bool _isLoading = true;
   int _selectedTabIndex = 0;
-  HomeworkFilter? _activeFilter;
+  HomeworkFilter _activeFilter = HomeworkFilter.lastTwoDays();
 
   @override
   void initState() {
     super.initState();
     _loadHomework();
-  }
-
-  List<HomeworkModelItem> get _filteredHomework {
-    final filter = _activeFilter;
-    if (filter == null) return _homework;
-    return _homework.where((item) => filter.matches(item.dueDate)).toList();
   }
 
   Future<void> _openFilterSheet() async {
@@ -51,6 +45,7 @@ class _HomeworkPageState extends State<HomeworkPage> {
 
     if (result == null) return;
     setState(() => _activeFilter = result);
+    _loadHomework();
   }
 
   Future<void> _loadHomework() async {
@@ -59,7 +54,11 @@ class _HomeworkPageState extends State<HomeworkPage> {
     });
 
     try {
-      final homework = await featuresRepo.getStudentHomework();
+      final (fromDate, toDate) = _activeFilter.dateRange;
+      final homework = await featuresRepo.getStudentHomework(
+        fromDate: fromDate,
+        toDate: toDate,
+      );
       if (!mounted) return;
       setState(() => _homework = homework);
     } finally {
@@ -93,12 +92,7 @@ class _HomeworkPageState extends State<HomeworkPage> {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: Icon(
-              Icons.filter_list_rounded,
-              color: _activeFilter != null
-                  ? AppColors.primary
-                  : AppColors.darkText,
-            ),
+            icon: const Icon(Icons.filter_list_rounded, color: AppColors.primary),
             onPressed: _openFilterSheet,
           ),
         ],
@@ -127,8 +121,8 @@ class _HomeworkPageState extends State<HomeworkPage> {
                       const SizedBox(height: 6),
                       Expanded(
                         child: _selectedTabIndex == 0
-                            ? HomeworkDateWise(homework: _filteredHomework)
-                            : HomeworkSubjectWise(homework: _filteredHomework),
+                            ? HomeworkDateWise(homework: _homework)
+                            : HomeworkSubjectWise(homework: _homework),
                       ),
                     ],
                   ),

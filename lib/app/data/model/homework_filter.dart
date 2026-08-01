@@ -7,30 +7,31 @@ class HomeworkFilter {
 
   const HomeworkFilter({required this.type, this.fromDate, this.toDate});
 
-  bool matches(String dueDateStr) {
-    DateTime dueDate;
-    try {
-      dueDate = DateTime.parse(dueDateStr).toLocal();
-    } catch (_) {
-      return true;
-    }
-    final dueDateOnly = DateTime(dueDate.year, dueDate.month, dueDate.day);
+  factory HomeworkFilter.lastTwoDays() {
+    final today = DateTime.now();
+    final todayOnly = DateTime(today.year, today.month, today.day);
+    return HomeworkFilter(
+      type: HomeworkFilterType.customRange,
+      fromDate: todayOnly.subtract(const Duration(days: 1)),
+      toDate: todayOnly,
+    );
+  }
 
+  (DateTime?, DateTime?) get dateRange {
     switch (type) {
       case HomeworkFilterType.thisWeek:
         final today = DateTime.now();
         final startOfWeek = today.subtract(Duration(days: today.weekday - 1));
         final start = DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day);
         final end = start.add(const Duration(days: 6));
-        return !dueDateOnly.isBefore(start) && !dueDateOnly.isAfter(end);
+        return (start, end);
       case HomeworkFilterType.thisMonth:
         final today = DateTime.now();
-        return dueDateOnly.year == today.year && dueDateOnly.month == today.month;
+        final start = DateTime(today.year, today.month, 1);
+        final end = DateTime(today.year, today.month + 1, 0);
+        return (start, end);
       case HomeworkFilterType.customRange:
-        if (fromDate == null || toDate == null) return true;
-        final start = DateTime(fromDate!.year, fromDate!.month, fromDate!.day);
-        final end = DateTime(toDate!.year, toDate!.month, toDate!.day);
-        return !dueDateOnly.isBefore(start) && !dueDateOnly.isAfter(end);
+        return (fromDate, toDate);
     }
   }
 }

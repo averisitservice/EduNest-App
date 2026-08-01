@@ -5,6 +5,7 @@ import 'package:edunest/app/core/utils/app_urls.dart';
 import 'package:edunest/app/data/model/exam_schedule_model.dart';
 import 'package:edunest/app/data/model/homework_model.dart';
 import 'package:edunest/app/data/model/timetable_model.dart';
+import 'package:intl/intl.dart';
 
 class FeaturesRepo extends BaseRepo {
   Future<ExamsModel> getStudentExams() async {
@@ -16,9 +17,18 @@ class FeaturesRepo extends BaseRepo {
     }
   }
 
-  Future<List<HomeworkModelItem>> getStudentHomework() async {
+  Future<List<HomeworkModelItem>> getStudentHomework({
+    DateTime? fromDate,
+    DateTime? toDate,
+  }) async {
     try {
-      var res = await DioClient.getInstance().get(AppUrls.getStudentHomework());
+      var res = await DioClient.getInstance().get(
+        AppUrls.getStudentHomework(),
+        queryParameters: {
+          if (fromDate != null) 'fromDate': DateFormat('yyyy-MM-dd').format(fromDate),
+          if (toDate != null) 'toDate': DateFormat('yyyy-MM-dd').format(toDate),
+        },
+      );
       final list = res.data['data'] as List? ?? [];
       return list.map((e) => HomeworkModelItem.fromJson(e)).toList();
     } catch (e) {

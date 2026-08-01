@@ -40,4 +40,9 @@ class AppUrls {
   static String createFeeOrder() => "$baseUrl/api/student/fee/create-order";
 
   static String verifyFeePayment() => "$baseUrl/api/student/fee/verify-payment";
+
+  // leave
+  static String getLeaveList() => "$baseUrl/api/student/leave/list";
+
+  static String submitLeave() => "$baseUrl/api/student/leave";
 }

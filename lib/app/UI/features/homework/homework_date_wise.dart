@@ -58,7 +58,6 @@ class HomeworkDateWise extends StatelessWidget {
     }
 
     final sortedList = List<HomeworkModelItem>.from(homework);
-    // Sort newest date first
     sortedList.sort((a, b) => b.dueDate.compareTo(a.dueDate));
 
     final Map<String, List<HomeworkModelItem>> grouped = {};
@@ -83,7 +82,11 @@ class HomeworkDateWise extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 12.0, bottom: 10.0, left: 4.0),
+              padding: const EdgeInsets.only(
+                top: 12.0,
+                bottom: 10.0,
+                left: 4.0,
+              ),
               child: Text(
                 key,
                 style: const TextStyle(
@@ -129,7 +132,10 @@ class HomeworkDateWise extends StatelessWidget {
             // Top Section (Tinted Subject Header)
             Container(
               color: subBg,
-              padding: const EdgeInsets.symmetric(horizontal: 14.0, vertical: 12.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 14.0,
+                vertical: 12.0,
+              ),
               child: Row(
                 children: [
                   Container(

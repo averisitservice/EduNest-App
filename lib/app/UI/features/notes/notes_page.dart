@@ -1,4 +1,4 @@
-import 'package:edunest/app/UI/features/notes_detail_page.dart';
+import 'package:edunest/app/UI/features/notes/notes_detail_page.dart';
 import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/services/subject_icon_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';

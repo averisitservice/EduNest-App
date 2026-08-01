@@ -85,10 +85,13 @@ class _HomeworkSubjectWiseState extends State<HomeworkSubjectWise> {
   Widget _buildSubjectAccordionItem(String subject) {
     final isExpanded = _expandedSubjects.contains(subject);
 
-    final items = widget.homework
-        .where((item) => item.subjectName.toLowerCase() == subject.toLowerCase())
-        .toList()
-      ..sort((a, b) => b.dueDate.compareTo(a.dueDate));
+    final items =
+        widget.homework
+            .where(
+              (item) => item.subjectName.toLowerCase() == subject.toLowerCase(),
+            )
+            .toList()
+          ..sort((a, b) => b.dueDate.compareTo(a.dueDate));
 
     final subColor = SubjectIconService.colorFor(subject);
     final subBg = SubjectIconService.bgColorFor(subject);

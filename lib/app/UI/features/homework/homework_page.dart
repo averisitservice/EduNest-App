@@ -92,7 +92,10 @@ class _HomeworkPageState extends State<HomeworkPage> {
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.filter_list_rounded, color: AppColors.primary),
+            icon: const Icon(
+              Icons.filter_list_rounded,
+              color: AppColors.primary,
+            ),
             onPressed: _openFilterSheet,
           ),
         ],
@@ -311,12 +314,17 @@ class _HomeworkFilterSheetState extends State<HomeworkFilterSheet> {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       side: const BorderSide(color: AppColors.borderGrey),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppValues.radiusDefault),
+                        borderRadius: BorderRadius.circular(
+                          AppValues.radiusDefault,
+                        ),
                       ),
                     ),
                     child: const Text(
                       'Reset',
-                      style: TextStyle(color: AppColors.darkText, fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                        color: AppColors.darkText,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
@@ -329,12 +337,17 @@ class _HomeworkFilterSheetState extends State<HomeworkFilterSheet> {
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       elevation: 0,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppValues.radiusDefault),
+                        borderRadius: BorderRadius.circular(
+                          AppValues.radiusDefault,
+                        ),
                       ),
                     ),
                     child: const Text(
                       'Apply',
-                      style: TextStyle(color: AppColors.colorWhite, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        color: AppColors.colorWhite,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
@@ -382,12 +395,17 @@ class _HomeworkFilterSheetState extends State<HomeworkFilterSheet> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: isSelected ? AppColors.primary : AppColors.darkText,
+                      color: isSelected
+                          ? AppColors.primary
+                          : AppColors.darkText,
                     ),
                   ),
                   Text(
                     subtitle,
-                    style: const TextStyle(fontSize: 11.5, color: AppColors.darkGrey),
+                    style: const TextStyle(
+                      fontSize: 11.5,
+                      color: AppColors.darkGrey,
+                    ),
                   ),
                 ],
               ),
@@ -419,14 +437,20 @@ class _HomeworkFilterSheetState extends State<HomeworkFilterSheet> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              date != null ? DateFormat('dd MMMM yyyy').format(date) : 'Select date',
+              date != null
+                  ? DateFormat('dd MMMM yyyy').format(date)
+                  : 'Select date',
               style: TextStyle(
                 fontSize: 13.5,
                 color: date != null ? AppColors.darkText : AppColors.textMuted,
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const Icon(Icons.calendar_today_outlined, size: 18, color: AppColors.darkGrey),
+            const Icon(
+              Icons.calendar_today_outlined,
+              size: 18,
+              color: AppColors.darkGrey,
+            ),
           ],
         ),
       ),

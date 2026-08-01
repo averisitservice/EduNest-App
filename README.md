@@ -1,8 +1,9 @@
 # EduNest — Student Mobile App
 
 Flutter mobile app for **students** of the EduNest school ERP. Students connect to
-their school with a school code, sign in with a username and password, and view
-their profile, class details, and school information.
+their school with a school code, sign in with a username and password, and can view
+their profile, timetable, homework, notes, exam schedule, results, fee status, and
+school contact info — and pay pending fees via Razorpay.
 
 Part of a three-app system:
 
@@ -10,7 +11,7 @@ Part of a three-app system:
 |---|---|
 | **EduNest-App** (this repo) | Flutter mobile app — **students** |
 | `EduNest-Web` | React admin panel — teachers / staff |
-| `EduNest-backend` | Spring Boot REST API (serves both) |
+| `EduNest-Api` | Spring Boot REST API (serves both) |
 
 ## Getting started
 
@@ -46,14 +47,15 @@ Base URLs live in `lib/flavors/edunest_environment.dart`:
 | `shared_preferences` | Local storage (token, tenant, student) |
 | `cached_network_image` | Disk-cached school banner / logo / photo |
 | `device_info_plus` | Real device details on the Device Info screen |
+| `permission_handler` | Location/notification permission requests on first Home open |
 | `package_info_plus` | App version |
 | `google_fonts`, `intl` | Typography, date formatting |
+| `razorpay_flutter` | In-app checkout UI for the Fee Payment screen |
 
 ## Architecture
 
-Follows the conventions of the team's `ChatApp-Frontend` project — **no GetX
-controllers, no result-wrapper types**. Screens are `StatefulWidget` + `setState`,
-holding a repository directly.
+Screens are `StatefulWidget` + `setState`, holding a repository directly — no GetX
+controllers, no result-wrapper types.
 
 ```
 lib/
@@ -66,17 +68,31 @@ lib/
         dio_client.dart           DioClient.getInstance() -> fresh Dio + interceptor
         edunest_interceptors.dart attaches Bearer token; 401 -> clear + TenantPage
         error_helper.dart         ApiException + ErrorHelper.toApiException(e)
-      services/common_service.dart SharedPreferences: token, tenant, student, schoolCode
-      utils/app_urls.dart          AppUrls.someCall() -> full URL strings
+      services/
+        common_service.dart       SharedPreferences: token, tenant, student, schoolCode
+        subject_icon_service.dart maps a subject name -> icon + color pair
+      helper/
+        date_util.dart            date formatting helpers
+        homework_status_helper.dart due-date -> "Due Today"/"Due Tomorrow"/"Due Completed" badge
+      utils/app_urls.dart          AppUrls.someCall() -> full URL strings, grouped by module
       values/                      app_colors.dart, app_values.dart
     data/
-      model/                       tenant, student, student_detail, school_contact, login_response
-      repository/                  auth_repo, tenant_repo, profile_repo
-    global_widgets/                edunest_button / _text_field / _divider
+      model/                       auth/, student/, homework/, exam/, fee/, timetable/, profile/
+      repository/                  auth_repo, tenant_repo, profile_repo, features_repo, fee_repo
+    global_widgets/
+      edunest_button / _text_field / _divider
+      edunest_filter.dart          shared bottom-sheet filter (This Week/Month/Custom Range),
+                                    used by both Homework and Notes
     UI/
       splash/                      SplashScreen (routes by stored token/tenant)
       login/                       tenant_page, login_page, forgot_password widget
-      home/                        home_page + drawer_menu
+      home/                        home_page (feature grid + attendance stats) + drawer_menu
+      features/
+        homework/                  homework_page (Date Wise / Subject Wise tabs + filter),
+                                    homework_detail_page
+        notes/                     notes_page (+ filter), notes_detail_page
+        fee/                       fee_payment_page, fee_amount_dialog, fee_payment_handler
+        exam_schedule_page.dart, results_page.dart, timetable_page.dart
       profile/                     profile, school_contacts, faq, about_us, settings*
       notifications/
   flavors/                         environment + global configuration
@@ -125,12 +141,21 @@ Splash ──► token stored?  ──yes──►  Home
 ```
 
 1. **Tenant** — enter school code → `GET /auth/tenant/{schoolCode}` → saves the school
-   (name, logos, banner, primary color) to local storage.
+   (name, logos, banner) to local storage.
 2. **Login** — username + password → `POST /api/auth/login` → saves session/refresh
    tokens, student profile, and tenant. Shows the school's logo and name.
    *Forgot password* emails a new password to the registered address.
-3. **Home / Profile** — student data loads from the API (e.g. `GET /api/student/{id}`,
-   `GET /api/school/contact`); change password via `POST /api/auth/change-password`.
+3. **Home** — feature grid (Time Table, Exam, Marks & Results, Announcements, Home
+   Work, Notes, Fee Details) plus today's/monthly attendance stats. On first open,
+   prompts for location and notification permissions (native OS dialogs, asked once).
+4. **Homework / Notes** — list with **Date Wise** and **Subject Wise** tabs (Homework
+   only; Notes is a flat list), a filter (This Week / This Month / Custom Date Range —
+   Homework defaults to "last 2 days" on first open) that re-queries the API with
+   `fromDate`/`toDate`, and a detail screen per item.
+5. **Fee Details** — shows pending/paid amount, then "Pay" opens the Razorpay checkout
+   UI; on success the app verifies the payment with the backend and shows the result.
+6. **Profile / Settings** — student profile, school contacts, change password, device
+   info, FAQ, about us.
 
 ## Student-facing API (all under `/api`, except the pre-login school lookup)
 
@@ -140,10 +165,20 @@ Splash ──► token stored?  ──yes──►  Home
 | `POST /api/auth/login` | Login with `{username, password}` |
 | `POST /api/auth/forgot-password` | Email a new password |
 | `POST /api/auth/change-password` | Change password (authenticated) |
+| `GET /api/auth/school/contact` | School contact details |
+| `GET /api/student/home` | Home screen summary + attendance stats |
 | `GET /api/student/{studentId}` | Full student profile |
-| `GET /api/school/contact` | School contact details |
+| `GET /api/student/timetable` | Timetable (optional `day` query param) |
+| `GET /api/student/exams` | Upcoming/past exams |
+| `GET /api/student/homework` | Homework list (optional `fromDate`/`toDate`) |
+| `GET /api/student/homework/{homeworkId}` | Homework detail |
+| `GET /api/student/notes` | Notes list (optional `fromDate`/`toDate`) |
+| `GET /api/student/notes/{noteId}` | Note detail |
+| `GET /api/student/fee/detail` | Fee summary (total/paid/pending) |
+| `POST /api/student/fee/create-order` | Create a Razorpay order for a fee payment |
+| `POST /api/student/fee/verify-payment` | Verify a completed Razorpay payment |
 
 ## Assets
 
 Bundled images live in `assets/images/` and are declared in `pubspec.yaml`
-(`full-icon.png`, `BackGroud.png`, `ChangePassword.png`, `DeviceInfo.png`).
+(`full-icon.png`, `BackGroud.png`, `ChangePassword.png`).

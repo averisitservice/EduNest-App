@@ -77,12 +77,6 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
     }
   }
 
-  void _submitHomework() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Homework submission is coming soon.')),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -172,12 +166,22 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
       children: [
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 12.0,
+            ),
             physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildHeaderCard(item, subjectColor, subjectBg, assignedDate, dueDate, overdue),
+                _buildHeaderCard(
+                  item,
+                  subjectColor,
+                  subjectBg,
+                  assignedDate,
+                  dueDate,
+                  overdue,
+                ),
                 const SizedBox(height: 16),
                 _buildDescriptionCard(item),
                 if (hasAttachment) ...[
@@ -191,7 +195,6 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
             ),
           ),
         ),
-        _buildSubmitButton(),
       ],
     );
   }
@@ -254,7 +257,10 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
                     ),
                     const SizedBox(height: 6),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: subjectBg,
                         borderRadius: BorderRadius.circular(8),
@@ -276,7 +282,12 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
           const SizedBox(height: 16),
           const Divider(height: 1, color: AppColors.lightBackground),
           const SizedBox(height: 12),
-          _buildInfoRow(Icons.event_available_rounded, 'Assigned Date', assignedDate, AppColors.darkText),
+          _buildInfoRow(
+            Icons.event_available_rounded,
+            'Assigned Date',
+            assignedDate,
+            AppColors.darkText,
+          ),
           const SizedBox(height: 10),
           _buildInfoRow(
             Icons.event_busy_rounded,
@@ -285,13 +296,23 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
             overdue ? AppColors.errorColor : AppColors.darkText,
           ),
           const SizedBox(height: 10),
-          _buildInfoRow(Icons.person_rounded, 'Teacher', item.teacherName, AppColors.darkText),
+          _buildInfoRow(
+            Icons.person_rounded,
+            'Teacher',
+            item.teacherName,
+            AppColors.darkText,
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String label, String value, Color valueColor) {
+  Widget _buildInfoRow(
+    IconData icon,
+    String label,
+    String value,
+    Color valueColor,
+  ) {
     return Row(
       children: [
         Icon(icon, size: 16, color: AppColors.darkGrey),
@@ -300,13 +321,21 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
           width: 100,
           child: Text(
             label,
-            style: const TextStyle(color: AppColors.darkGrey, fontSize: 12.5, fontWeight: FontWeight.w500),
+            style: const TextStyle(
+              color: AppColors.darkGrey,
+              fontSize: 12.5,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
         Expanded(
           child: Text(
             value,
-            style: TextStyle(color: valueColor, fontSize: 13, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: valueColor,
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ],
@@ -334,12 +363,22 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
         children: [
           const Text(
             'Description',
-            style: TextStyle(color: AppColors.darkText, fontSize: 15, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: AppColors.darkText,
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 12),
           Text(
-            item.description.isNotEmpty ? item.description : 'No description provided.',
-            style: const TextStyle(color: AppColors.darkGrey, fontSize: 13.5, height: 1.45),
+            item.description.isNotEmpty
+                ? item.description
+                : 'No description provided.',
+            style: const TextStyle(
+              color: AppColors.darkGrey,
+              fontSize: 13.5,
+              height: 1.45,
+            ),
           ),
         ],
       ),
@@ -367,7 +406,11 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
         children: [
           const Text(
             'Attachments',
-            style: TextStyle(color: AppColors.darkText, fontSize: 15, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: AppColors.darkText,
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 12),
           if (_isImageAttachment(item.attachmentUrl!)) ...[
@@ -383,7 +426,10 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) return child;
                     return const Center(
-                      child: CircularProgressIndicator(strokeWidth: 2, color: AppColors.primary),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColors.primary,
+                      ),
                     );
                   },
                   errorBuilder: (context, error, stackTrace) {
@@ -391,11 +437,18 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.broken_image_outlined, color: AppColors.darkGrey, size: 40),
+                          Icon(
+                            Icons.broken_image_outlined,
+                            color: AppColors.darkGrey,
+                            size: 40,
+                          ),
                           SizedBox(height: 8),
                           Text(
                             'Failed to load preview',
-                            style: TextStyle(color: AppColors.darkGrey, fontSize: 12),
+                            style: TextStyle(
+                              color: AppColors.darkGrey,
+                              fontSize: 12,
+                            ),
                           ),
                         ],
                       ),
@@ -416,24 +469,39 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.blueBackground,
                     borderRadius: BorderRadius.circular(6),
                     border: Border.all(color: AppColors.inputBorder),
                   ),
-                  child: const Icon(Icons.description_outlined, color: AppColors.primary, size: 22),
+                  child: const Icon(
+                    Icons.description_outlined,
+                    color: AppColors.primary,
+                    size: 22,
+                  ),
                 ),
                 const SizedBox(width: 14),
                 Expanded(
                   child: Text(
                     filename,
-                    style: const TextStyle(color: AppColors.darkText, fontSize: 13.5, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      color: AppColors.darkText,
+                      fontSize: 13.5,
+                      fontWeight: FontWeight.bold,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                const Icon(Icons.file_download_outlined, color: AppColors.primary, size: 24),
+                const Icon(
+                  Icons.file_download_outlined,
+                  color: AppColors.primary,
+                  size: 24,
+                ),
               ],
             ),
           ),
@@ -444,8 +512,12 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
 
   Widget _buildStatusCard(bool overdue) {
     final label = overdue ? 'Overdue' : 'Pending';
-    final color = overdue ? AppColors.notificationRedIcon : AppColors.notificationGreenIcon;
-    final bg = overdue ? AppColors.notificationRedBg : AppColors.notificationGreenBg;
+    final color = overdue
+        ? AppColors.notificationRedIcon
+        : AppColors.notificationGreenIcon;
+    final bg = overdue
+        ? AppColors.notificationRedBg
+        : AppColors.notificationGreenBg;
 
     return Container(
       width: double.infinity,
@@ -467,63 +539,42 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
         children: [
           const Text(
             'Status',
-            style: TextStyle(color: AppColors.darkText, fontSize: 14, fontWeight: FontWeight.w600),
+            style: TextStyle(
+              color: AppColors.darkText,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(20)),
+            decoration: BoxDecoration(
+              color: bg,
+              borderRadius: BorderRadius.circular(20),
+            ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
                   width: 7,
                   height: 7,
-                  decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+                  decoration: BoxDecoration(
+                    color: color,
+                    shape: BoxShape.circle,
+                  ),
                 ),
                 const SizedBox(width: 6),
                 Text(
                   label,
-                  style: TextStyle(color: color, fontSize: 12, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    color: color,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildSubmitButton() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-      decoration: BoxDecoration(
-        color: AppColors.colorWhite,
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.colorBlack.withValues(alpha: 0.04),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        top: false,
-        child: SizedBox(
-          height: 50,
-          child: ElevatedButton(
-            onPressed: _submitHomework,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppValues.radiusDefault)),
-            ),
-            child: const Text(
-              'Submit Homework',
-              style: TextStyle(color: AppColors.colorWhite, fontSize: 15, fontWeight: FontWeight.bold),
-            ),
-          ),
-        ),
       ),
     );
   }

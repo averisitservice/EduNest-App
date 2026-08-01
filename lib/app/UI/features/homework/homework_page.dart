@@ -1,7 +1,9 @@
 import 'package:edunest/app/UI/features/homework/homework_date_wise.dart';
+import 'package:edunest/app/UI/features/homework/homework_filter_sheet.dart';
 import 'package:edunest/app/UI/features/homework/homework_subject_wise.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
+import 'package:edunest/app/data/model/homework_filter.dart';
 import 'package:edunest/app/data/model/homework_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
 import 'package:flutter/material.dart';
@@ -20,11 +22,35 @@ class _HomeworkPageState extends State<HomeworkPage> {
   List<HomeworkModelItem> _homework = [];
   bool _isLoading = true;
   int _selectedTabIndex = 0;
+  HomeworkFilter? _activeFilter;
 
   @override
   void initState() {
     super.initState();
     _loadHomework();
+  }
+
+  List<HomeworkModelItem> get _filteredHomework {
+    final filter = _activeFilter;
+    if (filter == null) return _homework;
+    return _homework.where((item) => filter.matches(item.dueDate)).toList();
+  }
+
+  Future<void> _openFilterSheet() async {
+    final result = await showModalBottomSheet<HomeworkFilter>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.colorWhite,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(AppValues.radiusXLarge),
+        ),
+      ),
+      builder: (context) => HomeworkFilterSheet(currentFilter: _activeFilter),
+    );
+
+    if (result == null) return;
+    setState(() => _activeFilter = result);
   }
 
   Future<void> _loadHomework() async {
@@ -65,6 +91,17 @@ class _HomeworkPageState extends State<HomeworkPage> {
           ),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.filter_list_rounded,
+              color: _activeFilter != null
+                  ? AppColors.primary
+                  : AppColors.darkText,
+            ),
+            onPressed: _openFilterSheet,
+          ),
+        ],
       ),
       body: Container(
         width: double.infinity,
@@ -90,8 +127,8 @@ class _HomeworkPageState extends State<HomeworkPage> {
                       const SizedBox(height: 6),
                       Expanded(
                         child: _selectedTabIndex == 0
-                            ? HomeworkDateWise(homework: _homework)
-                            : HomeworkSubjectWise(homework: _homework),
+                            ? HomeworkDateWise(homework: _filteredHomework)
+                            : HomeworkSubjectWise(homework: _filteredHomework),
                       ),
                     ],
                   ),

@@ -101,99 +101,107 @@ class _EdunestFilterState extends State<EdunestFilter> {
           top: 12,
           bottom: MediaQuery.of(context).viewInsets.bottom + 16,
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: 16),
-                decoration: BoxDecoration(
-                  color: AppColors.borderGrey,
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-            ),
-            Text(
-              widget.title,
-              style: const TextStyle(
-                fontSize: AppValues.fontSizeSubTitle,
-                fontWeight: FontWeight.bold,
-                color: AppColors.darkText,
-              ),
-            ),
-            const SizedBox(height: 12),
-            _buildOption(
-              type: HomeworkFilterType.thisWeek,
-              title: 'This Week',
-              subtitle: 'Show data for this week',
-            ),
-            _buildOption(
-              type: HomeworkFilterType.thisMonth,
-              title: 'This Month',
-              subtitle: 'Show data for this month',
-            ),
-            _buildOption(
-              type: HomeworkFilterType.customRange,
-              title: 'Custom Date Range',
-              subtitle: 'Select a custom date range',
-            ),
-            if (_selectedType == HomeworkFilterType.customRange) ...[
-              const SizedBox(height: 8),
-              const Text(
-                'From Date',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.darkGrey,
-                ),
-              ),
-              const SizedBox(height: 6),
-              _buildDateField(isFromDate: true),
-              const SizedBox(height: 14),
-              const Text(
-                'To Date',
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.darkGrey,
-                ),
-              ),
-              const SizedBox(height: 6),
-              _buildDateField(isFromDate: false),
-            ],
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: EdunestButton(
-                    title: 'Reset',
-                    useGradient: false,
-                    backgroundColor: AppColors.colorWhite,
-                    borderColor: AppColors.borderGrey,
-                    textColor: AppColors.darkText,
-                    height: 48,
-                    fontSize: 14,
-                    radius: AppValues.radiusDefault,
-                    onPressed: _reset,
+        child: RadioGroup<HomeworkFilterType>(
+          groupValue: _selectedType,
+          onChanged: (value) {
+            if (value != null) {
+              setState(() => _selectedType = value);
+            }
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  decoration: BoxDecoration(
+                    color: AppColors.borderGrey,
+                    borderRadius: BorderRadius.circular(4),
                   ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: EdunestButton(
-                    title: 'Apply',
-                    useGradient: true,
-                    height: 48,
-                    fontSize: 14,
-                    radius: AppValues.radiusDefault,
-                    onPressed: _apply,
+              ),
+              Text(
+                widget.title,
+                style: const TextStyle(
+                  fontSize: AppValues.fontSizeSubTitle,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.darkText,
+                ),
+              ),
+              const SizedBox(height: 12),
+              _buildOption(
+                type: HomeworkFilterType.thisWeek,
+                title: 'This Week',
+                subtitle: 'Show data for this week',
+              ),
+              _buildOption(
+                type: HomeworkFilterType.thisMonth,
+                title: 'This Month',
+                subtitle: 'Show data for this month',
+              ),
+              _buildOption(
+                type: HomeworkFilterType.customRange,
+                title: 'Custom Date Range',
+                subtitle: 'Select a custom date range',
+              ),
+              if (_selectedType == HomeworkFilterType.customRange) ...[
+                const SizedBox(height: 8),
+                const Text(
+                  'From Date',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.darkGrey,
                   ),
                 ),
+                const SizedBox(height: 6),
+                _buildDateField(isFromDate: true),
+                const SizedBox(height: 14),
+                const Text(
+                  'To Date',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.darkGrey,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                _buildDateField(isFromDate: false),
               ],
-            ),
-          ],
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  Expanded(
+                    child: EdunestButton(
+                      title: 'Reset',
+                      useGradient: false,
+                      backgroundColor: AppColors.colorWhite,
+                      borderColor: AppColors.borderGrey,
+                      textColor: AppColors.darkText,
+                      height: 48,
+                      fontSize: 14,
+                      radius: AppValues.radiusDefault,
+                      onPressed: _reset,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: EdunestButton(
+                      title: 'Apply',
+                      useGradient: true,
+                      height: 48,
+                      fontSize: 14,
+                      radius: AppValues.radiusDefault,
+                      onPressed: _apply,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -250,9 +258,7 @@ class _EdunestFilterState extends State<EdunestFilter> {
             ),
             Radio<HomeworkFilterType>(
               value: type,
-              groupValue: _selectedType,
               activeColor: AppColors.primary,
-              onChanged: (value) => setState(() => _selectedType = value!),
             ),
           ],
         ),

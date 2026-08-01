@@ -36,9 +36,18 @@ class FeaturesRepo extends BaseRepo {
     }
   }
 
-  Future<List<HomeworkModelItem>> getStudentNotes() async {
+  Future<List<HomeworkModelItem>> getStudentNotes({
+    DateTime? fromDate,
+    DateTime? toDate,
+  }) async {
     try {
-      var res = await DioClient.getInstance().get(AppUrls.getStudentNotes());
+      var res = await DioClient.getInstance().get(
+        AppUrls.getStudentNotes(),
+        queryParameters: {
+          if (fromDate != null) 'fromDate': DateFormat('yyyy-MM-dd').format(fromDate),
+          if (toDate != null) 'toDate': DateFormat('yyyy-MM-dd').format(toDate),
+        },
+      );
       final list = res.data['data'] as List? ?? [];
       return list.map((e) => HomeworkModelItem.fromJson(e)).toList();
     } catch (e) {

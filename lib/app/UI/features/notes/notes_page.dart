@@ -3,8 +3,10 @@ import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/services/subject_icon_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
+import 'package:edunest/app/data/model/homework/homework_filter.dart';
 import 'package:edunest/app/data/model/homework/homework_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
+import 'package:edunest/app/global_widgets/edunest_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -22,10 +24,18 @@ class _NotesPageState extends State<NotesPage> {
   List<HomeworkModelItem> _notes = [];
   bool _isLoading = true;
   String? _errorMessage;
+  HomeworkFilter? _activeFilter;
 
   @override
   void initState() {
     super.initState();
+    _loadNotes();
+  }
+
+  Future<void> _openFilterSheet() async {
+    final result = await EdunestFilter.show(context, currentFilter: _activeFilter);
+    if (result == null) return;
+    setState(() => _activeFilter = result);
     _loadNotes();
   }
 
@@ -36,7 +46,11 @@ class _NotesPageState extends State<NotesPage> {
     });
 
     try {
-      final notes = await featuresRepo.getStudentNotes();
+      final (fromDate, toDate) = _activeFilter?.dateRange ?? (null, null);
+      final notes = await featuresRepo.getStudentNotes(
+        fromDate: fromDate,
+        toDate: toDate,
+      );
       if (!mounted) return;
       setState(() => _notes = notes);
     } on ApiException catch (e) {
@@ -71,6 +85,12 @@ class _NotesPageState extends State<NotesPage> {
           ),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.filter_list_rounded, color: AppColors.primary),
+            onPressed: _openFilterSheet,
+          ),
+        ],
       ),
       body: Container(
         width: double.infinity,

@@ -376,7 +376,7 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
               child: Container(
                 height: 200,
                 width: double.infinity,
-                color: AppColors.subtleBg,
+                color: AppColors.lightBackground,
                 child: Image.network(
                   item.attachmentUrl!,
                   fit: BoxFit.cover,
@@ -409,20 +409,20 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
           Container(
             padding: const EdgeInsets.all(12.0),
             decoration: BoxDecoration(
-              color: AppColors.subtleBg,
+              color: AppColors.lightBackground,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.subtleBorder),
+              border: Border.all(color: AppColors.borderGrey),
             ),
             child: Row(
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                   decoration: BoxDecoration(
-                    color: AppColors.fileBadgeBg,
+                    color: AppColors.blueBackground,
                     borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: AppColors.fileBadgeBorder),
+                    border: Border.all(color: AppColors.inputBorder),
                   ),
-                  child: const Icon(Icons.description_outlined, color: AppColors.fileBadgeIcon, size: 22),
+                  child: const Icon(Icons.description_outlined, color: AppColors.primary, size: 22),
                 ),
                 const SizedBox(width: 14),
                 Expanded(

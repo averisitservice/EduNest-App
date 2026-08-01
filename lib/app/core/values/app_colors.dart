@@ -46,11 +46,4 @@ abstract class AppColors {
   static const Color notificationRedBg = Color(0xFFFFE4E6);
   static const Color notificationAmberIcon = Color(0xFFD97706);
   static const Color notificationAmberBg = Color(0xFFFEF3C7);
-
-  static const Color cardBorder = Color(0xFFE2E8F0);
-  static const Color subtleBg = Color(0xFFF8FAFC);
-  static const Color subtleBorder = Color(0xFFF1F5F9);
-  static const Color fileBadgeBg = Color(0xFFFEE2E2);
-  static const Color fileBadgeBorder = Color(0xFFFECACA);
-  static const Color fileBadgeIcon = Color(0xFFDC2626);
 }

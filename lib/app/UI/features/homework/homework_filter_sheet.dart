@@ -193,7 +193,7 @@ class _HomeworkFilterSheetState extends State<HomeworkFilterSheet> {
           color: isSelected ? AppColors.blueBackground : AppColors.colorWhite,
           borderRadius: BorderRadius.circular(AppValues.radiusDefault),
           border: Border.all(
-            color: isSelected ? AppColors.primary : AppColors.cardBorder,
+            color: isSelected ? AppColors.primary : AppColors.borderGrey,
           ),
         ),
         child: Row(
@@ -243,7 +243,7 @@ class _HomeworkFilterSheetState extends State<HomeworkFilterSheet> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
-          border: Border.all(color: AppColors.cardBorder),
+          border: Border.all(color: AppColors.borderGrey),
           borderRadius: BorderRadius.circular(AppValues.radiusDefault),
         ),
         child: Row(

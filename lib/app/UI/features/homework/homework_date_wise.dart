@@ -111,7 +111,7 @@ class HomeworkDateWise extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.colorWhite,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: AppColors.cardBorder),
+                border: Border.all(color: AppColors.borderGrey),
                 boxShadow: [
                   BoxShadow(
                     color: AppColors.colorBlack.withValues(alpha: 0.02),

@@ -1,7 +1,6 @@
 class StudentDetailModel {
   final int studentId;
   final String admissionNo;
-  final String username;
   final String studentName;
   final String photoUrl;
 
@@ -10,12 +9,7 @@ class StudentDetailModel {
   final String aadharNo;
   final String email;
   final String mobileNo;
-  final bool isHostel;
 
-  final int classId;
-  final String className;
-  final int sectionId;
-  final String sectionName;
   final String displayClass;
   final String rollNo;
   final String classTeacherName;
@@ -31,7 +25,6 @@ class StudentDetailModel {
   const StudentDetailModel({
     required this.studentId,
     required this.admissionNo,
-    required this.username,
     required this.studentName,
     required this.photoUrl,
     required this.dateOfBirth,
@@ -39,11 +32,6 @@ class StudentDetailModel {
     required this.aadharNo,
     required this.email,
     required this.mobileNo,
-    required this.isHostel,
-    required this.classId,
-    required this.className,
-    required this.sectionId,
-    required this.sectionName,
     required this.displayClass,
     required this.rollNo,
     required this.classTeacherName,
@@ -59,7 +47,6 @@ class StudentDetailModel {
     return StudentDetailModel(
       studentId: json['studentId'] ?? 0,
       admissionNo: json['admissionNo'] ?? "",
-      username: json['username'] ?? "",
       studentName: json['studentName'] ?? "",
       photoUrl: json['photoUrl'] ?? "",
       dateOfBirth: json['dateOfBirth'] ?? "",
@@ -67,11 +54,6 @@ class StudentDetailModel {
       aadharNo: json['aadharNo'] ?? "",
       email: json['email'] ?? "",
       mobileNo: json['mobileNo'] ?? "",
-      isHostel: json['isHostel'] ?? false,
-      classId: json['classId'] ?? 0,
-      className: json['className'] ?? "",
-      sectionId: json['sectionId'] ?? 0,
-      sectionName: json['sectionName'] ?? "",
       displayClass: json['displayClass'] ?? "",
       rollNo: json['rollNo'] ?? "",
       classTeacherName: json['classTeacherName'] ?? "",

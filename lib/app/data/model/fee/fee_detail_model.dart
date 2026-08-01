@@ -38,33 +38,24 @@ class FeeDetailModel {
 }
 
 class FeePaymentItem {
-  final int feePaymentId;
   final double amount;
   final String paymentDate;
   final String paymentMode;
   final String receiptNo;
-  final String? remarks;
-  final String? collectedBy;
 
   const FeePaymentItem({
-    required this.feePaymentId,
     required this.amount,
     required this.paymentDate,
     required this.paymentMode,
     required this.receiptNo,
-    required this.remarks,
-    required this.collectedBy,
   });
 
   factory FeePaymentItem.fromJson(Map<String, dynamic> json) {
     return FeePaymentItem(
-      feePaymentId: json['feePaymentId'] ?? 0,
       amount: (json['amount'] as num?)?.toDouble() ?? 0,
       paymentDate: json['paymentDate'] ?? '',
       paymentMode: json['paymentMode'] ?? '',
       receiptNo: json['receiptNo'] ?? '',
-      remarks: json['remarks'],
-      collectedBy: json['collectedBy'],
     );
   }
 }

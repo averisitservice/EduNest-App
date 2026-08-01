@@ -1,6 +1,5 @@
 class HomeworkModelItem {
   final int id;
-  final int? subjectId;
   final String subjectName;
   final String title;
   final String description;
@@ -10,7 +9,6 @@ class HomeworkModelItem {
 
   const HomeworkModelItem({
     required this.id,
-    required this.subjectId,
     required this.subjectName,
     required this.title,
     required this.description,
@@ -22,7 +20,6 @@ class HomeworkModelItem {
   factory HomeworkModelItem.fromJson(Map<String, dynamic> json) {
     return HomeworkModelItem(
       id: json['homeworkId'] ?? json['noteId'] ?? 0,
-      subjectId: json['subjectId'],
       subjectName: json['subjectName'] ?? 'General',
       title: json['title'] ?? '',
       description: json['description'] ?? '',
@@ -35,7 +32,6 @@ class HomeworkModelItem {
 
 class HomeworkDetailModel {
   final int id;
-  final int? subjectId;
   final String subjectName;
   final String title;
   final String description;
@@ -46,7 +42,6 @@ class HomeworkDetailModel {
 
   const HomeworkDetailModel({
     required this.id,
-    required this.subjectId,
     required this.subjectName,
     required this.title,
     required this.description,
@@ -59,7 +54,6 @@ class HomeworkDetailModel {
   factory HomeworkDetailModel.fromJson(Map<String, dynamic> json) {
     return HomeworkDetailModel(
       id: json['homeworkId'] ?? json['noteId'] ?? 0,
-      subjectId: json['subjectId'],
       subjectName: json['subjectName'] ?? 'General',
       title: json['title'] ?? '',
       description: json['description'] ?? '',

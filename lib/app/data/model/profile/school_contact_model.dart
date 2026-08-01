@@ -1,5 +1,4 @@
 class SchoolContactModel {
-  final int tenantId;
   final String schoolName;
   final String logoUrl;
   final String contactName;
@@ -9,7 +8,6 @@ class SchoolContactModel {
   final String address;
 
   const SchoolContactModel({
-    required this.tenantId,
     required this.schoolName,
     required this.logoUrl,
     required this.contactName,
@@ -21,7 +19,6 @@ class SchoolContactModel {
 
   factory SchoolContactModel.fromJson(Map<String, dynamic> json) {
     return SchoolContactModel(
-      tenantId: json['tenantId'] ?? 0,
       schoolName: json['schoolName'] ?? "",
       logoUrl: json['logoUrl'] ?? "",
       contactName: json['contactName'] ?? "",

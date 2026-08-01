@@ -15,7 +15,6 @@ class ExamsModel {
 }
 
 class ExamItem {
-  final int examId;
   final String examName;
   final String subjectName;
   final String examDate;
@@ -25,7 +24,6 @@ class ExamItem {
   final String status;
 
   const ExamItem({
-    required this.examId,
     required this.examName,
     required this.subjectName,
     required this.examDate,
@@ -37,7 +35,6 @@ class ExamItem {
 
   factory ExamItem.fromJson(Map<String, dynamic> json) {
     return ExamItem(
-      examId: json['examId'] ?? 0,
       examName: json['examName'] ?? "",
       subjectName: json['subjectName'] ?? "",
       examDate: json['examDate'] ?? "",

@@ -7,12 +7,12 @@ class HomeworkFilter {
 
   const HomeworkFilter({required this.type, this.fromDate, this.toDate});
 
-  factory HomeworkFilter.lastTwoDays() {
+  factory HomeworkFilter.lastSevenDays() {
     final today = DateTime.now();
     final todayOnly = DateTime(today.year, today.month, today.day);
     return HomeworkFilter(
       type: HomeworkFilterType.customRange,
-      fromDate: todayOnly.subtract(const Duration(days: 1)),
+      fromDate: todayOnly.subtract(const Duration(days: 6)),
       toDate: todayOnly,
     );
   }

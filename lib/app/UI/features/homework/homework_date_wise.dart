@@ -26,41 +26,15 @@ class HomeworkDateWise extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (homework.isEmpty) {
-      return ListView(
-        physics: const AlwaysScrollableScrollPhysics(
-          parent: BouncingScrollPhysics(),
+      return const Center(
+        child: Text(
+          'No data found',
+          style: TextStyle(
+            fontSize: AppValues.fontSizeBody,
+            color: AppColors.darkGrey,
+            fontWeight: FontWeight.w500,
+          ),
         ),
-        children: const [
-          SizedBox(height: 100),
-          Center(
-            child: Icon(
-              Icons.inventory_2_outlined,
-              size: 56,
-              color: AppColors.textMuted,
-            ),
-          ),
-          SizedBox(height: 16),
-          Center(
-            child: Text(
-              "That's all for now!",
-              style: TextStyle(
-                fontSize: AppValues.fontSizeBody,
-                color: AppColors.darkText,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          SizedBox(height: 4),
-          Center(
-            child: Text(
-              'Pull down to refresh',
-              style: TextStyle(
-                fontSize: AppValues.fontSizeSmall,
-                color: AppColors.darkGrey,
-              ),
-            ),
-          ),
-        ],
       );
     }
 

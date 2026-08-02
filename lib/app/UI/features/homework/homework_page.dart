@@ -22,7 +22,7 @@ class _HomeworkPageState extends State<HomeworkPage> {
   List<HomeworkModelItem> _homework = [];
   bool _isLoading = true;
   int _selectedTabIndex = 0;
-  HomeworkFilter _activeFilter = HomeworkFilter.lastTwoDays();
+  HomeworkFilter _activeFilter = HomeworkFilter.lastSevenDays();
 
   @override
   void initState() {
@@ -107,25 +107,21 @@ class _HomeworkPageState extends State<HomeworkPage> {
         ),
         child: SafeArea(
           child: _isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(color: AppColors.primary),
-                )
-              : RefreshIndicator(
-                  onRefresh: _loadHomework,
-                  color: AppColors.primary,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _buildTabSwitcher(),
-                      const SizedBox(height: 6),
-                      Expanded(
-                        child: _selectedTabIndex == 0
-                            ? HomeworkDateWise(homework: _homework)
-                            : HomeworkSubjectWise(homework: _homework),
-                      ),
-                    ],
+            ? const Center(
+                child: CircularProgressIndicator(color: AppColors.primary),
+              )
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildTabSwitcher(),
+                  const SizedBox(height: 6),
+                  Expanded(
+                    child: _selectedTabIndex == 0
+                        ? HomeworkDateWise(homework: _homework)
+                        : HomeworkSubjectWise(homework: _homework),
                   ),
-                ),
+                ],
+              ),
         ),
       ),
     );

@@ -1,5 +1,4 @@
 import 'package:edunest/app/UI/features/homework/homework_detail_page.dart';
-import 'package:edunest/app/core/helper/homework_status_helper.dart';
 import 'package:edunest/app/core/services/subject_icon_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/data/model/homework/homework_model.dart';
@@ -117,7 +116,6 @@ class HomeworkRowItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final subColor = SubjectIconService.colorFor(item.subjectName);
-    final status = HomeworkStatusHelper.forDueDate(item.dueDate);
 
     return InkWell(
       onTap: () {
@@ -165,16 +163,14 @@ class HomeworkRowItem extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 6),
-                  status != null
-                      ? _buildStatusBadge(status)
-                      : Text(
-                          HomeworkStatusHelper.formatDueDate(item.dueDate),
-                          style: const TextStyle(
-                            color: AppColors.darkGrey,
-                            fontSize: 11.5,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
+                  Text(
+                    _formatDueDate(item.dueDate),
+                    style: const TextStyle(
+                      color: AppColors.darkGrey,
+                      fontSize: 11.5,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -190,21 +186,13 @@ class HomeworkRowItem extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusBadge(HomeworkStatus status) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: status.bgColor,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Text(
-        status.label,
-        style: TextStyle(
-          color: status.textColor,
-          fontSize: 10.5,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
+  String _formatDueDate(String dateStr) {
+    if (dateStr.isEmpty) return '--';
+    try {
+      final dt = DateTime.parse(dateStr).toLocal();
+      return DateFormat('dd MMM yyyy').format(dt);
+    } catch (_) {
+      return dateStr;
+    }
   }
 }

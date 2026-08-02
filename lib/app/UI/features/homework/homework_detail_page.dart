@@ -5,6 +5,7 @@ import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/homework/homework_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
+import 'package:edunest/app/global_widgets/edunest_divider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -74,19 +75,6 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Unable to open attachment.')),
       );
-    }
-  }
-
-  bool _isOverdue(String dueDateStr) {
-    if (dueDateStr.isEmpty) return false;
-    try {
-      final due = DateTime.parse(dueDateStr).toLocal();
-      final dueOnly = DateTime(due.year, due.month, due.day);
-      final today = DateTime.now();
-      final todayOnly = DateTime(today.year, today.month, today.day);
-      return dueOnly.isBefore(todayOnly);
-    } catch (_) {
-      return false;
     }
   }
 
@@ -164,13 +152,9 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
     final assignedDate = item.updatedDate.isNotEmpty
         ? '${DateUtil.getDay(item.updatedDate)} ${DateUtil.getMonth(item.updatedDate)} ${DateUtil.getYear(item.updatedDate)}'
         : '--';
-    final dueDate = item.dueDate.isNotEmpty
-        ? '${DateUtil.getDay(item.dueDate)} ${DateUtil.getMonth(item.dueDate)} ${DateUtil.getYear(item.dueDate)}'
-        : '--';
     final filename = _getFileName(item.attachmentUrl ?? '');
     final hasAttachment =
         item.attachmentUrl != null && item.attachmentUrl!.isNotEmpty;
-    final overdue = _isOverdue(item.dueDate);
 
     final subjectColor = SubjectIconService.colorFor(item.subjectName);
     final subjectBg = SubjectIconService.bgColorFor(item.subjectName);
@@ -187,22 +171,13 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildHeaderCard(
-                  item,
-                  subjectColor,
-                  subjectBg,
-                  assignedDate,
-                  dueDate,
-                  overdue,
-                ),
+                _buildHeaderCard(item, subjectColor, subjectBg, assignedDate),
                 const SizedBox(height: 16),
                 _buildDescriptionCard(item),
                 if (hasAttachment) ...[
                   const SizedBox(height: 16),
                   _buildAttachmentsCard(item, filename),
                 ],
-                const SizedBox(height: 16),
-                _buildStatusCard(overdue),
                 const SizedBox(height: 90),
               ],
             ),
@@ -217,8 +192,6 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
     Color subjectColor,
     Color subjectBg,
     String assignedDate,
-    String dueDate,
-    bool overdue,
   ) {
     return Container(
       width: double.infinity,
@@ -293,20 +266,13 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
             ],
           ),
           const SizedBox(height: 16),
-          const Divider(height: 1, color: AppColors.lightBackground),
+          const EdunestDivider(color: AppColors.lightBackground, height: 0),
           const SizedBox(height: 12),
           _buildInfoRow(
             Icons.event_available_rounded,
             'Assigned Date',
             assignedDate,
             AppColors.darkText,
-          ),
-          const SizedBox(height: 10),
-          _buildInfoRow(
-            Icons.event_busy_rounded,
-            'Due Date',
-            dueDate,
-            overdue ? AppColors.errorColor : AppColors.darkText,
           ),
           const SizedBox(height: 10),
           _buildInfoRow(
@@ -524,75 +490,6 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
                   ),
                 ],
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatusCard(bool overdue) {
-    final label = overdue ? 'Overdue' : 'Pending';
-    final color = overdue
-        ? AppColors.notificationRedIcon
-        : AppColors.notificationGreenIcon;
-    final bg = overdue
-        ? AppColors.notificationRedBg
-        : AppColors.notificationGreenBg;
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
-      decoration: BoxDecoration(
-        color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(16.0),
-        border: Border.all(color: AppColors.lightBackground),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.colorBlack.withValues(alpha: 0.02),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text(
-            'Status',
-            style: TextStyle(
-              color: AppColors.darkText,
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            decoration: BoxDecoration(
-              color: bg,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 7,
-                  height: 7,
-                  decoration: BoxDecoration(
-                    color: color,
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Text(
-                  label,
-                  style: TextStyle(
-                    color: color,
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
             ),
           ),
         ],

@@ -25,7 +25,7 @@ class _NotesPageState extends State<NotesPage> {
   List<HomeworkModelItem> _notes = [];
   bool _isLoading = true;
   String? _errorMessage;
-  HomeworkFilter? _activeFilter;
+  HomeworkFilter? _activeFilter = HomeworkFilter.lastSevenDays();
 
   @override
   void initState() {

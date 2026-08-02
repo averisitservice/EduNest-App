@@ -33,4 +33,13 @@ class LeaveRepo extends BaseRepo {
       throw ErrorHelper.toApiException(e);
     }
   }
+
+  Future<bool> deleteLeave(int leaveId) async {
+    try {
+      await DioClient.getInstance().delete(AppUrls.deleteLeave(leaveId));
+      return true;
+    } catch (e) {
+      throw ErrorHelper.toApiException(e);
+    }
+  }
 }

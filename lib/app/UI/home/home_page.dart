@@ -7,7 +7,7 @@ import 'package:edunest/app/UI/features/homework/homework_page.dart';
 import 'package:edunest/app/UI/features/notes/notes_page.dart';
 import 'package:edunest/app/UI/features/results_page.dart';
 import 'package:edunest/app/UI/features/fee/fee_payment_page.dart';
-import 'package:edunest/app/UI/features/leave/leave_request_page.dart';
+import 'package:edunest/app/UI/features/leave/leave_list_page.dart';
 import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
@@ -375,11 +375,11 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: _buildFeatureItem(
                 Icons.exit_to_app_rounded,
-                'Request Leave',
+                'Leave',
                 AppColors.notificationCyanBg,
                 AppColors.notificationCyanIcon,
                 onTap: () {
-                  Get.to(() => const LeaveRequestPage());
+                  Get.to(() => const LeaveListPage());
                 },
               ),
             ),

@@ -45,4 +45,7 @@ class AppUrls {
   static String getLeaveList() => "$baseUrl/api/student/leave/list";
 
   static String submitLeave() => "$baseUrl/api/student/leave";
+
+  static String deleteLeave(int leaveId) =>
+      "$baseUrl/api/student/leave/$leaveId";
 }

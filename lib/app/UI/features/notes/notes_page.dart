@@ -6,6 +6,7 @@ import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/homework/homework_filter.dart';
 import 'package:edunest/app/data/model/homework/homework_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
+import 'package:edunest/app/global_widgets/edunest_empty_state.dart';
 import 'package:edunest/app/global_widgets/edunest_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -145,17 +146,8 @@ class _NotesPageState extends State<NotesPage> {
             parent: BouncingScrollPhysics(),
           ),
           children: const [
-            SizedBox(height: 200),
-            Center(
-              child: Text(
-                'No notes posted yet.',
-                style: TextStyle(
-                  fontSize: AppValues.fontSizeBody,
-                  color: AppColors.darkGrey,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
+            SizedBox(height: 80),
+            EdunestEmptyState(subtitle: 'No notes posted yet.'),
           ],
         ),
       );

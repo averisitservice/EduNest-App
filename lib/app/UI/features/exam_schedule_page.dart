@@ -3,6 +3,7 @@ import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/exam/exam_schedule_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
+import 'package:edunest/app/global_widgets/edunest_empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -109,18 +110,12 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
           ),
           const SizedBox(height: 12),
           if (currentExams.isEmpty)
-            Container(
-              height: 160,
-              alignment: Alignment.center,
-              child: Text(
-                _selectedTabIndex == 0
+            SizedBox(
+              height: 260,
+              child: EdunestEmptyState(
+                subtitle: _selectedTabIndex == 0
                     ? 'No upcoming exams.'
                     : 'No past exams.',
-                style: const TextStyle(
-                  fontSize: AppValues.fontSizeBody,
-                  color: AppColors.darkGrey,
-                  fontWeight: FontWeight.w500,
-                ),
               ),
             )
           else

@@ -1,8 +1,8 @@
 import 'package:edunest/app/UI/features/homework/homework_date_wise.dart';
 import 'package:edunest/app/core/services/subject_icon_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
-import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/homework/homework_model.dart';
+import 'package:edunest/app/global_widgets/edunest_empty_state.dart';
 import 'package:flutter/material.dart';
 
 class HomeworkSubjectWise extends StatefulWidget {
@@ -29,16 +29,7 @@ class _HomeworkSubjectWiseState extends State<HomeworkSubjectWise> {
   @override
   Widget build(BuildContext context) {
     if (widget.homework.isEmpty) {
-      return const Center(
-        child: Text(
-          'No data found',
-          style: TextStyle(
-            fontSize: AppValues.fontSizeBody,
-            color: AppColors.darkGrey,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      );
+      return const EdunestEmptyState(subtitle: 'No homework posted yet.');
     }
 
     final subjects = _getUniqueSubjects();

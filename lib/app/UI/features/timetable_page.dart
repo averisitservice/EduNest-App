@@ -4,6 +4,7 @@ import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/timetable/timetable_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
+import 'package:edunest/app/global_widgets/edunest_empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -147,15 +148,7 @@ class _TimetablePageState extends State<TimetablePage> {
 
     final timetable = _timetable;
     if (timetable == null || timetable.days.isEmpty) {
-      return const Center(
-        child: Text(
-          'No timetable available.',
-          style: TextStyle(
-            color: AppColors.darkGrey,
-            fontSize: AppValues.fontSizeDefault,
-          ),
-        ),
-      );
+      return const EdunestEmptyState(subtitle: 'No timetable available.');
     }
 
     final day = timetable.days[_selectedDay];

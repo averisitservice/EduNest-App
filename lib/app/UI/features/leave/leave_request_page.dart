@@ -3,6 +3,7 @@ import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/repository/leave_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_button.dart';
+import 'package:edunest/app/global_widgets/edunest_date_picker.dart';
 import 'package:edunest/app/global_widgets/edunest_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -29,21 +30,11 @@ class _LeaveRequestPageState extends State<LeaveRequestPage> {
   }
 
   Future<void> _pickDate() async {
-    final picked = await showDatePicker(
-      context: context,
+    final picked = await EdunestDatePicker.pick(
+      context,
       initialDate: _leaveDate,
       firstDate: DateTime.now(),
       lastDate: DateTime.now().add(const Duration(days: 365)),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: Theme.of(
-              context,
-            ).colorScheme.copyWith(primary: AppColors.primary),
-          ),
-          child: child!,
-        );
-      },
     );
     if (picked != null) {
       setState(() => _leaveDate = picked);

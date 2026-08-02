@@ -2,6 +2,7 @@ import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/homework/homework_filter.dart';
 import 'package:edunest/app/global_widgets/edunest_button.dart';
+import 'package:edunest/app/global_widgets/edunest_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -56,8 +57,8 @@ class _EdunestFilterState extends State<EdunestFilter> {
 
   Future<void> _pickDate({required bool isFromDate}) async {
     final initial = (isFromDate ? _fromDate : _toDate) ?? DateTime.now();
-    final picked = await showDatePicker(
-      context: context,
+    final picked = await EdunestDatePicker.pick(
+      context,
       initialDate: initial,
       firstDate: DateTime(2020),
       lastDate: DateTime(2100),

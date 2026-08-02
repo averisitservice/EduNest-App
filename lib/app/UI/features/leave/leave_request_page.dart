@@ -141,37 +141,29 @@ class _LeaveRequestPageState extends State<LeaveRequestPage> {
       ),
       child: Column(
         children: [
-          Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              color: AppColors.blueBackground,
-              shape: BoxShape.circle,
-            ),
-            alignment: Alignment.center,
-            child: const Icon(
-              Icons.description_outlined,
-              color: AppColors.primary,
-              size: 30,
-            ),
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'Request Details',
-            style: TextStyle(
-              color: AppColors.darkText,
-              fontSize: 19,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 6),
-          const Text(
-            'Please provide the details for your leave request.',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: AppColors.darkGrey, fontSize: 13),
-          ),
           const SizedBox(height: 24),
-          _sectionLabel(Icons.calendar_today_rounded, 'Leave Date'),
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.calendar_today_rounded,
+                  size: 18,
+                  color: AppColors.primary,
+                ),
+                SizedBox(width: 8),
+                Text(
+                  'Leave Date',
+                  style: TextStyle(
+                    color: AppColors.darkText,
+                    fontSize: 14.5,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
           const SizedBox(height: 8),
           _buildDateField(),
           const SizedBox(height: 6),
@@ -183,7 +175,24 @@ class _LeaveRequestPageState extends State<LeaveRequestPage> {
             ),
           ),
           const SizedBox(height: 20),
-          _sectionLabel(Icons.edit_outlined, 'Reason'),
+          const Align(
+            alignment: Alignment.centerLeft,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.edit_outlined, size: 18, color: AppColors.primary),
+                SizedBox(width: 8),
+                Text(
+                  'Reason',
+                  style: TextStyle(
+                    color: AppColors.darkText,
+                    fontSize: 14.5,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
           const SizedBox(height: 8),
           EdunestTextField(
             labelText: '',
@@ -206,27 +215,6 @@ class _LeaveRequestPageState extends State<LeaveRequestPage> {
             title: 'Submit Request',
             isLoading: _isSubmitting,
             onPressed: _submit,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _sectionLabel(IconData icon, String label) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 18, color: AppColors.primary),
-          const SizedBox(width: 8),
-          Text(
-            label,
-            style: const TextStyle(
-              color: AppColors.darkText,
-              fontSize: 14.5,
-              fontWeight: FontWeight.bold,
-            ),
           ),
         ],
       ),

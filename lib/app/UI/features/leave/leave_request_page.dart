@@ -22,6 +22,7 @@ class _LeaveRequestPageState extends State<LeaveRequestPage> {
 
   DateTime _leaveDate = DateTime.now();
   bool _isSubmitting = false;
+  String? _reasonError;
 
   @override
   void dispose() {
@@ -44,11 +45,10 @@ class _LeaveRequestPageState extends State<LeaveRequestPage> {
   Future<void> _submit() async {
     final reason = _reasonController.text.trim();
     if (reason.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a reason for leave.')),
-      );
+      setState(() => _reasonError = 'Please enter a reason for leave.');
       return;
     }
+    setState(() => _reasonError = null);
 
     setState(() => _isSubmitting = true);
     try {
@@ -192,13 +192,27 @@ class _LeaveRequestPageState extends State<LeaveRequestPage> {
             maxLength: 300,
             keyboardType: TextInputType.multiline,
             padding: const EdgeInsets.all(AppValues.paddingDefault),
+            onChanged: (_) {
+              if (_reasonError != null) {
+                setState(() => _reasonError = null);
+              }
+            },
           ),
           const SizedBox(height: 6),
-          const Align(
+          Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              'Please provide the reason for your leave request.',
-              style: TextStyle(color: AppColors.darkGrey, fontSize: 12),
+              _reasonError ??
+                  'Please provide the reason for your leave request.',
+              style: TextStyle(
+                color: _reasonError != null
+                    ? AppColors.errorColor
+                    : AppColors.darkGrey,
+                fontSize: 12,
+                fontWeight: _reasonError != null
+                    ? FontWeight.w600
+                    : FontWeight.normal,
+              ),
             ),
           ),
           const SizedBox(height: 24),

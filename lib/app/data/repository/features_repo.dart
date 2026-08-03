@@ -2,12 +2,31 @@ import 'package:edunest/app/core/base/base_repo.dart';
 import 'package:edunest/app/core/network/dio_client.dart';
 import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/utils/app_urls.dart';
+import 'package:edunest/app/data/model/attendance/attendance_model.dart';
 import 'package:edunest/app/data/model/exam/exam_schedule_model.dart';
 import 'package:edunest/app/data/model/homework/homework_model.dart';
 import 'package:edunest/app/data/model/timetable/timetable_model.dart';
 import 'package:intl/intl.dart';
 
 class FeaturesRepo extends BaseRepo {
+  Future<AttendanceSummaryModel> getStudentAttendance({
+    DateTime? fromDate,
+    DateTime? toDate,
+  }) async {
+    try {
+      var res = await DioClient.getInstance().get(
+        AppUrls.getStudentAttendance(),
+        queryParameters: {
+          if (fromDate != null) 'fromDate': DateFormat('yyyy-MM-dd').format(fromDate),
+          if (toDate != null) 'toDate': DateFormat('yyyy-MM-dd').format(toDate),
+        },
+      );
+      return AttendanceSummaryModel.fromJson(res.data['data']);
+    } catch (e) {
+      throw ErrorHelper.toApiException(e);
+    }
+  }
+
   Future<ExamsModel> getStudentExams() async {
     try {
       var res = await DioClient.getInstance().get(AppUrls.getStudentExams());

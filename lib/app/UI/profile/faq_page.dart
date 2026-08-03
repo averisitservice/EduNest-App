@@ -1,5 +1,6 @@
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
+import 'package:edunest/app/global_widgets/edunest_divider.dart';
 import 'package:flutter/material.dart';
 
 class FAQPage extends StatefulWidget {
@@ -177,8 +178,8 @@ class _FAQPageState extends State<FAQPage> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            const Divider(
-                                              height: 20,
+                                            const EdunestDivider(
+                                              height: 10,
                                               thickness: 0.5,
                                             ),
                                             Text(

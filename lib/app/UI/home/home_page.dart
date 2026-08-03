@@ -7,6 +7,7 @@ import 'package:edunest/app/UI/features/homework/homework_page.dart';
 import 'package:edunest/app/UI/features/notes/notes_page.dart';
 import 'package:edunest/app/UI/features/results_page.dart';
 import 'package:edunest/app/UI/features/fee/fee_payment_page.dart';
+import 'package:edunest/app/UI/features/attendance_page.dart';
 import 'package:edunest/app/UI/features/leave/leave_list_page.dart';
 import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
@@ -622,23 +623,32 @@ class _HomePageState extends State<HomePage> {
                   thickness: AppValues.dividerThickness / 2,
                 ),
                 const SizedBox(height: AppValues.paddingSmall + 2),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
-                      'View Attendance',
-                      style: TextStyle(
-                        fontSize: AppValues.fontSizeBody - 1,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.primary,
-                      ),
+                InkWell(
+                  onTap: () {
+                    Get.to(() => const AttendancePage());
+                  },
+                  borderRadius: BorderRadius.circular(AppValues.radiusSmall),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        Text(
+                          'View Attendance',
+                          style: TextStyle(
+                            fontSize: AppValues.fontSizeBody - 1,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                        Icon(
+                          Icons.chevron_right_rounded,
+                          color: AppColors.primary,
+                          size: AppValues.iconSizeMedium,
+                        ),
+                      ],
                     ),
-                    Icon(
-                      Icons.chevron_right_rounded,
-                      color: AppColors.primary,
-                      size: AppValues.iconSizeMedium,
-                    ),
-                  ],
+                  ),
                 ),
               ],
             ),

@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:edunest/app/core/values/app_colors.dart';
+import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/attendance/attendance_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
 import 'package:intl/intl.dart';
@@ -55,8 +57,6 @@ class _AttendancePageState extends State<AttendancePage> {
         _summary = summary;
         _attendanceMap = map;
       });
-    } catch (_) {
-      // If error occurs or empty, retain basic structure
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -64,7 +64,6 @@ class _AttendancePageState extends State<AttendancePage> {
     }
   }
 
-  // Calculate statistics
   int get _presentCount {
     if (_summary != null && _summary!.presentDays > 0) {
       return _summary!.presentDays;
@@ -90,17 +89,10 @@ class _AttendancePageState extends State<AttendancePage> {
         .length;
   }
 
-  int get _holidayCount {
-    return _attendanceMap.values
-        .where((v) => v == 'HOLIDAY' || v == 'H')
-        .length;
-  }
-
   int get _totalWorkingCount {
     final computed = _presentCount + _absentCount + _leaveCount;
     if (_summary != null && _summary!.totalDays > 0) {
-      final val = _summary!.totalDays - _holidayCount;
-      return val > 0 ? val : computed;
+      return _summary!.totalDays;
     }
     return computed;
   }
@@ -116,99 +108,82 @@ class _AttendancePageState extends State<AttendancePage> {
 
   @override
   Widget build(BuildContext context) {
-    const primaryBlue = Color(0xFF0047AB);
-
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F6F9),
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        backgroundColor: primaryBlue,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        backgroundColor: AppColors.transparent,
         elevation: 0,
+        surfaceTintColor: AppColors.transparent,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_rounded, color: AppColors.darkText),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
           'View Attendance',
           style: TextStyle(
-            color: Colors.white,
-            fontSize: 18,
+            color: AppColors.darkText,
+            fontSize: AppValues.fontSizeTitle,
             fontWeight: FontWeight.bold,
           ),
         ),
-        centerTitle: false,
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.calendar_month_outlined,
-              color: Colors.white,
-            ),
-            onPressed: () async {
-              final picked = await showDatePicker(
-                context: context,
-                initialDate: _focusedDay,
-                firstDate: DateTime(2020),
-                lastDate: DateTime(2030),
-              );
-              if (picked != null) {
-                setState(() {
-                  _focusedDay = picked;
-                  _selectedDay = picked;
-                });
-                _loadAttendance();
-              }
-            },
-          ),
-          const SizedBox(width: 8),
-        ],
+        centerTitle: true,
       ),
-      body: SafeArea(
-        child: _isLoading
-            ? const Center(child: CircularProgressIndicator(color: primaryBlue))
-            : RefreshIndicator(
-                onRefresh: _loadAttendance,
-                color: primaryBlue,
-                child: SingleChildScrollView(
-                  physics: const AlwaysScrollableScrollPhysics(
-                    parent: BouncingScrollPhysics(),
-                  ),
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildOverallAttendanceCard(),
-                      const SizedBox(height: 16),
-                      _buildCalendarCard(),
-                      const SizedBox(height: 20),
-                      _buildMonthSummarySection(),
-                      const SizedBox(height: 16),
-                      _buildDisclaimerCard(),
-                      const SizedBox(height: 16),
-                    ],
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/BackGroud.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SafeArea(
+          child: _isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(color: AppColors.primary),
+                )
+              : RefreshIndicator(
+                  onRefresh: _loadAttendance,
+                  color: AppColors.primary,
+                  child: SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(
+                      parent: BouncingScrollPhysics(),
+                    ),
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildOverallAttendanceCard(),
+                        const SizedBox(height: 16),
+                        _buildCalendarCard(),
+                        const SizedBox(height: 20),
+                        _buildDisclaimerCard(),
+                        const SizedBox(height: 16),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+        ),
       ),
     );
   }
 
-  // 1. Overall Attendance Top Card
   Widget _buildOverallAttendanceCard() {
     final present = _presentCount;
     final absent = _absentCount;
     final leave = _leaveCount;
-    final holiday = _holidayCount;
     final percent = _attendancePercent;
 
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        color: AppColors.colorWhite,
+        borderRadius: BorderRadius.circular(AppValues.radiusLarge),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.colorBlack.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -216,7 +191,6 @@ class _AttendancePageState extends State<AttendancePage> {
       ),
       child: Row(
         children: [
-          // Circular Donut Ring
           SizedBox(
             width: 105,
             height: 105,
@@ -225,7 +199,6 @@ class _AttendancePageState extends State<AttendancePage> {
                 present: present,
                 absent: absent,
                 leave: leave,
-                holiday: holiday,
               ),
               child: Center(
                 child: Column(
@@ -236,7 +209,7 @@ class _AttendancePageState extends State<AttendancePage> {
                       style: const TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF0047AB),
+                        color: AppColors.primary,
                         height: 1.1,
                       ),
                     ),
@@ -245,7 +218,7 @@ class _AttendancePageState extends State<AttendancePage> {
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF64748B),
+                        color: AppColors.textMuted,
                       ),
                     ),
                   ],
@@ -255,11 +228,9 @@ class _AttendancePageState extends State<AttendancePage> {
           ),
           const SizedBox(width: 16),
 
-          // Divider
-          Container(width: 1, height: 90, color: const Color(0xFFE2E8F0)),
+          Container(width: 1, height: 90, color: AppColors.borderGrey),
           const SizedBox(width: 16),
 
-          // Right Side Details
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -269,11 +240,10 @@ class _AttendancePageState extends State<AttendancePage> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF0F2552),
+                    color: AppColors.darkText,
                   ),
                 ),
                 const SizedBox(height: 10),
-                // 2x2 Grid Stats
                 Row(
                   children: [
                     Expanded(
@@ -281,8 +251,8 @@ class _AttendancePageState extends State<AttendancePage> {
                         label: 'Present',
                         value: '$present',
                         unit: present == 1 ? 'Day' : 'Days',
-                        dotColor: const Color(0xFF22C55E),
-                        textColor: const Color(0xFF22C55E),
+                        dotColor: AppColors.notificationGreenIcon,
+                        textColor: AppColors.notificationGreenIcon,
                       ),
                     ),
                     Expanded(
@@ -290,8 +260,8 @@ class _AttendancePageState extends State<AttendancePage> {
                         label: 'Absent',
                         value: '$absent',
                         unit: absent == 1 ? 'Day' : 'Days',
-                        dotColor: const Color(0xFFEF4444),
-                        textColor: const Color(0xFFEF4444),
+                        dotColor: AppColors.notificationRedIcon,
+                        textColor: AppColors.notificationRedIcon,
                       ),
                     ),
                   ],
@@ -304,19 +274,11 @@ class _AttendancePageState extends State<AttendancePage> {
                         label: 'Leave',
                         value: '$leave',
                         unit: leave == 1 ? 'Day' : 'Days',
-                        dotColor: const Color(0xFFF97316),
-                        textColor: const Color(0xFFF97316),
+                        dotColor: AppColors.notificationOrangeIcon,
+                        textColor: AppColors.notificationOrangeIcon,
                       ),
                     ),
-                    Expanded(
-                      child: _buildOverallStatItem(
-                        label: 'Holiday',
-                        value: '$holiday',
-                        unit: holiday == 1 ? 'Day' : 'Days',
-                        dotColor: const Color(0xFF94A3B8),
-                        textColor: const Color(0xFF64748B),
-                      ),
-                    ),
+                    const Expanded(child: SizedBox.shrink()),
                   ],
                 ),
               ],
@@ -367,7 +329,7 @@ class _AttendancePageState extends State<AttendancePage> {
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1E293B),
+                  color: AppColors.darkText,
                 ),
               ),
               const TextSpan(text: ' '),
@@ -376,7 +338,7 @@ class _AttendancePageState extends State<AttendancePage> {
                 style: const TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w500,
-                  color: Color(0xFF64748B),
+                  color: AppColors.textMuted,
                 ),
               ),
             ],
@@ -386,18 +348,17 @@ class _AttendancePageState extends State<AttendancePage> {
     );
   }
 
-  // 2. Calendar Card
   Widget _buildCalendarCard() {
     final monthTitle = DateFormat('MMMM yyyy').format(_focusedDay);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        color: AppColors.colorWhite,
+        borderRadius: BorderRadius.circular(AppValues.radiusLarge),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
+            color: AppColors.colorBlack.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -405,14 +366,13 @@ class _AttendancePageState extends State<AttendancePage> {
       ),
       child: Column(
         children: [
-          // Header: Chevron Left, Month Title, Chevron Right
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
                 icon: const Icon(
                   Icons.chevron_left_rounded,
-                  color: Color(0xFF0047AB),
+                  color: AppColors.primary,
                   size: 26,
                 ),
                 onPressed: () {
@@ -431,13 +391,13 @@ class _AttendancePageState extends State<AttendancePage> {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF0047AB),
+                  color: AppColors.primary,
                 ),
               ),
               IconButton(
                 icon: const Icon(
                   Icons.chevron_right_rounded,
-                  color: Color(0xFF0047AB),
+                  color: AppColors.primary,
                   size: 26,
                 ),
                 onPressed: () {
@@ -455,7 +415,6 @@ class _AttendancePageState extends State<AttendancePage> {
           ),
           const SizedBox(height: 6),
 
-          // Table Calendar
           TableCalendar(
             firstDay: DateTime(2020, 1, 1),
             lastDay: DateTime(2030, 12, 31),
@@ -468,12 +427,12 @@ class _AttendancePageState extends State<AttendancePage> {
               weekdayStyle: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF64748B),
+                color: AppColors.textMuted,
               ),
               weekendStyle: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
-                color: Color(0xFF64748B),
+                color: AppColors.textMuted,
               ),
             ),
             calendarBuilders: CalendarBuilders(
@@ -504,22 +463,23 @@ class _AttendancePageState extends State<AttendancePage> {
             },
           ),
           const SizedBox(height: 16),
-          const Divider(height: 1, color: Color(0xFFF1F5F9)),
+          const Divider(height: 1, color: AppColors.lightBackground),
           const SizedBox(height: 12),
 
-          // Legend Bar
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               _buildLegendItem(
                 label: 'Present',
-                color: const Color(0xFF22C55E),
+                color: AppColors.notificationGreenIcon,
               ),
-              _buildLegendItem(label: 'Absent', color: const Color(0xFFEF4444)),
-              _buildLegendItem(label: 'Leave', color: const Color(0xFFF97316)),
               _buildLegendItem(
-                label: 'Holiday',
-                color: const Color(0xFF94A3B8),
+                label: 'Absent',
+                color: AppColors.notificationRedIcon,
+              ),
+              _buildLegendItem(
+                label: 'Leave',
+                color: AppColors.notificationOrangeIcon,
               ),
             ],
           ),
@@ -540,7 +500,7 @@ class _AttendancePageState extends State<AttendancePage> {
           '${day.day}',
           style: const TextStyle(
             fontSize: 13,
-            color: Color(0xFFCBD5E1),
+            color: AppColors.borderGrey,
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -551,24 +511,20 @@ class _AttendancePageState extends State<AttendancePage> {
     final status = _attendanceMap[dateKey] ?? '';
 
     Color bgColor = Colors.transparent;
-    Color textColor = const Color(0xFF334155);
+    Color textColor = AppColors.darkText;
     bool hasStatusCircle = false;
 
     if (status == 'PRESENT' || status == 'P') {
-      bgColor = const Color(0xFFDCFCE7); // Light Green fill
-      textColor = const Color(0xFF15803D); // Bold Dark Green text
+      bgColor = AppColors.notificationGreenBg;
+      textColor = AppColors.notificationGreenIcon;
       hasStatusCircle = true;
     } else if (status == 'ABSENT' || status == 'A') {
-      bgColor = const Color(0xFFEF4444); // Red fill
-      textColor = Colors.white;
+      bgColor = AppColors.notificationRedBg;
+      textColor = AppColors.notificationRedIcon;
       hasStatusCircle = true;
     } else if (status == 'LEAVE' || status == 'LATE' || status == 'L') {
-      bgColor = const Color(0xFFF97316); // Orange fill
-      textColor = Colors.white;
-      hasStatusCircle = true;
-    } else if (status == 'HOLIDAY' || status == 'H') {
-      bgColor = const Color(0xFFE2E8F0); // Grey fill
-      textColor = const Color(0xFF475569);
+      bgColor = AppColors.notificationOrangeBg;
+      textColor = AppColors.notificationOrangeIcon;
       hasStatusCircle = true;
     }
 
@@ -582,7 +538,7 @@ class _AttendancePageState extends State<AttendancePage> {
           color: hasStatusCircle ? bgColor : Colors.transparent,
           shape: BoxShape.circle,
           border: isSelectedOrToday
-              ? Border.all(color: const Color(0xFF0047AB), width: 2)
+              ? Border.all(color: AppColors.primary, width: 2)
               : null,
         ),
         child: Center(
@@ -614,168 +570,26 @@ class _AttendancePageState extends State<AttendancePage> {
           style: const TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w600,
-            color: Color(0xFF475569),
+            color: AppColors.darkGrey,
           ),
         ),
       ],
     );
   }
 
-  // 3. "This Month Summary" Section
-  Widget _buildMonthSummarySection() {
-    final present = _presentCount;
-    final absent = _absentCount;
-    final leave = _leaveCount;
-    final holiday = _holidayCount;
-    final totalWorking = _totalWorkingCount;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'This Month Summary',
-          style: TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF0F2552),
-          ),
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: _buildSummaryCard(
-                icon: Icons.check_circle_rounded,
-                iconColor: const Color(0xFF16A34A),
-                value: '$present',
-                line1: 'Present',
-                line2: 'Days',
-                bgColor: const Color(0xFFF0FDF4),
-                textColor: const Color(0xFF16A34A),
-              ),
-            ),
-            const SizedBox(width: 6),
-            Expanded(
-              child: _buildSummaryCard(
-                icon: Icons.cancel_rounded,
-                iconColor: const Color(0xFFDC2626),
-                value: '$absent',
-                line1: 'Absent',
-                line2: 'Days',
-                bgColor: const Color(0xFFFEF2F2),
-                textColor: const Color(0xFFDC2626),
-              ),
-            ),
-            const SizedBox(width: 6),
-            Expanded(
-              child: _buildSummaryCard(
-                icon: Icons.access_time_filled_rounded,
-                iconColor: const Color(0xFFEA580C),
-                value: '$leave',
-                line1: 'Leave',
-                line2: leave == 1 ? 'Day' : 'Days',
-                bgColor: const Color(0xFFFFF7ED),
-                textColor: const Color(0xFFEA580C),
-              ),
-            ),
-            const SizedBox(width: 6),
-            Expanded(
-              child: _buildSummaryCard(
-                icon: Icons.calendar_month_rounded,
-                iconColor: const Color(0xFF64748B),
-                value: '$holiday',
-                line1: 'Holiday',
-                line2: holiday == 1 ? 'Day' : 'Days',
-                bgColor: const Color(0xFFF8FAFC),
-                textColor: const Color(0xFF475569),
-              ),
-            ),
-            const SizedBox(width: 6),
-            Expanded(
-              child: _buildSummaryCard(
-                icon: Icons.calendar_month_rounded,
-                iconColor: const Color(0xFF2563EB),
-                value: '$totalWorking',
-                line1: 'Total Working',
-                line2: 'Days',
-                bgColor: const Color(0xFFEFF6FF),
-                textColor: const Color(0xFF1D4ED8),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSummaryCard({
-    required IconData icon,
-    required Color iconColor,
-    required String value,
-    required String line1,
-    required String line2,
-    required Color bgColor,
-    required Color textColor,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 2),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: iconColor, size: 20),
-          const SizedBox(height: 4),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: textColor,
-              height: 1.1,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            line1,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 9,
-              fontWeight: FontWeight.w600,
-              color: textColor,
-              height: 1.1,
-            ),
-          ),
-          Text(
-            line2,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 9,
-              fontWeight: FontWeight.w500,
-              color: textColor,
-              height: 1.1,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // 4. Disclaimer Note Box
   Widget _buildDisclaimerCard() {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFEFF6FF),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFFDBEAFE)),
+        color: AppColors.blueBackground,
+        borderRadius: BorderRadius.circular(AppValues.radiusDefault),
+        border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
       ),
       child: const Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.info_rounded, color: Color(0xFF2563EB), size: 22),
+          Icon(Icons.info_rounded, color: AppColors.primary, size: 22),
           SizedBox(width: 10),
           Expanded(
             child: Column(
@@ -786,7 +600,7 @@ class _AttendancePageState extends State<AttendancePage> {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1E40AF),
+                    color: AppColors.primaryDark,
                   ),
                 ),
                 SizedBox(height: 2),
@@ -795,7 +609,7 @@ class _AttendancePageState extends State<AttendancePage> {
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w400,
-                    color: Color(0xFF2563EB),
+                    color: AppColors.primary,
                   ),
                 ),
               ],
@@ -807,18 +621,15 @@ class _AttendancePageState extends State<AttendancePage> {
   }
 }
 
-// Donut Painter for multi-colored circular chart
 class _AttendanceDonutPainter extends CustomPainter {
   final int present;
   final int absent;
   final int leave;
-  final int holiday;
 
   _AttendanceDonutPainter({
     required this.present,
     required this.absent,
     required this.leave,
-    required this.holiday,
   });
 
   @override
@@ -832,11 +643,11 @@ class _AttendanceDonutPainter extends CustomPainter {
       ..strokeWidth = strokeWidth
       ..strokeCap = StrokeCap.round;
 
-    final total = present + absent + leave + holiday;
+    final total = present + absent + leave;
     final rect = Rect.fromCircle(center: center, radius: radius);
 
     if (total == 0) {
-      paint.color = const Color(0xFF22C55E);
+      paint.color = AppColors.notificationGreenIcon;
       canvas.drawArc(rect, -math.pi / 2, 2 * math.pi, false, paint);
       return;
     }
@@ -845,10 +656,9 @@ class _AttendanceDonutPainter extends CustomPainter {
     const gapAngle = 0.08;
 
     final items = [
-      (present, const Color(0xFF22C55E)),
-      (absent, const Color(0xFFEF4444)),
-      (leave, const Color(0xFFF97316)),
-      (holiday, const Color(0xFF94A3B8)),
+      (present, AppColors.notificationGreenIcon),
+      (absent, AppColors.notificationRedIcon),
+      (leave, AppColors.notificationOrangeIcon),
     ];
 
     final nonZeroCount = items.where((e) => e.$1 > 0).length;
@@ -871,7 +681,6 @@ class _AttendanceDonutPainter extends CustomPainter {
   bool shouldRepaint(covariant _AttendanceDonutPainter oldDelegate) {
     return oldDelegate.present != present ||
         oldDelegate.absent != absent ||
-        oldDelegate.leave != leave ||
-        oldDelegate.holiday != holiday;
+        oldDelegate.leave != leave;
   }
 }

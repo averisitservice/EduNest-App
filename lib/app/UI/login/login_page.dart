@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:edunest/app/UI/home/home_page.dart';
 import 'package:edunest/app/UI/login/tenant_page.dart';
 import 'package:edunest/app/UI/login/widgets/forgot_password_section.dart';
 import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/services/common_service.dart';
+import 'package:edunest/app/core/services/push_notification_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/auth/login_response_model.dart';
@@ -132,6 +135,8 @@ class _LoginPageState extends State<LoginPage> {
       await CommonService.setRefreshToken(result.refresh);
       await CommonService.setStudent(result.student);
       await CommonService.setTenant(result.tenant);
+
+      unawaited(PushNotificationService.registerCurrentToken());
 
       if (!mounted) return;
 

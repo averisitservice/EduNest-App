@@ -6,6 +6,7 @@ import 'package:edunest/app/UI/profile/profile_page.dart';
 import 'package:edunest/app/UI/profile/school_contacts_page.dart';
 import 'package:edunest/app/UI/profile/settings_page.dart';
 import 'package:edunest/app/core/services/common_service.dart';
+import 'package:edunest/app/core/services/push_notification_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/student/student_model.dart';
@@ -223,8 +224,9 @@ class _DrawerMenuState extends State<DrawerMenu> {
                         color: AppColors.transparent,
                         borderRadius: BorderRadius.circular(10),
                         child: InkWell(
-                          onTap: () {
-                            CommonService.clearSharedPreferences();
+                          onTap: () async {
+                            await PushNotificationService.unregisterCurrentToken();
+                            await CommonService.clearSharedPreferences();
                             Get.offAll(() => const TenantPage());
                           },
                           borderRadius: BorderRadius.circular(10),

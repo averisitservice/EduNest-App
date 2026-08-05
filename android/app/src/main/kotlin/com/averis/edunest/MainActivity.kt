@@ -1,4 +1,4 @@
-package com.example.edunest
+package com.averis.edunest
 
 import io.flutter.embedding.android.FlutterActivity
 

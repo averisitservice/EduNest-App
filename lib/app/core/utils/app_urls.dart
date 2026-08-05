@@ -36,6 +36,10 @@ class AppUrls {
   static String getStudentDetailsById(int studentId) =>
       "$baseUrl/api/student/$studentId";
 
+  static String registerDeviceToken() => "$baseUrl/api/student/device-token";
+
+  static String unregisterDeviceToken() => "$baseUrl/api/student/device-token";
+
   // fee
   static String getFeeDetail() => "$baseUrl/api/student/fee/detail";
 

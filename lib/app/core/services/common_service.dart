@@ -76,7 +76,7 @@ class CommonService {
     return switch (status) {
       'PRESENT' => 'Present',
       'ABSENT' => 'Absent',
-      'LATE' => 'Late',
+      'LEAVE' => 'Leave',
       _ => 'Not Marked',
     };
   }

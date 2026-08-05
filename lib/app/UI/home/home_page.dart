@@ -605,8 +605,8 @@ class _HomePageState extends State<HomePage> {
                             ),
                             const SizedBox(height: AppValues.paddingSmall),
                             _buildLegendItem(
-                              Icons.access_time_rounded,
-                              'Late',
+                              Icons.event_busy_rounded,
+                              'Leave',
                               '${home.lateDays}',
                               AppColors.notificationAmberIcon,
                               AppColors.notificationAmberBg,

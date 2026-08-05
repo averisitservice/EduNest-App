@@ -152,38 +152,38 @@ class _SchoolContactsPageState extends State<SchoolContactsPage> {
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    _buildInfoTile(
-                                      icon: Icons.school_outlined,
-                                      title: 'School Name',
-                                      subtitle: schoolNameVal,
-                                    ),
-                                    _buildInfoTile(
-                                      icon: Icons.location_on_outlined,
-                                      title: 'Address',
-                                      subtitle: addressVal,
-                                    ),
-                                    _buildInfoTile(
-                                      icon: Icons.person_outline_rounded,
-                                      title: 'Contact Person',
-                                      subtitle: contactNameVal,
-                                    ),
-                                    _buildInfoTile(
-                                      icon: Icons.phone_outlined,
-                                      title: 'Contact No.',
-                                      subtitle: contactPhoneVal,
-                                    ),
-                                    _buildInfoTile(
-                                      icon: Icons.mail_outline_rounded,
-                                      title: 'Email Address',
-                                      subtitle: contactEmailVal,
-                                    ),
-                                    _buildInfoTile(
-                                      icon: Icons.language_rounded,
-                                      title: 'Website',
-                                      subtitle: websiteVal,
-                                    ),
-                                  ],
+                                children: [
+                                  _buildInfoTile(
+                                    icon: Icons.school_outlined,
+                                    title: 'School Name',
+                                    subtitle: schoolNameVal,
+                                  ),
+                                  _buildInfoTile(
+                                    icon: Icons.location_on_outlined,
+                                    title: 'Address',
+                                    subtitle: addressVal,
+                                  ),
+                                  _buildInfoTile(
+                                    icon: Icons.person_outline_rounded,
+                                    title: 'Contact Person',
+                                    subtitle: contactNameVal,
+                                  ),
+                                  _buildInfoTile(
+                                    icon: Icons.phone_outlined,
+                                    title: 'Contact No.',
+                                    subtitle: contactPhoneVal,
+                                  ),
+                                  _buildInfoTile(
+                                    icon: Icons.mail_outline_rounded,
+                                    title: 'Email Address',
+                                    subtitle: contactEmailVal,
+                                  ),
+                                  _buildInfoTile(
+                                    icon: Icons.language_rounded,
+                                    title: 'Website',
+                                    subtitle: websiteVal,
+                                  ),
+                                ],
                               ),
                             ),
                           ),

@@ -49,13 +49,15 @@ class _LeaveRequestPageState extends State<LeaveRequestPage> {
       return;
     }
     setState(() => _reasonError = null);
-
     setState(() => _isSubmitting = true);
     try {
       await leaveRepo.submitLeave(leaveDate: _leaveDate, reason: reason);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Leave request submitted successfully.')),
+        const SnackBar(
+          content: Text('Leave request submitted successfully.'),
+          backgroundColor: AppColors.colorGreen,
+        ),
       );
       Navigator.pop(context, true);
     } on ApiException catch (e) {

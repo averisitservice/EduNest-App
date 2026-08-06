@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "83267417494",
+    "project_id": "edunest-29546",
+    "storage_bucket": "edunest-29546.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83267417494:android:6046f9bec4880b2d1f19b7",
+        "android_client_info": {
+          "package_name": "com.example.edunest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZ6gphWLU1W4hDTxTMp55lzZDK8hCCsTg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

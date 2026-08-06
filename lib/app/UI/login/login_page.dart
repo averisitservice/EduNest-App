@@ -12,6 +12,7 @@ import 'package:edunest/app/data/repository/auth_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_button.dart';
 import 'package:edunest/app/global_widgets/edunest_divider.dart';
 import 'package:edunest/app/global_widgets/edunest_text_field.dart';
+import 'package:edunest/app/core/services/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -49,6 +50,9 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     getAppVersion();
     _loadTenant();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      NotificationService.requestNotificationPermission();
+    });
   }
 
   Future<void> _loadTenant() async {

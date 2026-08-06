@@ -65,15 +65,6 @@ class _HomePageState extends State<HomePage> {
         await Permission.location.request();
       } catch (_) {}
     }
-
-    final hasAskedNotification =
-        await CommonService.hasAskedNotificationPermission();
-    if (!hasAskedNotification) {
-      await CommonService.setAskedNotificationPermission(true);
-      try {
-        await Permission.notification.request();
-      } catch (_) {}
-    }
   }
 
   @override

@@ -5,6 +5,7 @@ import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/attendance/attendance_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -119,11 +120,11 @@ class _AttendancePageState extends State<AttendancePage> {
           icon: const Icon(Icons.arrow_back_rounded, color: AppColors.darkText),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'View Attendance',
           style: TextStyle(
             color: AppColors.darkText,
-            fontSize: AppValues.fontSizeTitle,
+            fontSize: context.rf(AppValues.fontSizeTitle),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -150,16 +151,16 @@ class _AttendancePageState extends State<AttendancePage> {
                     physics: const AlwaysScrollableScrollPhysics(
                       parent: BouncingScrollPhysics(),
                     ),
-                    padding: const EdgeInsets.all(16.0),
+                    padding: EdgeInsets.all(context.rw(16.0)),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         _buildOverallAttendanceCard(),
-                        const SizedBox(height: 16),
+                        SizedBox(height: context.rh(16)),
                         _buildCalendarCard(),
-                        const SizedBox(height: 20),
+                        SizedBox(height: context.rh(20)),
                         _buildDisclaimerCard(),
-                        const SizedBox(height: 16),
+                        SizedBox(height: context.rh(16)),
                       ],
                     ),
                   ),
@@ -177,10 +178,10 @@ class _AttendancePageState extends State<AttendancePage> {
 
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(context.rw(16)),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+        borderRadius: BorderRadius.circular(context.rw(AppValues.radiusLarge)),
         boxShadow: [
           BoxShadow(
             color: AppColors.colorBlack.withValues(alpha: 0.04),
@@ -192,8 +193,8 @@ class _AttendancePageState extends State<AttendancePage> {
       child: Row(
         children: [
           SizedBox(
-            width: 105,
-            height: 105,
+            width: context.rw(105),
+            height: context.rw(105),
             child: CustomPaint(
               painter: _AttendanceDonutPainter(
                 present: present,
@@ -206,17 +207,17 @@ class _AttendancePageState extends State<AttendancePage> {
                   children: [
                     Text(
                       '${percent.toStringAsFixed(0)}%',
-                      style: const TextStyle(
-                        fontSize: 22,
+                      style: TextStyle(
+                        fontSize: context.rf(22),
                         fontWeight: FontWeight.bold,
                         color: AppColors.primary,
                         height: 1.1,
                       ),
                     ),
-                    const Text(
+                    Text(
                       'Attendance',
                       style: TextStyle(
-                        fontSize: 10,
+                        fontSize: context.rf(10),
                         fontWeight: FontWeight.w500,
                         color: AppColors.textMuted,
                       ),
@@ -226,24 +227,24 @@ class _AttendancePageState extends State<AttendancePage> {
               ),
             ),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: context.rw(16)),
 
-          Container(width: 1, height: 90, color: AppColors.borderGrey),
-          const SizedBox(width: 16),
+          Container(width: 1, height: context.rh(90), color: AppColors.borderGrey),
+          SizedBox(width: context.rw(16)),
 
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Overall Attendance',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: context.rf(14),
                     fontWeight: FontWeight.bold,
                     color: AppColors.darkText,
                   ),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: context.rh(10)),
                 Row(
                   children: [
                     Expanded(
@@ -266,7 +267,7 @@ class _AttendancePageState extends State<AttendancePage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: context.rh(10)),
                 Row(
                   children: [
                     Expanded(
@@ -302,32 +303,32 @@ class _AttendancePageState extends State<AttendancePage> {
         Row(
           children: [
             Container(
-              width: 7,
-              height: 7,
+              width: context.rw(7),
+              height: context.rw(7),
               decoration: BoxDecoration(
                 color: dotColor,
                 shape: BoxShape.circle,
               ),
             ),
-            const SizedBox(width: 5),
+            SizedBox(width: context.rw(5)),
             Text(
               label,
               style: TextStyle(
-                fontSize: 11,
+                fontSize: context.rf(11),
                 fontWeight: FontWeight.w600,
                 color: textColor,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 2),
+        SizedBox(height: context.rh(2)),
         RichText(
           text: TextSpan(
             children: [
               TextSpan(
                 text: value,
-                style: const TextStyle(
-                  fontSize: 15,
+                style: TextStyle(
+                  fontSize: context.rf(15),
                   fontWeight: FontWeight.bold,
                   color: AppColors.darkText,
                 ),
@@ -335,8 +336,8 @@ class _AttendancePageState extends State<AttendancePage> {
               const TextSpan(text: ' '),
               TextSpan(
                 text: unit,
-                style: const TextStyle(
-                  fontSize: 11,
+                style: TextStyle(
+                  fontSize: context.rf(11),
                   fontWeight: FontWeight.w500,
                   color: AppColors.textMuted,
                 ),
@@ -352,10 +353,13 @@ class _AttendancePageState extends State<AttendancePage> {
     final monthTitle = DateFormat('MMMM yyyy').format(_focusedDay);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+      padding: EdgeInsets.symmetric(
+        horizontal: context.rw(12),
+        vertical: context.rh(14),
+      ),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+        borderRadius: BorderRadius.circular(context.rw(AppValues.radiusLarge)),
         boxShadow: [
           BoxShadow(
             color: AppColors.colorBlack.withValues(alpha: 0.04),
@@ -370,10 +374,10 @@ class _AttendancePageState extends State<AttendancePage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Icons.chevron_left_rounded,
                   color: AppColors.primary,
-                  size: 26,
+                  size: context.rw(26),
                 ),
                 onPressed: () {
                   setState(() {
@@ -388,17 +392,17 @@ class _AttendancePageState extends State<AttendancePage> {
               ),
               Text(
                 monthTitle,
-                style: const TextStyle(
-                  fontSize: 16,
+                style: TextStyle(
+                  fontSize: context.rf(16),
                   fontWeight: FontWeight.bold,
                   color: AppColors.primary,
                 ),
               ),
               IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Icons.chevron_right_rounded,
                   color: AppColors.primary,
-                  size: 26,
+                  size: context.rw(26),
                 ),
                 onPressed: () {
                   setState(() {
@@ -413,7 +417,7 @@ class _AttendancePageState extends State<AttendancePage> {
               ),
             ],
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: context.rh(6)),
 
           TableCalendar(
             firstDay: DateTime(2020, 1, 1),
@@ -422,15 +426,15 @@ class _AttendancePageState extends State<AttendancePage> {
             selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
             startingDayOfWeek: StartingDayOfWeek.monday,
             headerVisible: false,
-            rowHeight: 44,
-            daysOfWeekStyle: const DaysOfWeekStyle(
+            rowHeight: context.rh(44),
+            daysOfWeekStyle: DaysOfWeekStyle(
               weekdayStyle: TextStyle(
-                fontSize: 12,
+                fontSize: context.rf(12),
                 fontWeight: FontWeight.w600,
                 color: AppColors.textMuted,
               ),
               weekendStyle: TextStyle(
-                fontSize: 12,
+                fontSize: context.rf(12),
                 fontWeight: FontWeight.w600,
                 color: AppColors.textMuted,
               ),
@@ -462,9 +466,9 @@ class _AttendancePageState extends State<AttendancePage> {
               });
             },
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: context.rh(16)),
           const Divider(height: 1, color: AppColors.lightBackground),
-          const SizedBox(height: 12),
+          SizedBox(height: context.rh(12)),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -498,8 +502,8 @@ class _AttendancePageState extends State<AttendancePage> {
       return Center(
         child: Text(
           '${day.day}',
-          style: const TextStyle(
-            fontSize: 13,
+          style: TextStyle(
+            fontSize: context.rf(13),
             color: AppColors.borderGrey,
             fontWeight: FontWeight.w400,
           ),
@@ -532,8 +536,8 @@ class _AttendancePageState extends State<AttendancePage> {
 
     return Center(
       child: Container(
-        width: 34,
-        height: 34,
+        width: context.rw(34),
+        height: context.rw(34),
         decoration: BoxDecoration(
           color: hasStatusCircle ? bgColor : Colors.transparent,
           shape: BoxShape.circle,
@@ -545,7 +549,7 @@ class _AttendancePageState extends State<AttendancePage> {
           child: Text(
             '${day.day}',
             style: TextStyle(
-              fontSize: 13,
+              fontSize: context.rf(13),
               fontWeight: FontWeight.bold,
               color: textColor,
             ),
@@ -560,15 +564,15 @@ class _AttendancePageState extends State<AttendancePage> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          width: 8,
-          height: 8,
+          width: context.rw(8),
+          height: context.rw(8),
           decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
-        const SizedBox(width: 6),
+        SizedBox(width: context.rw(6)),
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 11,
+          style: TextStyle(
+            fontSize: context.rf(11),
             fontWeight: FontWeight.w600,
             color: AppColors.darkGrey,
           ),
@@ -580,17 +584,20 @@ class _AttendancePageState extends State<AttendancePage> {
   Widget _buildDisclaimerCard() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      padding: EdgeInsets.symmetric(
+        horizontal: context.rw(14),
+        vertical: context.rh(12),
+      ),
       decoration: BoxDecoration(
         color: AppColors.blueBackground,
-        borderRadius: BorderRadius.circular(AppValues.radiusDefault),
+        borderRadius: BorderRadius.circular(context.rw(AppValues.radiusDefault)),
         border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
       ),
-      child: const Row(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.info_rounded, color: AppColors.primary, size: 22),
-          SizedBox(width: 10),
+          Icon(Icons.info_rounded, color: AppColors.primary, size: context.rw(22)),
+          SizedBox(width: context.rw(10)),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -598,16 +605,16 @@ class _AttendancePageState extends State<AttendancePage> {
                 Text(
                   'Attendance is updated regularly.',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: context.rf(12),
                     fontWeight: FontWeight.bold,
                     color: AppColors.primaryDark,
                   ),
                 ),
-                SizedBox(height: 2),
+                SizedBox(height: context.rh(2)),
                 Text(
                   'Please contact school office for any discrepancies.',
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: context.rf(11),
                     fontWeight: FontWeight.w400,
                     color: AppColors.primary,
                   ),

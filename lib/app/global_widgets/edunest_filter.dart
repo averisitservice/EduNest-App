@@ -5,6 +5,7 @@ import 'package:edunest/app/global_widgets/edunest_button.dart';
 import 'package:edunest/app/global_widgets/edunest_date_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 
 class EdunestFilter extends StatefulWidget {
   final HomeworkFilter? currentFilter;
@@ -26,9 +27,9 @@ class EdunestFilter extends StatefulWidget {
       context: context,
       isScrollControlled: true,
       backgroundColor: AppColors.colorWhite,
-      shape: const RoundedRectangleBorder(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(AppValues.radiusXLarge),
+          top: Radius.circular(context.rw(AppValues.radiusXLarge)),
         ),
       ),
       builder: (context) => EdunestFilter(
@@ -97,10 +98,10 @@ class _EdunestFilterState extends State<EdunestFilter> {
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.only(
-          left: 16,
-          right: 16,
-          top: 12,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 16,
+          left: context.rw(16),
+          right: context.rw(16),
+          top: context.rh(12),
+          bottom: MediaQuery.of(context).viewInsets.bottom + context.rh(16),
         ),
         child: RadioGroup<HomeworkFilterType>(
           groupValue: _selectedType,
@@ -115,24 +116,24 @@ class _EdunestFilterState extends State<EdunestFilter> {
             children: [
               Center(
                 child: Container(
-                  width: 40,
-                  height: 4,
-                  margin: const EdgeInsets.only(bottom: 16),
+                  width: context.rw(40),
+                  height: context.rh(4),
+                  margin: EdgeInsets.only(bottom: context.rh(16)),
                   decoration: BoxDecoration(
                     color: AppColors.borderGrey,
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(context.rw(4)),
                   ),
                 ),
               ),
               Text(
                 widget.title,
-                style: const TextStyle(
-                  fontSize: AppValues.fontSizeSubTitle,
+                style: TextStyle(
+                  fontSize: context.rf(AppValues.fontSizeSubTitle),
                   fontWeight: FontWeight.bold,
                   color: AppColors.darkText,
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: context.rh(12)),
               _buildOption(
                 type: HomeworkFilterType.thisWeek,
                 title: 'This Week',
@@ -149,30 +150,30 @@ class _EdunestFilterState extends State<EdunestFilter> {
                 subtitle: 'Select a custom date range',
               ),
               if (_selectedType == HomeworkFilterType.customRange) ...[
-                const SizedBox(height: 8),
-                const Text(
+                SizedBox(height: context.rh(8)),
+                Text(
                   'From Date',
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: context.rf(13),
                     fontWeight: FontWeight.w600,
                     color: AppColors.darkGrey,
                   ),
                 ),
-                const SizedBox(height: 6),
+                SizedBox(height: context.rh(6)),
                 _buildDateField(isFromDate: true),
-                const SizedBox(height: 14),
-                const Text(
+                SizedBox(height: context.rh(14)),
+                Text(
                   'To Date',
                   style: TextStyle(
-                    fontSize: 13,
+                    fontSize: context.rf(13),
                     fontWeight: FontWeight.w600,
                     color: AppColors.darkGrey,
                   ),
                 ),
-                const SizedBox(height: 6),
+                SizedBox(height: context.rh(6)),
                 _buildDateField(isFromDate: false),
               ],
-              const SizedBox(height: 20),
+              SizedBox(height: context.rh(20)),
               Row(
                 children: [
                   Expanded(
@@ -188,7 +189,7 @@ class _EdunestFilterState extends State<EdunestFilter> {
                       onPressed: _reset,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  SizedBox(width: context.rw(12)),
                   Expanded(
                     child: EdunestButton(
                       title: 'Apply',
@@ -216,13 +217,16 @@ class _EdunestFilterState extends State<EdunestFilter> {
     final isSelected = _selectedType == type;
     return InkWell(
       onTap: () => setState(() => _selectedType = type),
-      borderRadius: BorderRadius.circular(AppValues.radiusDefault),
+      borderRadius: BorderRadius.circular(context.rw(AppValues.radiusDefault)),
       child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        margin: EdgeInsets.only(bottom: context.rh(10)),
+        padding: EdgeInsets.symmetric(
+          horizontal: context.rw(14),
+          vertical: context.rh(10),
+        ),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.blueBackground : AppColors.colorWhite,
-          borderRadius: BorderRadius.circular(AppValues.radiusDefault),
+          borderRadius: BorderRadius.circular(context.rw(AppValues.radiusDefault)),
           border: Border.all(
             color: isSelected ? AppColors.primary : AppColors.borderGrey,
           ),
@@ -231,10 +235,10 @@ class _EdunestFilterState extends State<EdunestFilter> {
           children: [
             Icon(
               Icons.calendar_today_rounded,
-              size: 20,
+              size: context.rw(20),
               color: isSelected ? AppColors.primary : AppColors.darkGrey,
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: context.rw(12)),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -242,15 +246,15 @@ class _EdunestFilterState extends State<EdunestFilter> {
                   Text(
                     title,
                     style: TextStyle(
-                      fontSize: 14,
+                      fontSize: context.rf(14),
                       fontWeight: FontWeight.bold,
                       color: isSelected ? AppColors.primary : AppColors.darkText,
                     ),
                   ),
                   Text(
                     subtitle,
-                    style: const TextStyle(
-                      fontSize: 11.5,
+                    style: TextStyle(
+                      fontSize: context.rf(11.5),
                       color: AppColors.darkGrey,
                     ),
                   ),
@@ -271,12 +275,15 @@ class _EdunestFilterState extends State<EdunestFilter> {
     final date = isFromDate ? _fromDate : _toDate;
     return InkWell(
       onTap: () => _pickDate(isFromDate: isFromDate),
-      borderRadius: BorderRadius.circular(AppValues.radiusDefault),
+      borderRadius: BorderRadius.circular(context.rw(AppValues.radiusDefault)),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        padding: EdgeInsets.symmetric(
+          horizontal: context.rw(14),
+          vertical: context.rh(12),
+        ),
         decoration: BoxDecoration(
           border: Border.all(color: AppColors.borderGrey),
-          borderRadius: BorderRadius.circular(AppValues.radiusDefault),
+          borderRadius: BorderRadius.circular(context.rw(AppValues.radiusDefault)),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -286,14 +293,14 @@ class _EdunestFilterState extends State<EdunestFilter> {
                   ? DateFormat('dd MMMM yyyy').format(date)
                   : 'Select date',
               style: TextStyle(
-                fontSize: 13.5,
+                fontSize: context.rf(13.5),
                 color: date != null ? AppColors.darkText : AppColors.textMuted,
                 fontWeight: FontWeight.w500,
               ),
             ),
-            const Icon(
+            Icon(
               Icons.calendar_today_outlined,
-              size: 18,
+              size: context.rw(18),
               color: AppColors.darkGrey,
             ),
           ],

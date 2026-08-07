@@ -5,6 +5,7 @@ import 'package:edunest/app/core/values/app_values.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 
 class SettingsDevicesPage extends StatefulWidget {
   const SettingsDevicesPage({super.key});
@@ -77,42 +78,42 @@ class _SettingsDevicesPageState extends State<SettingsDevicesPage> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 8.0,
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.rw(8.0),
+                  vertical: context.rh(8.0),
                 ),
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.chevron_left_rounded,
                         color: AppColors.primary,
-                        size: AppValues.appBarIconSize,
+                        size: context.rw(AppValues.appBarIconSize),
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Center(
                         child: Text(
                           'Device Information',
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: context.rf(22),
                             fontWeight: FontWeight.bold,
                             color: AppColors.primary,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 48),
+                    SizedBox(width: context.rw(48)),
                   ],
                 ),
               ),
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: 16.0,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: context.rw(20.0),
+                    vertical: context.rh(16.0),
                   ),
                   child: Column(
                     children: [
@@ -120,7 +121,7 @@ class _SettingsDevicesPageState extends State<SettingsDevicesPage> {
                         decoration: BoxDecoration(
                           color: AppColors.colorWhite,
                           borderRadius: BorderRadius.circular(
-                            AppValues.radiusLarge,
+                            context.rw(AppValues.radiusLarge),
                           ),
                           boxShadow: [
                             BoxShadow(
@@ -172,7 +173,7 @@ class _SettingsDevicesPageState extends State<SettingsDevicesPage> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 40),
+                      SizedBox(height: context.rh(40)),
                     ],
                   ),
                 ),
@@ -190,47 +191,47 @@ class _SettingsDevicesPageState extends State<SettingsDevicesPage> {
     required String value,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 14.0, horizontal: 16.0),
+      padding: EdgeInsets.symmetric(vertical: context.rh(14.0), horizontal: context.rw(16.0)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.all(AppValues.paddingSmall),
+            padding: EdgeInsets.all(context.rw(AppValues.paddingSmall)),
             decoration: BoxDecoration(
               color: AppColors.blueBackground,
-              borderRadius: BorderRadius.circular(AppValues.radiusMedium),
+              borderRadius: BorderRadius.circular(context.rw(AppValues.radiusMedium)),
             ),
             child: Icon(
               icon,
               color: AppColors.primary,
-              size: AppValues.iconSizeMedium,
+              size: context.rw(AppValues.iconSizeMedium),
             ),
           ),
-          const SizedBox(width: 14),
+          SizedBox(width: context.rw(14)),
           Expanded(
             flex: 5,
             child: Padding(
-              padding: const EdgeInsets.only(top: AppValues.paddingSmall),
+              padding: EdgeInsets.only(top: context.rh(AppValues.paddingSmall)),
               child: Text(
                 label,
-                style: const TextStyle(
-                  fontSize: 15,
+                style: TextStyle(
+                  fontSize: context.rf(15),
                   fontWeight: FontWeight.bold,
                   color: AppColors.darkText,
                 ),
               ),
             ),
           ),
-          const SizedBox(width: 16),
+          SizedBox(width: context.rw(16)),
           Expanded(
             flex: 6,
             child: Padding(
-              padding: const EdgeInsets.only(top: AppValues.paddingSmall),
+              padding: EdgeInsets.only(top: context.rh(AppValues.paddingSmall)),
               child: Text(
                 value,
                 textAlign: TextAlign.end,
-                style: const TextStyle(
-                  fontSize: 14,
+                style: TextStyle(
+                  fontSize: context.rf(14),
                   color: AppColors.darkGrey,
                   fontWeight: FontWeight.w500,
                 ),

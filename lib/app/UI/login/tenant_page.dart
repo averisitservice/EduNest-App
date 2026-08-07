@@ -9,6 +9,7 @@ import 'package:edunest/app/data/repository/tenant_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_button.dart';
 import 'package:edunest/app/global_widgets/edunest_divider.dart';
 import 'package:edunest/app/global_widgets/edunest_text_field.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -99,20 +100,22 @@ class _TenantPageState extends State<TenantPage> {
         child: SafeArea(
           child: Center(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppValues.paddingLarge,
-                vertical: AppValues.paddingXLarge,
+              padding: EdgeInsets.symmetric(
+                horizontal: context.rw(AppValues.paddingLarge),
+                vertical: context.rh(AppValues.paddingXLarge),
               ),
               child: Container(
                 width: double.infinity,
-                constraints: const BoxConstraints(maxWidth: 440),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppValues.paddingXLarge,
-                  vertical: 36,
+                constraints: BoxConstraints(
+                  maxWidth: context.isFoldableOrTablet ? 480 : 440,
+                ),
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.rw(AppValues.paddingXLarge),
+                  vertical: context.rh(36),
                 ),
                 decoration: BoxDecoration(
                   color: AppColors.colorWhite,
-                  borderRadius: BorderRadius.circular(AppValues.radius20),
+                  borderRadius: BorderRadius.circular(context.rw(AppValues.radius20)),
                   boxShadow: [
                     BoxShadow(
                       color: AppColors.primary.withValues(alpha: 0.06),
@@ -126,8 +129,8 @@ class _TenantPageState extends State<TenantPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Container(
-                      width: 200,
-                      height: 150,
+                      width: context.rw(200),
+                      height: context.rh(150),
                       decoration: const BoxDecoration(
                         image: DecorationImage(
                           image: AssetImage('assets/images/full-icon.png'),
@@ -135,7 +138,7 @@ class _TenantPageState extends State<TenantPage> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: context.rh(24)),
 
                     EdunestTextField(
                       controller: _schoolCodeController,
@@ -150,23 +153,23 @@ class _TenantPageState extends State<TenantPage> {
                       },
                     ),
                     if (errorMessage != null) ...[
-                      const SizedBox(height: 6),
+                      SizedBox(height: context.rh(6)),
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Padding(
-                          padding: const EdgeInsets.only(left: 4),
+                          padding: EdgeInsets.only(left: context.rw(4)),
                           child: Text(
                             errorMessage!,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppColors.errorColor,
-                              fontSize: AppValues.fontSizeSmall,
+                              fontSize: context.rf(AppValues.fontSizeSmall),
                               fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
                       ),
                     ],
-                    SizedBox(height: errorMessage != null ? 18 : 24),
+                    SizedBox(height: context.rh(errorMessage != null ? 18 : 24)),
 
                     EdunestButton(
                       title: 'Proceed',
@@ -174,39 +177,39 @@ class _TenantPageState extends State<TenantPage> {
                       onPressed: _handleProceed,
                     ),
 
-                    const SizedBox(height: 10),
+                    SizedBox(height: context.rh(10)),
 
                     const EdunestDivider(
                       color: AppColors.borderGrey,
                       isDashed: true,
                     ),
 
-                    const SizedBox(height: 10),
+                    SizedBox(height: context.rh(10)),
 
                     InkWell(
                       onTap: () {},
                       borderRadius: BorderRadius.circular(
-                        AppValues.smallRadius,
+                        context.rw(AppValues.smallRadius),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppValues.paddingSmall,
-                          vertical: 6,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: context.rw(AppValues.paddingSmall),
+                          vertical: context.rh(6),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
-                          children: const [
+                          children: [
                             Icon(
                               Icons.help_outline_rounded,
                               color: AppColors.primary,
-                              size: AppValues.margin18,
+                              size: context.rw(AppValues.margin18),
                             ),
-                            SizedBox(width: AppValues.paddingSmall),
+                            SizedBox(width: context.rw(AppValues.paddingSmall)),
                             Text(
                               'Login Guide',
                               style: TextStyle(
                                 color: AppColors.primary,
-                                fontSize: AppValues.fontSizeBody,
+                                fontSize: context.rf(AppValues.fontSizeBody),
                                 fontWeight: FontWeight.w600,
                               ),
                             ),

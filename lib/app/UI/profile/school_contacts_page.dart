@@ -3,6 +3,7 @@ import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/profile/school_contact_model.dart';
 import 'package:edunest/app/data/repository/profile_repo.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 
 class SchoolContactsPage extends StatefulWidget {
@@ -79,33 +80,33 @@ class _SchoolContactsPageState extends State<SchoolContactsPage> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 8.0,
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.rw(8.0),
+                  vertical: context.rh(8.0),
                 ),
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.chevron_left_rounded,
                         color: AppColors.primary,
-                        size: AppValues.appBarIconSize,
+                        size: context.rw(AppValues.appBarIconSize),
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Center(
                         child: Text(
                           'School Contacts',
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: context.rf(22),
                             fontWeight: FontWeight.bold,
                             color: AppColors.primary,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 48),
+                    SizedBox(width: context.rw(48)),
                   ],
                 ),
               ),
@@ -119,8 +120,8 @@ class _SchoolContactsPageState extends State<SchoolContactsPage> {
                     : _errorMessage != null
                     ? Center(
                         child: Padding(
-                          padding: const EdgeInsets.all(
-                            AppValues.paddingXLarge,
+                          padding: EdgeInsets.all(
+                            context.rw(AppValues.paddingXLarge),
                           ),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -128,12 +129,13 @@ class _SchoolContactsPageState extends State<SchoolContactsPage> {
                               Text(
                                 _errorMessage!,
                                 textAlign: TextAlign.center,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   color: AppColors.errorColor,
                                   fontWeight: FontWeight.w500,
+                                  fontSize: context.rf(AppValues.fontSizeBody),
                                 ),
                               ),
-                              const SizedBox(height: AppValues.paddingMedium),
+                              SizedBox(height: context.rh(AppValues.paddingMedium)),
                               TextButton(
                                 onPressed: _loadSchoolContact,
                                 child: const Text('Retry'),
@@ -147,8 +149,8 @@ class _SchoolContactsPageState extends State<SchoolContactsPage> {
                           Expanded(
                             child: SingleChildScrollView(
                               physics: const BouncingScrollPhysics(),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: AppValues.paddingXLarge,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: context.rw(AppValues.paddingXLarge),
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,32 +190,32 @@ class _SchoolContactsPageState extends State<SchoolContactsPage> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(bottom: 5, top: 5),
+                            padding: EdgeInsets.only(bottom: context.rh(5), top: context.rh(5)),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Text(
+                                Text(
                                   'Powered By',
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: context.rf(12),
                                     color: AppColors.darkGrey,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                const SizedBox(height: 6),
+                                SizedBox(height: context.rh(6)),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const Icon(
+                                    Icon(
                                       Icons.menu_book_rounded,
                                       color: AppColors.primary,
-                                      size: 18,
+                                      size: context.rw(18),
                                     ),
-                                    const SizedBox(width: 8),
+                                    SizedBox(width: context.rw(8)),
                                     Text(
                                       'EDUNEXT',
                                       style: TextStyle(
-                                        fontSize: 16,
+                                        fontSize: context.rf(16),
                                         fontWeight: FontWeight.bold,
                                         color: AppColors.primary.withValues(
                                           alpha: 0.9,
@@ -242,29 +244,29 @@ class _SchoolContactsPageState extends State<SchoolContactsPage> {
     required String subtitle,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppValues.paddingMedium),
+      padding: EdgeInsets.symmetric(vertical: context.rh(AppValues.paddingMedium)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: AppColors.primary, size: 26),
-          const SizedBox(width: 16),
+          Icon(icon, color: AppColors.primary, size: context.rw(26)),
+          SizedBox(width: context.rw(16)),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 15,
+                  style: TextStyle(
+                    fontSize: context.rf(15),
                     fontWeight: FontWeight.bold,
                     color: AppColors.darkText,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: context.rh(4)),
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    fontSize: 13,
+                  style: TextStyle(
+                    fontSize: context.rf(13),
                     color: AppColors.darkGrey,
                   ),
                 ),

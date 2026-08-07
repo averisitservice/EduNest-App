@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 
 class EdunestButton extends StatelessWidget {
   final String title;
@@ -47,6 +48,10 @@ class EdunestButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isOutlined = borderColor != null;
+    final double scaledFontSize = context.rf(fontSize);
+    final double scaledVerticalPadding = context.rh(verticalPadding);
+    final double scaledRadius = context.rw(radius);
+    final double scaledHeight = context.rh(height ?? AppValues.buttonHeight);
 
     final List<Color> defaultGradient = [
       disabled ? AppColors.colorGrey : (backgroundColor ?? AppColors.primary),
@@ -57,9 +62,9 @@ class EdunestButton extends StatelessWidget {
 
     Widget buttonContent = Container(
       width: width ?? double.infinity,
-      height: height ?? AppValues.buttonHeight,
+      height: scaledHeight,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(radius),
+        borderRadius: BorderRadius.circular(scaledRadius),
         gradient: (!isOutlined && useGradient)
             ? LinearGradient(
                 colors: gradientColors ?? defaultGradient,
@@ -92,9 +97,9 @@ class EdunestButton extends StatelessWidget {
           backgroundColor: AppColors.transparent,
           shadowColor: AppColors.transparent,
           elevation: 0,
-          padding: EdgeInsets.symmetric(vertical: verticalPadding),
+          padding: EdgeInsets.symmetric(vertical: scaledVerticalPadding),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(radius),
+            borderRadius: BorderRadius.circular(scaledRadius),
             side: isOutlined
                 ? BorderSide(color: borderColor!, width: borderWidth)
                 : BorderSide.none,
@@ -102,8 +107,8 @@ class EdunestButton extends StatelessWidget {
         ),
         child: isLoading
             ? SizedBox(
-                height: fontSize,
-                width: fontSize,
+                height: scaledFontSize,
+                width: scaledFontSize,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
                   color: textColor,
@@ -115,14 +120,17 @@ class EdunestButton extends StatelessWidget {
                 children: [
                   if (icon != null) ...[
                     icon!,
-                    const SizedBox(width: AppValues.paddingSmall),
+                    SizedBox(width: context.rw(AppValues.paddingSmall)),
                   ],
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: fontSize,
-                      color: disabled ? AppColors.colorWhite : textColor,
-                      fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: Text(
+                      title,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: scaledFontSize,
+                        color: disabled ? AppColors.colorWhite : textColor,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],

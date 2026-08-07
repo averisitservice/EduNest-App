@@ -6,6 +6,7 @@ import 'package:edunest/app/data/model/homework/homework_filter.dart';
 import 'package:edunest/app/data/model/homework/homework_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_filter.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -77,11 +78,11 @@ class _HomeworkPageState extends State<HomeworkPage> {
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Homework',
           style: TextStyle(
             color: AppColors.darkText,
-            fontSize: AppValues.fontSizeTitle,
+            fontSize: context.rf(AppValues.fontSizeTitle),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -114,7 +115,7 @@ class _HomeworkPageState extends State<HomeworkPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   _buildTabSwitcher(),
-                  const SizedBox(height: 6),
+                  SizedBox(height: context.rh(6)),
                   Expanded(
                     child: _selectedTabIndex == 0
                         ? HomeworkDateWise(homework: _homework)
@@ -130,7 +131,7 @@ class _HomeworkPageState extends State<HomeworkPage> {
   Widget _buildTabSwitcher() {
     return Container(
       color: AppColors.colorWhite,
-      height: 48,
+      height: context.rh(48),
       child: Row(
         children: [_buildTab('Date Wise', 0), _buildTab('Subject Wise', 1)],
       ),
@@ -157,7 +158,7 @@ class _HomeworkPageState extends State<HomeworkPage> {
           child: Text(
             label,
             style: TextStyle(
-              fontSize: 14,
+              fontSize: context.rf(14),
               fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
               color: isSelected ? AppColors.primary : AppColors.darkGrey,
             ),

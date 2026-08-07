@@ -14,6 +14,7 @@ import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/student/student_home_model.dart';
 import 'package:edunest/app/data/repository/profile_repo.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -94,21 +95,21 @@ class _HomePageState extends State<HomePage> {
         surfaceTintColor: AppColors.transparent,
         leading: Builder(
           builder: (context) => IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.notes_rounded,
               color: AppColors.darkText,
-              size: 28,
+              size: context.rw(28),
             ),
             onPressed: () {
               Scaffold.of(context).openDrawer();
             },
           ),
         ),
-        title: const Text(
+        title: Text(
           'EduNest',
           style: TextStyle(
             color: AppColors.darkText,
-            fontSize: AppValues.fontSizeTitle,
+            fontSize: context.rf(AppValues.fontSizeTitle),
             fontWeight: FontWeight.bold,
             letterSpacing: 1.5,
           ),
@@ -119,29 +120,29 @@ class _HomePageState extends State<HomePage> {
             clipBehavior: Clip.none,
             children: [
               IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Icons.notifications_none_rounded,
                   color: AppColors.darkText,
-                  size: 28,
+                  size: context.rw(28),
                 ),
                 onPressed: () {
                   Get.to(() => const NotificationPage());
                 },
               ),
               Positioned(
-                right: 6,
-                top: 6,
+                right: context.rw(6),
+                top: context.rh(6),
                 child: Container(
-                  padding: const EdgeInsets.all(4),
+                  padding: EdgeInsets.all(context.rw(4)),
                   decoration: const BoxDecoration(
                     color: AppColors.errorColor,
                     shape: BoxShape.circle,
                   ),
-                  child: const Text(
+                  child: Text(
                     '3',
                     style: TextStyle(
                       color: AppColors.colorWhite,
-                      fontSize: 10,
+                      fontSize: context.rf(10),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -149,7 +150,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: context.rw(8)),
         ],
       ),
       body: Container(
@@ -165,17 +166,17 @@ class _HomePageState extends State<HomePage> {
           bottom: false,
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
+            padding: EdgeInsets.symmetric(
+              horizontal: context.rw(16.0),
+              vertical: context.rh(8.0),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildProfileHeaderCard(home),
-                const SizedBox(height: 20),
+                SizedBox(height: context.rh(20)),
                 _buildFeatureGrid(),
-                const SizedBox(height: 20),
+                SizedBox(height: context.rh(20)),
                 _buildStatsRow(home),
               ],
             ),
@@ -187,10 +188,10 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildProfileHeaderCard(StudentHomeModel student) {
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(context.rw(16.0)),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(24.0),
+        borderRadius: BorderRadius.circular(context.rw(24.0)),
         boxShadow: [
           BoxShadow(
             color: AppColors.colorBlack.withValues(alpha: 0.04),
@@ -207,7 +208,7 @@ class _HomePageState extends State<HomePage> {
             bottom: -4,
             child: Icon(
               Icons.school_outlined,
-              size: 80,
+              size: context.rw(80),
               color: AppColors.primary.withValues(alpha: 0.03),
             ),
           ),
@@ -222,21 +223,21 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 child: CircleAvatar(
-                  radius: 38,
+                  radius: context.rw(38),
                   backgroundColor: AppColors.blueBackground,
                   backgroundImage: student.photoUrl.isNotEmpty
                       ? CachedNetworkImageProvider(student.photoUrl)
                       : null,
                   child: student.photoUrl.isEmpty
-                      ? const Icon(
+                      ? Icon(
                           Icons.person_outline_rounded,
                           color: AppColors.primary,
-                          size: 28,
+                          size: context.rw(28),
                         )
                       : null,
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: context.rw(16)),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -244,28 +245,28 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Text(
                       student.studentName,
-                      style: const TextStyle(
-                        fontSize: 20,
+                      style: TextStyle(
+                        fontSize: context.rf(20),
                         fontWeight: FontWeight.bold,
                         color: AppColors.primaryDark,
                       ),
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: context.rh(4)),
                     Text(
                       '${student.displayClass}  •  Roll No. ${student.rollNo}',
-                      style: const TextStyle(
-                        fontSize: 14,
+                      style: TextStyle(
+                        fontSize: context.rf(14),
                         fontWeight: FontWeight.w600,
                         color: AppColors.darkGrey,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: context.rh(6)),
                     Text(
                       student.academicYearName.isNotEmpty
                           ? 'Academic Year ${student.academicYearName}'
                           : '',
-                      style: const TextStyle(
-                        fontSize: 12,
+                      style: TextStyle(
+                        fontSize: context.rf(12),
                         fontWeight: FontWeight.bold,
                         color: AppColors.primary,
                       ),
@@ -386,10 +387,10 @@ class _HomePageState extends State<HomePage> {
       children: [
         Expanded(
           child: Container(
-            padding: const EdgeInsets.all(AppValues.paddingDefault),
+            padding: EdgeInsets.all(context.rw(AppValues.paddingDefault)),
             decoration: BoxDecoration(
               color: AppColors.colorWhite,
-              borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+              borderRadius: BorderRadius.circular(context.rw(AppValues.radiusLarge)),
               boxShadow: [
                 BoxShadow(
                   color: AppColors.colorBlack.withValues(alpha: 0.03),
@@ -404,53 +405,55 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   children: [
                     Container(
-                      width: 36,
-                      height: 36,
+                      width: context.rw(36),
+                      height: context.rw(36),
                       decoration: BoxDecoration(
                         color: AppColors.blueBackground,
                         borderRadius: BorderRadius.circular(
-                          AppValues.radiusSmall + 2,
+                          context.rw(AppValues.radiusSmall + 2),
                         ),
                       ),
-                      child: const Icon(
+                      child: Icon(
                         Icons.calendar_today_rounded,
                         color: AppColors.primary,
-                        size: 18,
+                        size: context.rw(18),
                       ),
                     ),
-                    const SizedBox(width: AppValues.paddingSmall),
-                    const Text(
-                      "Today's Attendance",
-                      style: TextStyle(
-                        fontSize: AppValues.fontSizeDefault,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.darkText,
+                    SizedBox(width: context.rw(AppValues.paddingSmall)),
+                    Expanded(
+                      child: Text(
+                        "Today's Attendance",
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: context.rf(AppValues.fontSizeDefault),
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.darkText,
+                        ),
                       ),
                     ),
-                    const Spacer(),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppValues.paddingXSmall + 4,
-                        vertical: AppValues.paddingXSmall,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: context.rw(AppValues.paddingXSmall + 4),
+                        vertical: context.rh(AppValues.paddingXSmall),
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.lightGreen,
                         borderRadius: BorderRadius.circular(
-                          AppValues.radiusSmall + 4,
+                          context.rw(AppValues.radiusSmall + 4),
                         ),
                       ),
                       child: Text(
                         CommonService.getTodayStatusLabel(home.todayStatus),
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.iconGreen,
-                          fontSize: AppValues.fontSizeCaption + 1,
+                          fontSize: context.rf(AppValues.fontSizeCaption + 1),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: AppValues.paddingLarge),
+                SizedBox(height: context.rh(AppValues.paddingLarge)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -458,25 +461,25 @@ class _HomePageState extends State<HomePage> {
                       flex: 4,
                       child: Column(
                         children: [
-                          const Text(
+                          Text(
                             'This Month Attendance',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: AppValues.fontSizeCaption + 1,
+                              fontSize: context.rf(AppValues.fontSizeCaption + 1),
                               fontWeight: FontWeight.w600,
                               color: AppColors.darkGrey,
                             ),
                           ),
-                          const SizedBox(height: AppValues.paddingSmall),
+                          SizedBox(height: context.rh(AppValues.paddingSmall)),
                           SizedBox(
-                            width: 80,
-                            height: 80,
+                            width: context.rw(80),
+                            height: context.rw(80),
                             child: Stack(
                               alignment: Alignment.center,
                               children: [
                                 SizedBox(
-                                  width: 76,
-                                  height: 76,
+                                  width: context.rw(76),
+                                  height: context.rw(76),
                                   child: CircularProgressIndicator(
                                     value: home.thisMonthPercent / 100,
                                     strokeWidth: 6.0,
@@ -489,16 +492,16 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     Text(
                                       '${home.thisMonthPercent.toStringAsFixed(0)}%',
-                                      style: const TextStyle(
-                                        fontSize: AppValues.fontSizeSubTitle,
+                                      style: TextStyle(
+                                        fontSize: context.rf(AppValues.fontSizeSubTitle),
                                         fontWeight: FontWeight.bold,
                                         color: AppColors.iconGreen,
                                       ),
                                     ),
-                                    const Text(
+                                    Text(
                                       'This Month',
                                       style: TextStyle(
-                                        fontSize: AppValues.fontSizeCaption - 2,
+                                        fontSize: context.rf(AppValues.fontSizeCaption - 2),
                                         color: AppColors.darkGrey,
                                         fontWeight: FontWeight.w500,
                                       ),
@@ -515,25 +518,25 @@ class _HomePageState extends State<HomePage> {
                       flex: 4,
                       child: Column(
                         children: [
-                          const Text(
+                          Text(
                             'Average Attendance',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: AppValues.fontSizeCaption + 1,
+                              fontSize: context.rf(AppValues.fontSizeCaption + 1),
                               fontWeight: FontWeight.w600,
                               color: AppColors.darkGrey,
                             ),
                           ),
-                          const SizedBox(height: AppValues.paddingSmall),
+                          SizedBox(height: context.rh(AppValues.paddingSmall)),
                           SizedBox(
-                            width: 80,
-                            height: 80,
+                            width: context.rw(80),
+                            height: context.rw(80),
                             child: Stack(
                               alignment: Alignment.center,
                               children: [
                                 SizedBox(
-                                  width: 76,
-                                  height: 76,
+                                  width: context.rw(76),
+                                  height: context.rw(76),
                                   child: CircularProgressIndicator(
                                     value: home.averagePercent / 100,
                                     strokeWidth: 6.0,
@@ -546,16 +549,16 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     Text(
                                       '${home.averagePercent.toStringAsFixed(0)}%',
-                                      style: const TextStyle(
-                                        fontSize: AppValues.fontSizeSubTitle,
+                                      style: TextStyle(
+                                        fontSize: context.rf(AppValues.fontSizeSubTitle),
                                         fontWeight: FontWeight.bold,
                                         color: AppColors.primary,
                                       ),
                                     ),
-                                    const Text(
+                                    Text(
                                       'Average',
                                       style: TextStyle(
-                                        fontSize: AppValues.fontSizeCaption - 2,
+                                        fontSize: context.rf(AppValues.fontSizeCaption - 2),
                                         color: AppColors.darkGrey,
                                         fontWeight: FontWeight.w500,
                                       ),
@@ -570,13 +573,13 @@ class _HomePageState extends State<HomePage> {
                     ),
                     Container(
                       width: 1,
-                      height: 90,
+                      height: context.rh(90),
                       color: AppColors.borderGrey.withValues(alpha: 0.5),
                     ),
                     Expanded(
                       flex: 4,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 4.0),
+                        padding: EdgeInsets.only(left: context.rw(4.0)),
                         child: Column(
                           children: [
                             _buildLegendItem(
@@ -586,7 +589,7 @@ class _HomePageState extends State<HomePage> {
                               AppColors.notificationGreenIcon,
                               AppColors.notificationGreenBg,
                             ),
-                            const SizedBox(height: AppValues.paddingSmall),
+                            SizedBox(height: context.rh(AppValues.paddingSmall)),
                             _buildLegendItem(
                               Icons.cancel_outlined,
                               'Absent',
@@ -594,7 +597,7 @@ class _HomePageState extends State<HomePage> {
                               AppColors.notificationRedIcon,
                               AppColors.notificationRedBg,
                             ),
-                            const SizedBox(height: AppValues.paddingSmall),
+                            SizedBox(height: context.rh(AppValues.paddingSmall)),
                             _buildLegendItem(
                               Icons.event_busy_rounded,
                               'Leave',
@@ -608,26 +611,26 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: AppValues.paddingLarge),
+                SizedBox(height: context.rh(AppValues.paddingLarge)),
                 const Divider(
                   height: AppValues.dividerHeight,
                   thickness: AppValues.dividerThickness / 2,
                 ),
-                const SizedBox(height: AppValues.paddingSmall + 2),
+                SizedBox(height: context.rh(AppValues.paddingSmall + 2)),
                 InkWell(
                   onTap: () {
                     Get.to(() => const AttendancePage());
                   },
-                  borderRadius: BorderRadius.circular(AppValues.radiusSmall),
+                  borderRadius: BorderRadius.circular(context.rw(AppValues.radiusSmall)),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    padding: EdgeInsets.symmetric(vertical: context.rh(4.0)),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
+                      children: [
                         Text(
                           'View Attendance',
                           style: TextStyle(
-                            fontSize: AppValues.fontSizeBody - 1,
+                            fontSize: context.rf(AppValues.fontSizeBody - 1),
                             fontWeight: FontWeight.bold,
                             color: AppColors.primary,
                           ),
@@ -635,7 +638,7 @@ class _HomePageState extends State<HomePage> {
                         Icon(
                           Icons.chevron_right_rounded,
                           color: AppColors.primary,
-                          size: AppValues.iconSizeMedium,
+                          size: context.rw(AppValues.iconSizeMedium),
                         ),
                       ],
                     ),
@@ -659,28 +662,30 @@ class _HomePageState extends State<HomePage> {
     return Row(
       children: [
         Container(
-          width: 28,
-          height: 28,
+          width: context.rw(28),
+          height: context.rw(28),
           decoration: BoxDecoration(
             color: bgColor,
-            borderRadius: BorderRadius.circular(AppValues.radiusSmall),
+            borderRadius: BorderRadius.circular(context.rw(AppValues.radiusSmall)),
           ),
-          child: Icon(icon, size: 16, color: iconColor),
+          child: Icon(icon, size: context.rw(16), color: iconColor),
         ),
-        const SizedBox(width: 8),
-        Text(
-          label,
-          style: const TextStyle(
-            fontSize: AppValues.fontSizeCaption + 1,
-            fontWeight: FontWeight.w500,
-            color: AppColors.darkText,
+        SizedBox(width: context.rw(8)),
+        Expanded(
+          child: Text(
+            label,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: context.rf(AppValues.fontSizeCaption + 1),
+              fontWeight: FontWeight.w500,
+              color: AppColors.darkText,
+            ),
           ),
         ),
-        const Spacer(),
         Text(
           value,
-          style: const TextStyle(
-            fontSize: AppValues.fontSizeCaption + 2,
+          style: TextStyle(
+            fontSize: context.rf(AppValues.fontSizeCaption + 2),
             fontWeight: FontWeight.bold,
             color: AppColors.darkText,
           ),
@@ -700,26 +705,29 @@ class _HomePageState extends State<HomePage> {
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 4.0),
+        padding: EdgeInsets.symmetric(
+          vertical: context.rh(10.0),
+          horizontal: context.rw(4.0),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              width: 64.0,
-              height: 64.0,
+              width: context.rw(64.0),
+              height: context.rw(64.0),
               decoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
-              child: Icon(icon, color: iconColor, size: 28.0),
+              child: Icon(icon, color: iconColor, size: context.rw(28.0)),
             ),
-            const SizedBox(height: 8.0),
+            SizedBox(height: context.rh(8.0)),
             Text(
               title,
               textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 13,
+              style: TextStyle(
+                fontSize: context.rf(13),
                 fontWeight: FontWeight.w600,
                 color: AppColors.darkText,
                 height: 1.2,

@@ -4,6 +4,7 @@ import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/repository/auth_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_button.dart';
 import 'package:edunest/app/global_widgets/edunest_text_field.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -143,33 +144,33 @@ class _SettingsChangePasswordPageState
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 8.0,
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.rw(8.0),
+                  vertical: context.rh(8.0),
                 ),
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.chevron_left_rounded,
                         color: AppColors.primary,
-                        size: AppValues.appBarIconSize,
+                        size: context.rw(AppValues.appBarIconSize),
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Center(
                         child: Text(
                           'Change Password',
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: context.rf(22),
                             fontWeight: FontWeight.bold,
                             color: AppColors.primary,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 48),
+                    SizedBox(width: context.rw(48)),
                   ],
                 ),
               ),
@@ -182,16 +183,16 @@ class _SettingsChangePasswordPageState
                       )
                     : SingleChildScrollView(
                         physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20.0,
-                          vertical: 16.0,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: context.rw(20.0),
+                          vertical: context.rh(16.0),
                         ),
                         child: Form(
                           key: _formKey,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const SizedBox(height: 10),
+                              SizedBox(height: context.rh(10)),
                               EdunestTextField(
                                 controller: _currentPasswordController,
                                 labelText: 'Current Password',
@@ -221,23 +222,23 @@ class _SettingsChangePasswordPageState
                                 },
                               ),
                               if (_currentPasswordError != null) ...[
-                                const SizedBox(height: 6),
+                                SizedBox(height: context.rh(6)),
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 4,
-                                    bottom: 12,
+                                  padding: EdgeInsets.only(
+                                    left: context.rw(4),
+                                    bottom: context.rh(12),
                                   ),
                                   child: Text(
                                     _currentPasswordError!,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: AppColors.errorColor,
-                                      fontSize: AppValues.fontSizeSmall,
+                                      fontSize: context.rf(AppValues.fontSizeSmall),
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                 ),
                               ] else
-                                const SizedBox(height: 16),
+                                SizedBox(height: context.rh(16)),
                               EdunestTextField(
                                 controller: _newPasswordController,
                                 labelText: 'New Password',
@@ -265,23 +266,23 @@ class _SettingsChangePasswordPageState
                                 },
                               ),
                               if (_newPasswordError != null) ...[
-                                const SizedBox(height: 6),
+                                SizedBox(height: context.rh(6)),
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 4,
-                                    bottom: 12,
+                                  padding: EdgeInsets.only(
+                                    left: context.rw(4),
+                                    bottom: context.rh(12),
                                   ),
                                   child: Text(
                                     _newPasswordError!,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: AppColors.errorColor,
-                                      fontSize: AppValues.fontSizeSmall,
+                                      fontSize: context.rf(AppValues.fontSizeSmall),
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                 ),
                               ] else
-                                const SizedBox(height: 16),
+                                SizedBox(height: context.rh(16)),
                               EdunestTextField(
                                 controller: _confirmPasswordController,
                                 labelText: 'Confirm Password',
@@ -311,23 +312,23 @@ class _SettingsChangePasswordPageState
                                 },
                               ),
                               if (_confirmPasswordError != null) ...[
-                                const SizedBox(height: 6),
+                                SizedBox(height: context.rh(6)),
                                 Padding(
-                                  padding: const EdgeInsets.only(
-                                    left: 4,
-                                    bottom: 12,
+                                  padding: EdgeInsets.only(
+                                    left: context.rw(4),
+                                    bottom: context.rh(12),
                                   ),
                                   child: Text(
                                     _confirmPasswordError!,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       color: AppColors.errorColor,
-                                      fontSize: AppValues.fontSizeSmall,
+                                      fontSize: context.rf(AppValues.fontSizeSmall),
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                 ),
                               ] else
-                                const SizedBox(height: 24),
+                                SizedBox(height: context.rh(24)),
                               EdunestButton(
                                 title: 'Save Password',
                                 onPressed: _validateAndSubmit,

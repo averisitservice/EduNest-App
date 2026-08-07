@@ -1,5 +1,6 @@
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -90,11 +91,11 @@ class _NotificationPageState extends State<NotificationPage> {
           icon: const Icon(Icons.arrow_back_rounded, color: AppColors.darkText),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Notifications',
           style: TextStyle(
             color: AppColors.darkText,
-            fontSize: AppValues.fontSizeTitle,
+            fontSize: context.rf(AppValues.fontSizeTitle),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -112,16 +113,16 @@ class _NotificationPageState extends State<NotificationPage> {
         child: SafeArea(
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
+            padding: EdgeInsets.symmetric(
+              horizontal: context.rw(16.0),
+              vertical: context.rh(8.0),
             ),
             child: Column(
               children: [
                 Container(
                   decoration: BoxDecoration(
                     color: AppColors.colorWhite,
-                    borderRadius: BorderRadius.circular(AppValues.radius20),
+                    borderRadius: BorderRadius.circular(context.rw(AppValues.radius20)),
                     boxShadow: [
                       BoxShadow(
                         color: AppColors.colorBlack.withValues(alpha: 0.03),
@@ -146,17 +147,17 @@ class _NotificationPageState extends State<NotificationPage> {
                       final bool isUnread = item['isUnread'] as bool;
 
                       return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12.0,
-                          vertical: 14.0,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: context.rw(12.0),
+                          vertical: context.rh(14.0),
                         ),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              width: 8,
-                              height: 8,
-                              margin: const EdgeInsets.only(top: 18, right: 8),
+                              width: context.rw(8),
+                              height: context.rw(8),
+                              margin: EdgeInsets.only(top: context.rh(18), right: context.rw(8)),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 color: isUnread
@@ -165,8 +166,8 @@ class _NotificationPageState extends State<NotificationPage> {
                               ),
                             ),
                             Container(
-                              width: 44,
-                              height: 44,
+                              width: context.rw(44),
+                              height: context.rw(44),
                               decoration: BoxDecoration(
                                 color: item['iconBgColor'] as Color,
                                 shape: BoxShape.circle,
@@ -174,10 +175,10 @@ class _NotificationPageState extends State<NotificationPage> {
                               child: Icon(
                                 item['icon'] as IconData,
                                 color: item['iconColor'] as Color,
-                                size: 22,
+                                size: context.rw(22),
                               ),
                             ),
-                            const SizedBox(width: 12),
+                            SizedBox(width: context.rw(12)),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,8 +190,8 @@ class _NotificationPageState extends State<NotificationPage> {
                                       Expanded(
                                         child: Text(
                                           item['title'] as String,
-                                          style: const TextStyle(
-                                            fontSize: 14,
+                                          style: TextStyle(
+                                            fontSize: context.rf(14),
                                             fontWeight: FontWeight.bold,
                                             color: AppColors.darkText,
                                           ),
@@ -198,19 +199,19 @@ class _NotificationPageState extends State<NotificationPage> {
                                       ),
                                       Text(
                                         item['time'] as String,
-                                        style: const TextStyle(
-                                          fontSize: 11,
+                                        style: TextStyle(
+                                          fontSize: context.rf(11),
                                           fontWeight: FontWeight.w500,
                                           color: AppColors.textMuted,
                                         ),
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 4),
+                                  SizedBox(height: context.rh(4)),
                                   Text(
                                     item['subtitle'] as String,
-                                    style: const TextStyle(
-                                      fontSize: 12,
+                                    style: TextStyle(
+                                      fontSize: context.rf(12),
                                       color: AppColors.darkGrey,
                                       height: 1.3,
                                     ),
@@ -224,25 +225,25 @@ class _NotificationPageState extends State<NotificationPage> {
                     },
                   ),
                 ),
-                const SizedBox(height: 32),
+                SizedBox(height: context.rh(32)),
                 Column(
-                  children: const [
+                  children: [
                     Text(
                       "You're all caught up!",
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: context.rf(15),
                         fontWeight: FontWeight.bold,
                         color: AppColors.darkText,
                       ),
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: context.rh(4)),
                     Text(
                       "We'll notify you when something new arrives.",
-                      style: TextStyle(fontSize: 12, color: AppColors.darkGrey),
+                      style: TextStyle(fontSize: context.rf(12), color: AppColors.darkGrey),
                     ),
                   ],
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: context.rh(24)),
               ],
             ),
           ),

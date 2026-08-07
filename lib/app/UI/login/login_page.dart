@@ -13,6 +13,7 @@ import 'package:edunest/app/global_widgets/edunest_button.dart';
 import 'package:edunest/app/global_widgets/edunest_divider.dart';
 import 'package:edunest/app/global_widgets/edunest_text_field.dart';
 import 'package:edunest/app/core/services/notification_service.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -94,8 +95,8 @@ class _LoginPageState extends State<LoginPage> {
     if (logoUrl.isNotEmpty) {
       return CachedNetworkImage(
         imageUrl: logoUrl,
-        width: 70,
-        height: 70,
+        width: context.rw(70),
+        height: context.rw(70),
         fit: BoxFit.contain,
         placeholder: (context, url) => _defaultLogo(),
         errorWidget: (context, url, error) => _defaultLogo(),
@@ -107,8 +108,8 @@ class _LoginPageState extends State<LoginPage> {
   Widget _defaultLogo() {
     return Image.asset(
       'assets/images/full-icon.png',
-      width: 70,
-      height: 70,
+      width: context.rw(70),
+      height: context.rw(70),
       fit: BoxFit.contain,
     );
   }
@@ -204,16 +205,16 @@ class _LoginPageState extends State<LoginPage> {
             Get.offAll(() => const TenantPage());
           },
           child: Padding(
-            padding: const EdgeInsets.only(left: 8),
+            padding: EdgeInsets.only(left: context.rw(8)),
             child: Row(
-              children: const [
-                Icon(Icons.chevron_left, color: AppColors.darkText, size: 24),
-                SizedBox(width: 4),
+              children: [
+                Icon(Icons.chevron_left, color: AppColors.darkText, size: context.rw(24)),
+                SizedBox(width: context.rw(4)),
                 Text(
                   'Change School Code',
                   style: TextStyle(
                     color: AppColors.darkText,
-                    fontSize: 14,
+                    fontSize: context.rf(14),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -225,47 +226,49 @@ class _LoginPageState extends State<LoginPage> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppValues.paddingLarge,
-              vertical: AppValues.paddingDefault,
+            padding: EdgeInsets.symmetric(
+              horizontal: context.rw(AppValues.paddingLarge),
+              vertical: context.rh(AppValues.paddingDefault),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                  width: 90,
-                  height: 90,
+                  width: context.rw(90),
+                  height: context.rw(90),
                   decoration: BoxDecoration(
                     color: AppColors.darkBlueLogoBackground,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(context.rw(12)),
                   ),
                   child: Center(child: _buildSchoolLogo()),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: context.rh(12)),
                 Text(
                   (tenant != null && tenant.tenantName.isNotEmpty)
                       ? tenant.tenantName
                       : 'Loading school...',
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: AppValues.fontSizeBody,
+                  style: TextStyle(
+                    fontSize: context.rf(AppValues.fontSizeBody),
                     color: AppColors.colorBlack,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: context.rh(20)),
 
                 Container(
                   width: double.infinity,
-                  constraints: const BoxConstraints(maxWidth: 440),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppValues.paddingXLarge,
-                    vertical: 28,
+                  constraints: BoxConstraints(
+                    maxWidth: context.isFoldableOrTablet ? 480 : 440,
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: context.rw(AppValues.paddingXLarge),
+                    vertical: context.rh(28),
                   ),
                   decoration: BoxDecoration(
                     color: AppColors.colorWhite,
-                    borderRadius: BorderRadius.circular(AppValues.radius20),
+                    borderRadius: BorderRadius.circular(context.rw(AppValues.radius20)),
                     boxShadow: [
                       BoxShadow(
                         color: AppColors.primary.withValues(alpha: 0.06),
@@ -278,15 +281,15 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text(
+                      Text(
                         'Kindly sign in to continue',
                         style: TextStyle(
-                          fontSize: AppValues.fontSizeDefault,
+                          fontSize: context.rf(AppValues.fontSizeDefault),
                           color: AppColors.primaryDark,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: context.rh(24)),
 
                       EdunestTextField(
                         controller: _usernameController,
@@ -299,23 +302,23 @@ class _LoginPageState extends State<LoginPage> {
                         },
                       ),
                       if (usernameError != null) ...[
-                        const SizedBox(height: 6),
+                        SizedBox(height: context.rh(6)),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 4),
+                            padding: EdgeInsets.only(left: context.rw(4)),
                             child: Text(
                               usernameError!,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppColors.errorColor,
-                                fontSize: AppValues.fontSizeSmall,
+                                fontSize: context.rf(AppValues.fontSizeSmall),
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
                         ),
                       ],
-                      const SizedBox(height: 16),
+                      SizedBox(height: context.rh(16)),
 
                       EdunestTextField(
                         controller: _passwordController,
@@ -343,23 +346,23 @@ class _LoginPageState extends State<LoginPage> {
                         },
                       ),
                       if (passwordError != null) ...[
-                        const SizedBox(height: 6),
+                        SizedBox(height: context.rh(6)),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 4),
+                            padding: EdgeInsets.only(left: context.rw(4)),
                             child: Text(
                               passwordError!,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppColors.errorColor,
-                                fontSize: AppValues.fontSizeSmall,
+                                fontSize: context.rf(AppValues.fontSizeSmall),
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
                         ),
                       ],
-                      const SizedBox(height: 16),
+                      SizedBox(height: context.rh(16)),
 
                       if (_showForgotPassword) ...[
                         ForgotPasswordSection(
@@ -393,17 +396,17 @@ class _LoginPageState extends State<LoginPage> {
                               minimumSize: Size.zero,
                               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                             ),
-                            child: const Text(
+                            child: Text(
                               'Forgot Password?',
                               style: TextStyle(
                                 color: AppColors.primaryDark,
-                                fontSize: AppValues.fontSizeSmall,
+                                fontSize: context.rf(AppValues.fontSizeSmall),
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: context.rh(20)),
 
                         EdunestButton(
                           title: 'Login',
@@ -412,7 +415,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ],
 
-                      const SizedBox(height: 20),
+                      SizedBox(height: context.rh(20)),
 
                       const EdunestDivider(
                         color: AppColors.borderGrey,
@@ -420,32 +423,32 @@ class _LoginPageState extends State<LoginPage> {
                         height: 0,
                       ),
 
-                      const SizedBox(height: 20),
+                      SizedBox(height: context.rh(20)),
 
                       InkWell(
                         onTap: () {},
                         borderRadius: BorderRadius.circular(
-                          AppValues.smallRadius,
+                          context.rw(AppValues.smallRadius),
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: AppValues.paddingSmall,
-                            vertical: 6,
+                          padding: EdgeInsets.symmetric(
+                            horizontal: context.rw(AppValues.paddingSmall),
+                            vertical: context.rh(6),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
-                            children: const [
+                            children: [
                               Icon(
                                 Icons.help_outline_rounded,
                                 color: AppColors.primary,
-                                size: AppValues.margin18,
+                                size: context.rw(AppValues.margin18),
                               ),
-                              SizedBox(width: AppValues.paddingSmall),
+                              SizedBox(width: context.rw(AppValues.paddingSmall)),
                               Text(
                                 'Login Guide',
                                 style: TextStyle(
                                   color: AppColors.primary,
-                                  fontSize: AppValues.fontSizeBody,
+                                  fontSize: context.rf(AppValues.fontSizeBody),
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -456,29 +459,29 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 50),
-                const Text(
+                SizedBox(height: context.rh(50)),
+                Text(
                   'Powered By',
                   style: TextStyle(
-                    fontSize: AppValues.fontSizeSmall,
+                    fontSize: context.rf(AppValues.fontSizeSmall),
                     color: AppColors.darkGrey,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 6),
+                SizedBox(height: context.rh(6)),
                 Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     Icon(
                       Icons.school_rounded,
                       color: AppColors.primaryDark,
-                      size: 24,
+                      size: context.rw(24),
                     ),
-                    SizedBox(width: 8),
+                    SizedBox(width: context.rw(8)),
                     Text(
                       'EDUNEST',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: context.rf(20),
                         fontWeight: FontWeight.bold,
                         color: AppColors.primaryDark,
                         letterSpacing: 1.5,
@@ -486,11 +489,11 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: context.rh(8)),
                 Text(
                   version.isEmpty ? 'Version' : 'Version $version',
-                  style: const TextStyle(
-                    fontSize: AppValues.fontSizeSmall,
+                  style: TextStyle(
+                    fontSize: context.rf(AppValues.fontSizeSmall),
                     color: AppColors.darkGrey,
                   ),
                 ),

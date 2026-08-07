@@ -2,6 +2,7 @@ import 'package:edunest/app/UI/profile/settings_change_password_page.dart';
 import 'package:edunest/app/UI/profile/settings_devices_page.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,46 +25,47 @@ class SettingsPage extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 8.0,
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.rw(8.0),
+                  vertical: context.rh(8.0),
                 ),
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.chevron_left_rounded,
                         color: AppColors.primary,
-                        size: AppValues.appBarIconSize,
+                        size: context.rw(AppValues.appBarIconSize),
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Center(
                         child: Text(
                           'Settings',
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: context.rf(22),
                             fontWeight: FontWeight.bold,
                             color: AppColors.primary,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 48),
+                    SizedBox(width: context.rw(48)),
                   ],
                 ),
               ),
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: 16.0,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: context.rw(20.0),
+                    vertical: context.rh(16.0),
                   ),
                   child: Column(
                     children: [
                       _buildSettingsCard(
+                        context,
                         icon: Icons.lock_outline_rounded,
                         title: 'Change Password',
                         subtitle: 'You can change your password',
@@ -71,6 +73,7 @@ class SettingsPage extends StatelessWidget {
                             Get.to(() => const SettingsChangePasswordPage()),
                       ),
                       _buildSettingsCard(
+                        context,
                         icon: Icons.smartphone_rounded,
                         title: 'Devices',
                         subtitle: 'Your current / active devices',
@@ -87,17 +90,18 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingsCard({
+  Widget _buildSettingsCard(
+    BuildContext context, {
     required IconData icon,
     required String title,
     required String subtitle,
     required VoidCallback onTap,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: AppValues.paddingDefault),
+      margin: EdgeInsets.only(bottom: context.rh(AppValues.paddingDefault)),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+        borderRadius: BorderRadius.circular(context.rw(AppValues.radiusLarge)),
         boxShadow: [
           BoxShadow(
             color: AppColors.colorBlack.withValues(alpha: 0.04),
@@ -108,59 +112,59 @@ class SettingsPage extends StatelessWidget {
       ),
       child: Material(
         color: AppColors.transparent,
-        borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+        borderRadius: BorderRadius.circular(context.rw(AppValues.radiusLarge)),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+          borderRadius: BorderRadius.circular(context.rw(AppValues.radiusLarge)),
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 20.0,
+            padding: EdgeInsets.symmetric(
+              horizontal: context.rw(16.0),
+              vertical: context.rh(20.0),
             ),
             child: Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(AppValues.paddingMedium),
+                  padding: EdgeInsets.all(context.rw(AppValues.paddingMedium)),
                   decoration: BoxDecoration(
                     color: AppColors.blueBackground,
                     borderRadius: BorderRadius.circular(
-                      AppValues.radiusDefault,
+                      context.rw(AppValues.radiusDefault),
                     ),
                   ),
                   child: Icon(
                     icon,
                     color: AppColors.primary,
-                    size: AppValues.iconDefaultSize,
+                    size: context.rw(AppValues.iconDefaultSize),
                   ),
                 ),
-                const SizedBox(width: 16),
+                SizedBox(width: context.rw(16)),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
-                          fontSize: 16,
+                        style: TextStyle(
+                          fontSize: context.rf(16),
                           fontWeight: FontWeight.bold,
                           color: AppColors.darkText,
                         ),
                       ),
-                      const SizedBox(height: 4),
+                      SizedBox(height: context.rh(4)),
                       Text(
                         subtitle,
-                        style: const TextStyle(
-                          fontSize: 12,
+                        style: TextStyle(
+                          fontSize: context.rf(12),
                           color: AppColors.darkGrey,
                         ),
                       ),
                     ],
                   ),
                 ),
-                const Icon(
+                Icon(
                   Icons.chevron_right_rounded,
                   color: AppColors.darkText,
-                  size: 28,
+                  size: context.rw(28),
                 ),
               ],
             ),

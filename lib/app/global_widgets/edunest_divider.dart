@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 
 class EdunestDivider extends StatelessWidget {
   final Color dividerColor;
@@ -63,12 +64,12 @@ class EdunestDivider extends StatelessWidget {
           Padding(
             padding:
                 padding ??
-                const EdgeInsets.symmetric(horizontal: AppValues.paddingMedium),
+                EdgeInsets.symmetric(horizontal: context.rw(AppValues.paddingMedium)),
             child: Text(
               textVal,
               style: TextStyle(
                 color: effectiveColor,
-                fontSize: AppValues.fontSizeSmall,
+                fontSize: context.rf(AppValues.fontSizeSmall),
                 fontWeight: FontWeight.w600,
                 letterSpacing: 1,
               ),
@@ -84,9 +85,9 @@ class EdunestDivider extends StatelessWidget {
     Widget result = Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (height > 0) SizedBox(height: height),
+        if (height > 0) SizedBox(height: context.rh(height)),
         dividerChild,
-        if (height > 0) SizedBox(height: height),
+        if (height > 0) SizedBox(height: context.rh(height)),
       ],
     );
 

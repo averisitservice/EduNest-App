@@ -5,6 +5,7 @@ import 'package:edunest/app/data/repository/leave_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_button.dart';
 import 'package:edunest/app/global_widgets/edunest_date_picker.dart';
 import 'package:edunest/app/global_widgets/edunest_text_field.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -81,11 +82,11 @@ class _LeaveRequestPageState extends State<LeaveRequestPage> {
           icon: const Icon(Icons.arrow_back_rounded, color: AppColors.darkText),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Leave Request',
           style: TextStyle(
             color: AppColors.darkText,
-            fontSize: AppValues.fontSizeTitle,
+            fontSize: context.rf(AppValues.fontSizeTitle),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -102,9 +103,9 @@ class _LeaveRequestPageState extends State<LeaveRequestPage> {
         ),
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 12.0,
+            padding: EdgeInsets.symmetric(
+              horizontal: context.rw(16.0),
+              vertical: context.rh(12.0),
             ),
             physics: const BouncingScrollPhysics(),
             child: _buildFormCard(),
@@ -117,10 +118,10 @@ class _LeaveRequestPageState extends State<LeaveRequestPage> {
   Widget _buildFormCard() {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(20.0),
+      padding: EdgeInsets.all(context.rw(20.0)),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(context.rw(16.0)),
         border: Border.all(color: AppColors.lightBackground),
         boxShadow: [
           BoxShadow(
@@ -132,73 +133,73 @@ class _LeaveRequestPageState extends State<LeaveRequestPage> {
       ),
       child: Column(
         children: [
-          const SizedBox(height: 24),
-          const Align(
+          SizedBox(height: context.rh(24)),
+          Align(
             alignment: Alignment.centerLeft,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
                   Icons.calendar_today_rounded,
-                  size: 18,
+                  size: context.rw(18),
                   color: AppColors.primary,
                 ),
-                SizedBox(width: 8),
+                SizedBox(width: context.rw(8)),
                 Text(
                   'Leave Date',
                   style: TextStyle(
                     color: AppColors.darkText,
-                    fontSize: 14.5,
+                    fontSize: context.rf(14.5),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: context.rh(8)),
           _buildDateField(),
-          const SizedBox(height: 6),
-          const Align(
+          SizedBox(height: context.rh(6)),
+          Align(
             alignment: Alignment.centerLeft,
             child: Text(
               'Select the date for your leave.',
-              style: TextStyle(color: AppColors.darkGrey, fontSize: 12),
+              style: TextStyle(color: AppColors.darkGrey, fontSize: context.rf(12)),
             ),
           ),
-          const SizedBox(height: 20),
-          const Align(
+          SizedBox(height: context.rh(20)),
+          Align(
             alignment: Alignment.centerLeft,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.edit_outlined, size: 18, color: AppColors.primary),
-                SizedBox(width: 8),
+                Icon(Icons.edit_outlined, size: context.rw(18), color: AppColors.primary),
+                SizedBox(width: context.rw(8)),
                 Text(
                   'Reason',
                   style: TextStyle(
                     color: AppColors.darkText,
-                    fontSize: 14.5,
+                    fontSize: context.rf(14.5),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: context.rh(8)),
           EdunestTextField(
             labelText: '',
             hintText: 'Enter leave reason...',
             controller: _reasonController,
             maxLength: 300,
             keyboardType: TextInputType.multiline,
-            padding: const EdgeInsets.all(AppValues.paddingDefault),
+            padding: EdgeInsets.all(context.rw(AppValues.paddingDefault)),
             onChanged: (_) {
               if (_reasonError != null) {
                 setState(() => _reasonError = null);
               }
             },
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: context.rh(6)),
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
@@ -208,14 +209,14 @@ class _LeaveRequestPageState extends State<LeaveRequestPage> {
                 color: _reasonError != null
                     ? AppColors.errorColor
                     : AppColors.darkGrey,
-                fontSize: 12,
+                fontSize: context.rf(12),
                 fontWeight: _reasonError != null
                     ? FontWeight.w600
                     : FontWeight.normal,
               ),
             ),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: context.rh(24)),
           EdunestButton(
             title: 'Submit Request',
             isLoading: _isSubmitting,
@@ -228,36 +229,39 @@ class _LeaveRequestPageState extends State<LeaveRequestPage> {
 
   Widget _buildDateField() {
     return InkWell(
-      borderRadius: BorderRadius.circular(AppValues.radiusDefault),
+      borderRadius: BorderRadius.circular(context.rw(AppValues.radiusDefault)),
       onTap: _pickDate,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        padding: EdgeInsets.symmetric(
+          horizontal: context.rw(14),
+          vertical: context.rh(14),
+        ),
         decoration: BoxDecoration(
           color: AppColors.inputFill,
-          borderRadius: BorderRadius.circular(AppValues.radiusDefault),
+          borderRadius: BorderRadius.circular(context.rw(AppValues.radiusDefault)),
           border: Border.all(color: AppColors.borderGrey),
         ),
         child: Row(
           children: [
-            const Icon(
+            Icon(
               Icons.calendar_today_outlined,
-              size: 18,
+              size: context.rw(18),
               color: AppColors.darkGrey,
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: context.rw(12)),
             Expanded(
               child: Text(
                 DateFormat('dd MMM yyyy').format(_leaveDate),
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.darkText,
-                  fontSize: 14,
+                  fontSize: context.rf(14),
                   fontWeight: FontWeight.w600,
                 ),
               ),
             ),
-            const Icon(
+            Icon(
               Icons.calendar_month_rounded,
-              size: 20,
+              size: context.rw(20),
               color: AppColors.primary,
             ),
           ],

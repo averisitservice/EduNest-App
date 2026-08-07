@@ -9,6 +9,7 @@ import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/student/student_model.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -75,10 +76,11 @@ class _DrawerMenuState extends State<DrawerMenu> {
   @override
   Widget build(BuildContext context) {
     final double drawerWidth = MediaQuery.of(context).size.width * 0.90;
+    final double maxDrawerWidth = context.isFoldableOrTablet ? 360 : 310;
     final student = _student;
 
     return SizedBox(
-      width: drawerWidth < 310 ? drawerWidth : 310,
+      width: drawerWidth < maxDrawerWidth ? drawerWidth : maxDrawerWidth,
       child: Drawer(
         backgroundColor: AppColors.colorWhite,
         surfaceTintColor: AppColors.transparent,
@@ -89,9 +91,9 @@ class _DrawerMenuState extends State<DrawerMenu> {
               Expanded(
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 20,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: context.rw(14),
+                    vertical: context.rh(20),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,26 +101,26 @@ class _DrawerMenuState extends State<DrawerMenu> {
                       Material(
                         color: AppColors.transparent,
                         borderRadius: BorderRadius.circular(
-                          AppValues.radius16,
+                          context.rw(AppValues.radius16),
                         ),
                         child: InkWell(
                           borderRadius: BorderRadius.circular(
-                            AppValues.radius16,
+                            context.rw(AppValues.radius16),
                           ),
                           child: Container(
-                            padding: const EdgeInsets.all(
-                              AppValues.paddingMedium,
+                            padding: EdgeInsets.all(
+                              context.rw(AppValues.paddingMedium),
                             ),
                             decoration: BoxDecoration(
                               color: AppColors.blueBackground,
                               borderRadius: BorderRadius.circular(
-                                AppValues.radius16,
+                                context.rw(AppValues.radius16),
                               ),
                             ),
                             child: Row(
                               children: [
                                 CircleAvatar(
-                                  radius: 24,
+                                  radius: context.rw(24),
                                   backgroundColor: AppColors.secondary
                                       .withValues(alpha: 0.2),
                                   backgroundImage:
@@ -129,13 +131,13 @@ class _DrawerMenuState extends State<DrawerMenu> {
                                       : null,
                                   child: (student != null && student.photoUrl.isNotEmpty)
                                       ? null
-                                      : const Icon(
+                                      : Icon(
                                           Icons.person,
                                           color: AppColors.primary,
-                                          size: 28,
+                                          size: context.rw(28),
                                         ),
                                 ),
-                                const SizedBox(width: 12),
+                                SizedBox(width: context.rw(12)),
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment:
@@ -143,17 +145,19 @@ class _DrawerMenuState extends State<DrawerMenu> {
                                     children: [
                                       Text(
                                         student != null ? student.studentName : 'Loading...',
-                                        style: const TextStyle(
-                                          fontSize: 18,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: context.rf(18),
                                           fontWeight: FontWeight.bold,
                                           color: AppColors.darkText,
                                         ),
                                       ),
-                                      const SizedBox(height: 3),
+                                      SizedBox(height: context.rh(3)),
                                       Text(
                                         student != null ? student.email : '',
-                                        style: const TextStyle(
-                                          fontSize: 13,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          fontSize: context.rf(13),
                                           color: AppColors.darkGrey,
                                         ),
                                       ),
@@ -165,7 +169,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 14),
+                      SizedBox(height: context.rh(14)),
                       ListView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -175,7 +179,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
                           final String title = item['title'] as String;
 
                           return Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
+                            padding: EdgeInsets.only(bottom: context.rh(8)),
                             child: Material(
                               color: AppColors.transparent,
                               borderRadius: BorderRadius.circular(10),
@@ -183,31 +187,31 @@ class _DrawerMenuState extends State<DrawerMenu> {
                                 onTap: () => _onMenuItemTap(title),
                                 borderRadius: BorderRadius.circular(10),
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 10,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: context.rw(10),
+                                    vertical: context.rh(10),
                                   ),
                                   child: Row(
                                     children: [
                                       Icon(
                                         item['icon'] as IconData,
-                                        size: 25,
+                                        size: context.rw(25),
                                         color: AppColors.darkGrey,
                                       ),
-                                      const SizedBox(width: 12),
+                                      SizedBox(width: context.rw(12)),
                                       Expanded(
                                         child: Text(
                                           title,
-                                          style: const TextStyle(
-                                            fontSize: 17,
+                                          style: TextStyle(
+                                            fontSize: context.rf(17),
                                             fontWeight: FontWeight.w500,
                                             color: AppColors.darkText,
                                           ),
                                         ),
                                       ),
-                                      const Icon(
+                                      Icon(
                                         Icons.chevron_right_rounded,
-                                        size: AppValues.iconSizeMedium,
+                                        size: context.rw(AppValues.iconSizeMedium),
                                         color: AppColors.textMuted,
                                       ),
                                     ],
@@ -218,7 +222,7 @@ class _DrawerMenuState extends State<DrawerMenu> {
                           );
                         },
                       ),
-                      const SizedBox(height: 10),
+                      SizedBox(height: context.rh(10)),
                       Material(
                         color: AppColors.transparent,
                         borderRadius: BorderRadius.circular(10),
@@ -229,23 +233,23 @@ class _DrawerMenuState extends State<DrawerMenu> {
                           },
                           borderRadius: BorderRadius.circular(10),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 8,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: context.rw(10),
+                              vertical: context.rh(8),
                             ),
 
                             child: Row(
-                              children: const [
+                              children: [
                                 Icon(
                                   Icons.logout_rounded,
-                                  size: 25,
+                                  size: context.rw(25),
                                   color: AppColors.errorColor,
                                 ),
-                                SizedBox(width: 12),
+                                SizedBox(width: context.rw(12)),
                                 Text(
                                   'Logout',
                                   style: TextStyle(
-                                    fontSize: 17,
+                                    fontSize: context.rf(17),
                                     fontWeight: FontWeight.w700,
                                     color: AppColors.errorColor,
                                   ),

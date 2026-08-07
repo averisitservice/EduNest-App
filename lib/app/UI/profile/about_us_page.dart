@@ -1,5 +1,6 @@
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -43,43 +44,43 @@ class _AboutUsPageState extends State<AboutUsPage> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 8.0,
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.rw(8.0),
+                  vertical: context.rh(8.0),
                 ),
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.chevron_left_rounded,
                         color: AppColors.primary,
-                        size: AppValues.appBarIconSize,
+                        size: context.rw(AppValues.appBarIconSize),
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Center(
                         child: Text(
                           'About Us',
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: context.rf(22),
                             fontWeight: FontWeight.bold,
                             color: AppColors.primary,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 48),
+                    SizedBox(width: context.rw(48)),
                   ],
                 ),
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  padding: EdgeInsets.symmetric(horizontal: context.rw(24.0)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 24),
+                      SizedBox(height: context.rh(24)),
                       _buildInfoTile(
                         icon: Icons.smartphone_outlined,
                         title: 'Application Version',
@@ -107,28 +108,28 @@ class _AboutUsPageState extends State<AboutUsPage> {
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Text(
+                            Text(
                               'Powered By',
                               style: TextStyle(
-                                fontSize: AppValues.fontSizeSmall,
+                                fontSize: context.rf(AppValues.fontSizeSmall),
                                 color: AppColors.darkGrey,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            const SizedBox(height: 6),
+                            SizedBox(height: context.rh(6)),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.menu_book_rounded,
                                   color: AppColors.primary,
-                                  size: 18,
+                                  size: context.rw(18),
                                 ),
-                                const SizedBox(width: 8),
+                                SizedBox(width: context.rw(8)),
                                 Text(
                                   'EDUNEXT',
                                   style: TextStyle(
-                                    fontSize: AppValues.fontSizeDefault,
+                                    fontSize: context.rf(AppValues.fontSizeDefault),
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.primary.withValues(
                                       alpha: 0.9,
@@ -141,7 +142,7 @@ class _AboutUsPageState extends State<AboutUsPage> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      SizedBox(height: context.rh(24)),
                     ],
                   ),
                 ),
@@ -159,29 +160,29 @@ class _AboutUsPageState extends State<AboutUsPage> {
     required String subtitle,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      padding: EdgeInsets.symmetric(vertical: context.rh(16.0)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: AppColors.primary, size: 26),
-          const SizedBox(width: 16),
+          Icon(icon, color: AppColors.primary, size: context.rw(26)),
+          SizedBox(width: context.rw(16)),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
-                    fontSize: 15,
+                  style: TextStyle(
+                    fontSize: context.rf(15),
                     fontWeight: FontWeight.bold,
                     color: AppColors.darkText,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: context.rh(4)),
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    fontSize: 13,
+                  style: TextStyle(
+                    fontSize: context.rf(13),
                     color: AppColors.darkGrey,
                   ),
                 ),

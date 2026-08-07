@@ -7,6 +7,7 @@ import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/fee/fee_detail_model.dart';
 import 'package:edunest/app/data/repository/fee_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_button.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -106,11 +107,11 @@ class _FeePaymentPageState extends State<FeePaymentPage> {
           icon: const Icon(Icons.arrow_back_rounded, color: AppColors.darkText),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Fee Details',
           style: TextStyle(
             color: AppColors.darkText,
-            fontSize: AppValues.fontSizeTitle,
+            fontSize: context.rf(AppValues.fontSizeTitle),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -140,19 +141,19 @@ class _FeePaymentPageState extends State<FeePaymentPage> {
     if (_errorMessage != null) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(context.rw(24)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 _errorMessage!,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: AppValues.fontSizeBody,
+                style: TextStyle(
+                  fontSize: context.rf(AppValues.fontSizeBody),
                   color: AppColors.darkGrey,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: context.rh(16)),
               ElevatedButton(
                 onPressed: _loadDetail,
                 child: const Text('Retry'),
@@ -172,14 +173,17 @@ class _FeePaymentPageState extends State<FeePaymentPage> {
         physics: const AlwaysScrollableScrollPhysics(
           parent: BouncingScrollPhysics(),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+        padding: EdgeInsets.symmetric(
+          horizontal: context.rw(16.0),
+          vertical: context.rh(12.0),
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildOverviewCard(detail),
-            const SizedBox(height: 16),
+            SizedBox(height: context.rh(16)),
             _buildPaymentHistory(detail),
-            const SizedBox(height: 16),
+            SizedBox(height: context.rh(16)),
             _buildNote(),
           ],
         ),
@@ -189,10 +193,10 @@ class _FeePaymentPageState extends State<FeePaymentPage> {
 
   Widget _buildOverviewCard(FeeDetailModel detail) {
     return Container(
-      padding: const EdgeInsets.all(AppValues.paddingDefault),
+      padding: EdgeInsets.all(context.rw(AppValues.paddingDefault)),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+        borderRadius: BorderRadius.circular(context.rw(AppValues.radiusLarge)),
         border: Border.all(color: AppColors.lightBackground),
         boxShadow: [
           BoxShadow(
@@ -205,15 +209,15 @@ class _FeePaymentPageState extends State<FeePaymentPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Fee Overview',
             style: TextStyle(
               color: AppColors.darkText,
-              fontSize: AppValues.fontSizeDefault,
+              fontSize: context.rf(AppValues.fontSizeDefault),
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: context.rh(16)),
           Row(
             children: [
               Expanded(
@@ -246,36 +250,36 @@ class _FeePaymentPageState extends State<FeePaymentPage> {
             Row(
               children: [
                 Container(
-                  width: 44,
-                  height: 44,
+                  width: context.rw(44),
+                  height: context.rw(44),
                   decoration: const BoxDecoration(
                     color: AppColors.blueBackground,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.calendar_month_rounded,
                     color: AppColors.primary,
-                    size: AppValues.iconSize22,
+                    size: context.rw(AppValues.iconSize22),
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: context.rw(12)),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Amount Due',
                         style: TextStyle(
                           color: AppColors.darkGrey,
-                          fontSize: AppValues.fontSizeSmall,
+                          fontSize: context.rf(AppValues.fontSizeSmall),
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                       Text(
                         '₹${detail.pendingAmount.toStringAsFixed(0)}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.primary,
-                          fontSize: AppValues.fontSizeTitle,
+                          fontSize: context.rf(AppValues.fontSizeTitle),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -300,19 +304,21 @@ class _FeePaymentPageState extends State<FeePaymentPage> {
             ),
           ] else ...[
             Row(
-              children: const [
+              children: [
                 Icon(
                   Icons.check_circle_rounded,
                   color: AppColors.notificationGreenIcon,
-                  size: AppValues.iconSize20,
+                  size: context.rw(AppValues.iconSize20),
                 ),
-                SizedBox(width: 10),
-                Text(
-                  'Fees fully paid for this academic year.',
-                  style: TextStyle(
-                    color: AppColors.darkText,
-                    fontSize: AppValues.fontSizeSmall,
-                    fontWeight: FontWeight.w600,
+                SizedBox(width: context.rw(10)),
+                Expanded(
+                  child: Text(
+                    'Fees fully paid for this academic year.',
+                    style: TextStyle(
+                      color: AppColors.darkText,
+                      fontSize: context.rf(AppValues.fontSizeSmall),
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ],
@@ -329,17 +335,17 @@ class _FeePaymentPageState extends State<FeePaymentPage> {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             color: AppColors.darkGrey,
-            fontSize: AppValues.fontSizeSmall,
+            fontSize: context.rf(AppValues.fontSizeSmall),
           ),
         ),
-        const SizedBox(height: 6),
+        SizedBox(height: context.rh(6)),
         Text(
           '₹${amount.toStringAsFixed(0)}',
           style: TextStyle(
             color: color,
-            fontSize: AppValues.fontSizeSubTitle - 1,
+            fontSize: context.rf(AppValues.fontSizeSubTitle - 1),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -349,10 +355,10 @@ class _FeePaymentPageState extends State<FeePaymentPage> {
 
   Widget _buildPaymentHistory(FeeDetailModel detail) {
     return Container(
-      padding: const EdgeInsets.all(AppValues.paddingDefault),
+      padding: EdgeInsets.all(context.rw(AppValues.paddingDefault)),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+        borderRadius: BorderRadius.circular(context.rw(AppValues.radiusLarge)),
         border: Border.all(color: AppColors.lightBackground),
         boxShadow: [
           BoxShadow(
@@ -365,23 +371,25 @@ class _FeePaymentPageState extends State<FeePaymentPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Past Payments',
             style: TextStyle(
               color: AppColors.darkText,
-              fontSize: AppValues.fontSizeDefault,
+              fontSize: context.rf(AppValues.fontSizeDefault),
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: context.rh(12)),
           if (detail.payments.isEmpty)
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: AppValues.paddingMedium),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: context.rh(AppValues.paddingMedium),
+              ),
               child: Text(
                 'No payments made yet.',
                 style: TextStyle(
                   color: AppColors.darkGrey,
-                  fontSize: AppValues.fontSizeBody,
+                  fontSize: context.rf(AppValues.fontSizeBody),
                 ),
               ),
             )
@@ -404,19 +412,19 @@ class _FeePaymentPageState extends State<FeePaymentPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: 36,
-          height: 36,
+          width: context.rw(36),
+          height: context.rw(36),
           decoration: const BoxDecoration(
             color: AppColors.notificationGreenBg,
             shape: BoxShape.circle,
           ),
-          child: const Icon(
+          child: Icon(
             Icons.check_rounded,
             color: AppColors.notificationGreenIcon,
-            size: AppValues.iconSize20,
+            size: context.rw(AppValues.iconSize20),
           ),
         ),
-        const SizedBox(width: 12),
+        SizedBox(width: context.rw(12)),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -425,18 +433,18 @@ class _FeePaymentPageState extends State<FeePaymentPage> {
                 displayDate.isNotEmpty
                     ? 'Paid on: $displayDate'
                     : payment.paymentMode,
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.darkText,
-                  fontSize: AppValues.fontSizeBody,
+                  fontSize: context.rf(AppValues.fontSizeBody),
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              const SizedBox(height: 2),
+              SizedBox(height: context.rh(2)),
               Text(
                 'Transaction ID: ${payment.receiptNo}',
-                style: const TextStyle(
+                style: TextStyle(
                   color: AppColors.darkGrey,
-                  fontSize: AppValues.fontSizeSmall,
+                  fontSize: context.rf(AppValues.fontSizeSmall),
                 ),
               ),
             ],
@@ -447,24 +455,27 @@ class _FeePaymentPageState extends State<FeePaymentPage> {
           children: [
             Text(
               '₹${payment.amount.toStringAsFixed(0)}',
-              style: const TextStyle(
+              style: TextStyle(
                 color: AppColors.notificationGreenIcon,
-                fontSize: AppValues.fontSizeBody,
+                fontSize: context.rf(AppValues.fontSizeBody),
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: AppValues.margin4),
+            SizedBox(height: context.rh(AppValues.margin4)),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              padding: EdgeInsets.symmetric(
+                horizontal: context.rw(8),
+                vertical: context.rh(2),
+              ),
               decoration: BoxDecoration(
                 color: AppColors.notificationGreenBg,
-                borderRadius: BorderRadius.circular(AppValues.radius20),
+                borderRadius: BorderRadius.circular(context.rw(AppValues.radius20)),
               ),
-              child: const Text(
+              child: Text(
                 'Paid',
                 style: TextStyle(
                   color: AppColors.notificationGreenIcon,
-                  fontSize: AppValues.fontSizeCaption + 1,
+                  fontSize: context.rf(AppValues.fontSizeCaption + 1),
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -477,26 +488,26 @@ class _FeePaymentPageState extends State<FeePaymentPage> {
 
   Widget _buildNote() {
     return Container(
-      padding: const EdgeInsets.all(AppValues.paddingDefault),
+      padding: EdgeInsets.all(context.rw(AppValues.paddingDefault)),
       decoration: BoxDecoration(
         color: AppColors.blueBackground,
-        borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+        borderRadius: BorderRadius.circular(context.rw(AppValues.radiusLarge)),
       ),
-      child: const Row(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(
             Icons.info_outline_rounded,
             color: AppColors.primary,
-            size: AppValues.iconSize20,
+            size: context.rw(AppValues.iconSize20),
           ),
-          SizedBox(width: AppValues.margin10),
+          SizedBox(width: context.rw(AppValues.margin10)),
           Expanded(
             child: Text(
               'Please pay the pending amount before the due date to avoid late fee charges.',
               style: TextStyle(
                 color: AppColors.darkGrey,
-                fontSize: AppValues.fontSizeSmall,
+                fontSize: context.rf(AppValues.fontSizeSmall),
                 height: 1.4,
               ),
             ),

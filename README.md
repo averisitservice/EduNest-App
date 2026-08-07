@@ -51,6 +51,13 @@ Base URLs live in `lib/flavors/edunest_environment.dart`:
 | `package_info_plus` | App version |
 | `google_fonts`, `intl` | Typography, date formatting |
 | `razorpay_flutter` | In-app checkout UI for the Fee Payment screen |
+| `url_launcher` | Opening phone/email/map links from School Contacts |
+| `table_calendar` | Calendar UI (attendance / date pickers) |
+| `firebase_core` | Firebase app initialization |
+| `firebase_messaging` | Push notifications (FCM) |
+| `flutter_local_notifications` | Displaying local/foreground push notifications |
+| `cupertino_icons` | iOS-style icon set |
+| `flutter_lints` *(dev)* | Static analysis rules (`flutter analyze`) |
 
 ## Architecture
 
@@ -97,6 +104,28 @@ lib/
       notifications/
   flavors/                         environment + global configuration
 ```
+
+### Responsive design
+
+The UI scales across small/medium/large phones and foldables/tablets, in both
+portrait and landscape, using pure Flutter (`MediaQuery`/`LayoutBuilder` — no
+external scaling package). The scaling logic lives in
+`lib/app/core/utils/responsive.dart`, exposed as a `BuildContext` extension:
+
+| Helper | Use |
+|---|---|
+| `context.rw(value)` | Scale a width/horizontal size against a 375px reference |
+| `context.rh(value)` | Scale a height/vertical size against a 812px reference |
+| `context.rf(value)` | Scale a font size, also honoring the OS text-scale setting |
+| `context.isSmallPhone` / `isMediumPhone` / `isLargePhone` / `isFoldableOrTablet` | Width breakpoints (<360 / 360–400 / 400–600 / ≥600) |
+| `context.isPortrait` / `isLandscape` | Orientation |
+
+All scaling is clamped (widths/heights 0.85×–1.35×, fonts 0.9×–1.3×, fonts also
+floored/ceilinged 10–40px) so nothing balloons or shrinks past a readable range.
+`my_app.dart` additionally clamps the app-wide `TextScaler` as a safety net
+against extreme OS accessibility font settings. On large/foldable screens,
+dialogs and cards (e.g. `EdunestConfirmDialog`, `FeeAmountDialog`, login/tenant
+cards) are capped with a `maxWidth` instead of stretching full width.
 
 ### Networking pattern
 

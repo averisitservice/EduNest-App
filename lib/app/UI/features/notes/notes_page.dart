@@ -8,6 +8,7 @@ import 'package:edunest/app/data/model/homework/homework_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_empty_state.dart';
 import 'package:edunest/app/global_widgets/edunest_filter.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -77,11 +78,11 @@ class _NotesPageState extends State<NotesPage> {
           icon: const Icon(Icons.arrow_back_rounded, color: AppColors.darkText),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Notes',
           style: TextStyle(
             color: AppColors.darkText,
-            fontSize: AppValues.fontSizeTitle,
+            fontSize: context.rf(AppValues.fontSizeTitle),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -117,19 +118,19 @@ class _NotesPageState extends State<NotesPage> {
     if (_errorMessage != null) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(context.rw(24)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 _errorMessage!,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: AppValues.fontSizeBody,
+                style: TextStyle(
+                  fontSize: context.rf(AppValues.fontSizeBody),
                   color: AppColors.darkGrey,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: context.rh(16)),
               ElevatedButton(onPressed: _loadNotes, child: const Text('Retry')),
             ],
           ),
@@ -145,9 +146,9 @@ class _NotesPageState extends State<NotesPage> {
           physics: const AlwaysScrollableScrollPhysics(
             parent: BouncingScrollPhysics(),
           ),
-          children: const [
-            SizedBox(height: 80),
-            EdunestEmptyState(subtitle: 'No notes posted yet.'),
+          children: [
+            SizedBox(height: context.rh(80)),
+            const EdunestEmptyState(subtitle: 'No notes posted yet.'),
           ],
         ),
       );
@@ -157,7 +158,10 @@ class _NotesPageState extends State<NotesPage> {
       onRefresh: _loadNotes,
       color: AppColors.primary,
       child: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+        padding: EdgeInsets.symmetric(
+          horizontal: context.rw(16.0),
+          vertical: context.rh(12.0),
+        ),
         physics: const AlwaysScrollableScrollPhysics(
           parent: BouncingScrollPhysics(),
         ),
@@ -175,13 +179,13 @@ class _NotesPageState extends State<NotesPage> {
       onTap: () {
         Get.to(() => NotesDetailPage(noteId: item.id));
       },
-      borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+      borderRadius: BorderRadius.circular(context.rw(AppValues.radiusLarge)),
       child: Container(
-        margin: const EdgeInsets.only(bottom: AppValues.radius12),
-        padding: const EdgeInsets.all(AppValues.paddingDefault),
+        margin: EdgeInsets.only(bottom: context.rh(AppValues.radius12)),
+        padding: EdgeInsets.all(context.rw(AppValues.paddingDefault)),
         decoration: BoxDecoration(
           color: AppColors.colorWhite,
-          borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+          borderRadius: BorderRadius.circular(context.rw(AppValues.radiusLarge)),
           border: Border.all(color: AppColors.lightBackground),
           boxShadow: [
             BoxShadow(
@@ -195,8 +199,8 @@ class _NotesPageState extends State<NotesPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              width: 44,
-              height: 44,
+              width: context.rw(44),
+              height: context.rw(44),
               decoration: const BoxDecoration(
                 color: AppColors.blueBackground,
                 shape: BoxShape.circle,
@@ -205,39 +209,39 @@ class _NotesPageState extends State<NotesPage> {
               child: Icon(
                 SubjectIconService.iconFor(item.subjectName),
                 color: AppColors.primary,
-                size: 22,
+                size: context.rw(22),
               ),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: context.rw(12)),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     item.subjectName,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.darkText,
-                      fontSize: 16,
+                      fontSize: context.rf(16),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 6),
+                  SizedBox(height: context.rh(6)),
                   Text(
                     item.title,
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.darkGrey,
-                      fontSize: 13.5,
+                      fontSize: context.rf(13.5),
                       height: 1.3,
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(width: 12),
-            const Icon(
+            SizedBox(width: context.rw(12)),
+            Icon(
               Icons.chevron_right_rounded,
               color: AppColors.darkGrey,
-              size: 20,
+              size: context.rw(20),
             ),
           ],
         ),

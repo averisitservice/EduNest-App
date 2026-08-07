@@ -6,6 +6,7 @@ import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/homework/homework_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_divider.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -91,11 +92,11 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
           icon: const Icon(Icons.arrow_back_rounded, color: AppColors.darkText),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Homework Details',
           style: TextStyle(
             color: AppColors.darkText,
-            fontSize: AppValues.fontSizeTitle,
+            fontSize: context.rf(AppValues.fontSizeTitle),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -125,19 +126,19 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
     if (_errorMessage != null) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(context.rw(24)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 _errorMessage!,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: AppValues.fontSizeBody,
+                style: TextStyle(
+                  fontSize: context.rf(AppValues.fontSizeBody),
                   color: AppColors.darkGrey,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: context.rh(16)),
               ElevatedButton(
                 onPressed: _loadDetail,
                 child: const Text('Retry'),
@@ -163,22 +164,22 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
       children: [
         Expanded(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 12.0,
+            padding: EdgeInsets.symmetric(
+              horizontal: context.rw(16.0),
+              vertical: context.rh(12.0),
             ),
             physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildHeaderCard(item, subjectColor, subjectBg, assignedDate),
-                const SizedBox(height: 16),
+                SizedBox(height: context.rh(16)),
                 _buildDescriptionCard(item),
                 if (hasAttachment) ...[
-                  const SizedBox(height: 16),
+                  SizedBox(height: context.rh(16)),
                   _buildAttachmentsCard(item, filename),
                 ],
-                const SizedBox(height: 90),
+                SizedBox(height: context.rh(90)),
               ],
             ),
           ),
@@ -195,10 +196,10 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
   ) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(context.rw(16.0)),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(context.rw(16.0)),
         border: Border.all(color: AppColors.lightBackground),
         boxShadow: [
           BoxShadow(
@@ -215,47 +216,47 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 48,
-                height: 48,
+                width: context.rw(48),
+                height: context.rw(48),
                 decoration: BoxDecoration(
                   color: subjectBg,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(context.rw(12)),
                 ),
                 alignment: Alignment.center,
                 child: Icon(
                   SubjectIconService.iconFor(item.subjectName),
                   color: subjectColor,
-                  size: 22,
+                  size: context.rw(22),
                 ),
               ),
-              const SizedBox(width: 14),
+              SizedBox(width: context.rw(14)),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       item.title,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.darkText,
-                        fontSize: 17,
+                        fontSize: context.rf(17),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: context.rh(6)),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: context.rw(10),
+                        vertical: context.rh(4),
                       ),
                       decoration: BoxDecoration(
                         color: subjectBg,
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(context.rw(8)),
                       ),
                       child: Text(
                         item.subjectName,
                         style: TextStyle(
                           color: subjectColor,
-                          fontSize: 12,
+                          fontSize: context.rf(12),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -265,16 +266,16 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: context.rh(16)),
           const EdunestDivider(color: AppColors.lightBackground, height: 0),
-          const SizedBox(height: 12),
+          SizedBox(height: context.rh(12)),
           _buildInfoRow(
             Icons.event_available_rounded,
             'Assigned Date',
             assignedDate,
             AppColors.darkText,
           ),
-          const SizedBox(height: 10),
+          SizedBox(height: context.rh(10)),
           _buildInfoRow(
             Icons.person_rounded,
             'Teacher',
@@ -294,15 +295,15 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
   ) {
     return Row(
       children: [
-        Icon(icon, size: 16, color: AppColors.darkGrey),
-        const SizedBox(width: 8),
+        Icon(icon, size: context.rw(16), color: AppColors.darkGrey),
+        SizedBox(width: context.rw(8)),
         SizedBox(
-          width: 100,
+          width: context.rw(100),
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.darkGrey,
-              fontSize: 12.5,
+              fontSize: context.rf(12.5),
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -312,7 +313,7 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
             value,
             style: TextStyle(
               color: valueColor,
-              fontSize: 13,
+              fontSize: context.rf(13),
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -324,10 +325,10 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
   Widget _buildDescriptionCard(HomeworkDetailModel item) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(context.rw(16.0)),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(context.rw(16.0)),
         border: Border.all(color: AppColors.lightBackground),
         boxShadow: [
           BoxShadow(
@@ -340,22 +341,22 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Description',
             style: TextStyle(
               color: AppColors.darkText,
-              fontSize: 15,
+              fontSize: context.rf(15),
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: context.rh(12)),
           Text(
             item.description.isNotEmpty
                 ? item.description
                 : 'No description provided.',
-            style: const TextStyle(
+            style: TextStyle(
               color: AppColors.darkGrey,
-              fontSize: 13.5,
+              fontSize: context.rf(13.5),
               height: 1.45,
             ),
           ),
@@ -367,10 +368,10 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
   Widget _buildAttachmentsCard(HomeworkDetailModel item, String filename) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(context.rw(16.0)),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(context.rw(16.0)),
         border: Border.all(color: AppColors.lightBackground),
         boxShadow: [
           BoxShadow(
@@ -383,23 +384,23 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Attachments',
             style: TextStyle(
               color: AppColors.darkText,
-              fontSize: 15,
+              fontSize: context.rf(15),
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: context.rh(12)),
           if (_isImageAttachment(item.attachmentUrl!)) ...[
             InkWell(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(context.rw(12)),
               onTap: () => _openAttachment(item.attachmentUrl!),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(context.rw(12)),
                 child: Container(
-                  height: 200,
+                  height: context.rh(200),
                   width: double.infinity,
                   color: AppColors.lightBackground,
                   child: Image.network(
@@ -415,21 +416,21 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
                       );
                     },
                     errorBuilder: (context, error, stackTrace) {
-                      return const Center(
+                      return Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
                               Icons.broken_image_outlined,
                               color: AppColors.darkGrey,
-                              size: 40,
+                              size: context.rw(40),
                             ),
-                            SizedBox(height: 8),
+                            SizedBox(height: context.rh(8)),
                             Text(
                               'Failed to load preview',
                               style: TextStyle(
                                 color: AppColors.darkGrey,
-                                fontSize: 12,
+                                fontSize: context.rf(12),
                               ),
                             ),
                           ],
@@ -440,53 +441,53 @@ class _HomeworkDetailPageState extends State<HomeworkDetailPage> {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: context.rh(12)),
           ],
           InkWell(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(context.rw(12)),
             onTap: () => _openAttachment(item.attachmentUrl!),
             child: Container(
-              padding: const EdgeInsets.all(12.0),
+              padding: EdgeInsets.all(context.rw(12.0)),
               decoration: BoxDecoration(
                 color: AppColors.lightBackground,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(context.rw(12)),
                 border: Border.all(color: AppColors.borderGrey),
               ),
               child: Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 6,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: context.rw(8),
+                      vertical: context.rh(6),
                     ),
                     decoration: BoxDecoration(
                       color: AppColors.blueBackground,
-                      borderRadius: BorderRadius.circular(6),
+                      borderRadius: BorderRadius.circular(context.rw(6)),
                       border: Border.all(color: AppColors.inputBorder),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.description_outlined,
                       color: AppColors.primary,
-                      size: 22,
+                      size: context.rw(22),
                     ),
                   ),
-                  const SizedBox(width: 14),
+                  SizedBox(width: context.rw(14)),
                   Expanded(
                     child: Text(
                       filename,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.darkText,
-                        fontSize: 13.5,
+                        fontSize: context.rf(13.5),
                         fontWeight: FontWeight.bold,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const Icon(
+                  Icon(
                     Icons.file_download_outlined,
                     color: AppColors.primary,
-                    size: 24,
+                    size: context.rw(24),
                   ),
                 ],
               ),

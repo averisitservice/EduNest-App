@@ -6,6 +6,7 @@ import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/auth/tenant_model.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -100,15 +101,15 @@ class _SplashScreenState extends State<SplashScreen>
           ),
         ),
         Positioned(
-          bottom: 40.0,
+          bottom: context.rh(40.0),
           left: 0.0,
           right: 0.0,
           child: FadeTransition(
             opacity: _fadeAnimation,
             child: Center(
               child: SizedBox(
-                width: AppValues.iconSizeDefault,
-                height: AppValues.iconSizeDefault,
+                width: context.rw(AppValues.iconSizeDefault),
+                height: context.rw(AppValues.iconSizeDefault),
                 child: CircularProgressIndicator(
                   strokeWidth: 2.5,
                   valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
@@ -122,9 +123,12 @@ class _SplashScreenState extends State<SplashScreen>
   }
 
   Widget _defaultLogo(double screenWidth) {
+    final double logoWidth = context.isFoldableOrTablet
+        ? screenWidth * 0.5
+        : screenWidth * 0.75;
     return Image.asset(
       'assets/images/full-icon.png',
-      width: screenWidth * 0.75,
+      width: logoWidth,
       fit: BoxFit.contain,
     );
   }
@@ -156,8 +160,8 @@ class _SplashScreenState extends State<SplashScreen>
                 fit: BoxFit.cover,
                 placeholder: (context, url) => Center(
                   child: SizedBox(
-                    width: AppValues.iconSizeDefault,
-                    height: AppValues.iconSizeDefault,
+                    width: context.rw(AppValues.iconSizeDefault),
+                    height: context.rw(AppValues.iconSizeDefault),
                     child: CircularProgressIndicator(
                       strokeWidth: 2.5,
                       valueColor: AlwaysStoppedAnimation<Color>(
@@ -168,8 +172,8 @@ class _SplashScreenState extends State<SplashScreen>
                 ),
                 errorWidget: (context, url, error) => Center(
                   child: SizedBox(
-                    width: AppValues.iconSizeDefault,
-                    height: AppValues.iconSizeDefault,
+                    width: context.rw(AppValues.iconSizeDefault),
+                    height: context.rw(AppValues.iconSizeDefault),
                     child: CircularProgressIndicator(
                       strokeWidth: 2.5,
                       valueColor: AlwaysStoppedAnimation<Color>(

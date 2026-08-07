@@ -5,6 +5,7 @@ import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/timetable/timetable_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_empty_state.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -115,11 +116,11 @@ class _TimetablePageState extends State<TimetablePage> {
           icon: const Icon(Icons.arrow_back_rounded, color: AppColors.darkText),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Time Table',
           style: TextStyle(
             color: AppColors.darkText,
-            fontSize: AppValues.fontSizeTitle,
+            fontSize: context.rf(AppValues.fontSizeTitle),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -155,26 +156,29 @@ class _TimetablePageState extends State<TimetablePage> {
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      padding: EdgeInsets.symmetric(
+        horizontal: context.rw(16.0),
+        vertical: context.rh(8.0),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildDaySelector(timetable),
-          const SizedBox(height: 18),
+          SizedBox(height: context.rh(18)),
           if (_dayLoading)
             Container(
-              height: AppValues.listBottomEmptySpace,
+              height: context.rh(AppValues.listBottomEmptySpace),
               alignment: Alignment.center,
               child: const CircularProgressIndicator(color: AppColors.primary),
             )
           else if (day.periods.isEmpty)
             Container(
-              height: AppValues.listBottomEmptySpace,
+              height: context.rh(AppValues.listBottomEmptySpace),
               alignment: Alignment.center,
-              child: const Text(
+              child: Text(
                 'No periods scheduled for this day.',
                 style: TextStyle(
-                  fontSize: AppValues.fontSizeBody,
+                  fontSize: context.rf(AppValues.fontSizeBody),
                   color: AppColors.darkGrey,
                   fontWeight: FontWeight.w500,
                 ),
@@ -188,7 +192,7 @@ class _TimetablePageState extends State<TimetablePage> {
               itemBuilder: (context, index) =>
                   _buildPeriodCard(day.periods[index]),
             ),
-          const SizedBox(height: 12),
+          SizedBox(height: context.rh(12)),
         ],
       ),
     );
@@ -198,10 +202,10 @@ class _TimetablePageState extends State<TimetablePage> {
     return Row(
       children: [
         IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.chevron_left_rounded,
             color: AppColors.primary,
-            size: 28,
+            size: context.rw(28),
           ),
           onPressed: _selectedDay > 0
               ? () => _onDaySelected(_selectedDay - 1)
@@ -209,25 +213,25 @@ class _TimetablePageState extends State<TimetablePage> {
         ),
         Expanded(
           child: SizedBox(
-            height: 42,
+            height: context.rh(42),
             child: ListView.separated(
               controller: _scrollController,
               scrollDirection: Axis.horizontal,
               physics: const BouncingScrollPhysics(),
               itemCount: timetable.days.length,
-              separatorBuilder: (context, index) => const SizedBox(width: 8),
+              separatorBuilder: (context, index) => SizedBox(width: context.rw(8)),
               itemBuilder: (context, index) {
                 final dayData = timetable.days[index];
                 final isSelected = index == _selectedDay;
 
                 return InkWell(
                   onTap: () => _onDaySelected(index),
-                  borderRadius: BorderRadius.circular(AppValues.radiusDefault),
+                  borderRadius: BorderRadius.circular(context.rw(AppValues.radiusDefault)),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20,
-                      vertical: 10,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: context.rw(20),
+                      vertical: context.rh(10),
                     ),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
@@ -235,7 +239,7 @@ class _TimetablePageState extends State<TimetablePage> {
                           ? AppColors.primary
                           : AppColors.colorWhite,
                       borderRadius: BorderRadius.circular(
-                        AppValues.radiusDefault,
+                        context.rw(AppValues.radiusDefault),
                       ),
                       border: isSelected
                           ? null
@@ -253,7 +257,7 @@ class _TimetablePageState extends State<TimetablePage> {
                     child: Text(
                       dayData.dayName.toUpperCase(),
                       style: TextStyle(
-                        fontSize: 12.5,
+                        fontSize: context.rf(12.5),
                         fontWeight: FontWeight.bold,
                         color: isSelected
                             ? AppColors.colorWhite
@@ -268,10 +272,10 @@ class _TimetablePageState extends State<TimetablePage> {
           ),
         ),
         IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.chevron_right_rounded,
             color: AppColors.primary,
-            size: 28,
+            size: context.rw(28),
           ),
           onPressed: _selectedDay < timetable.days.length - 1
               ? () => _onDaySelected(_selectedDay + 1)
@@ -288,10 +292,10 @@ class _TimetablePageState extends State<TimetablePage> {
     final String endTime = DateUtil.getTime(period.endTime);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: AppValues.margin10),
+      margin: EdgeInsets.only(bottom: context.rh(AppValues.margin10)),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(AppValues.radius12),
+        borderRadius: BorderRadius.circular(context.rw(AppValues.radius12)),
         border: Border.all(color: AppColors.lightBackground),
         boxShadow: [
           BoxShadow(
@@ -305,46 +309,46 @@ class _TimetablePageState extends State<TimetablePage> {
         child: Row(
           children: [
             Container(
-              width: 4,
+              width: context.rw(4),
               decoration: BoxDecoration(
                 color: barColor,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(AppValues.radius12),
-                  bottomLeft: Radius.circular(AppValues.radius12),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(context.rw(AppValues.radius12)),
+                  bottomLeft: Radius.circular(context.rw(AppValues.radius12)),
                 ),
               ),
             ),
-            const SizedBox(width: 14),
+            SizedBox(width: context.rw(14)),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 14.0),
+              padding: EdgeInsets.symmetric(vertical: context.rh(14.0)),
               child: SizedBox(
-                width: 70,
+                width: context.rw(70),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       startTime,
-                      style: const TextStyle(
-                        fontSize: 12.5,
+                      style: TextStyle(
+                        fontSize: context.rf(12.5),
                         fontWeight: FontWeight.bold,
                         color: AppColors.darkText,
                       ),
                     ),
-                    const SizedBox(height: 2),
-                    const Text(
+                    SizedBox(height: context.rh(2)),
+                    Text(
                       'to',
                       style: TextStyle(
-                        fontSize: 11,
+                        fontSize: context.rf(11),
                         fontWeight: FontWeight.w500,
                         color: AppColors.textMuted,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    SizedBox(height: context.rh(2)),
                     Text(
                       endTime,
-                      style: const TextStyle(
-                        fontSize: 12.5,
+                      style: TextStyle(
+                        fontSize: context.rf(12.5),
                         fontWeight: FontWeight.bold,
                         color: AppColors.darkText,
                       ),
@@ -355,16 +359,16 @@ class _TimetablePageState extends State<TimetablePage> {
             ),
             Container(
               width: 1,
-              margin: const EdgeInsets.symmetric(vertical: AppValues.margin10),
+              margin: EdgeInsets.symmetric(vertical: context.rh(AppValues.margin10)),
               color: AppColors.borderGrey,
             ),
-            const SizedBox(width: 14),
+            SizedBox(width: context.rw(14)),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.only(
-                  top: 14.0,
-                  bottom: 14.0,
-                  right: 14.0,
+                padding: EdgeInsets.only(
+                  top: context.rh(14.0),
+                  bottom: context.rh(14.0),
+                  right: context.rw(14.0),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -377,7 +381,7 @@ class _TimetablePageState extends State<TimetablePage> {
                                 ? period.subjectName
                                 : period.slotName),
                       style: TextStyle(
-                        fontSize: AppValues.fontSizeDefault,
+                        fontSize: context.rf(AppValues.fontSizeDefault),
                         fontWeight: FontWeight.bold,
                         color: isBreak
                             ? AppColors.colorPurple
@@ -385,20 +389,20 @@ class _TimetablePageState extends State<TimetablePage> {
                       ),
                     ),
                     if (!isBreak) ...[
-                      const SizedBox(height: 8),
+                      SizedBox(height: context.rh(8)),
                       Row(
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.person_outline_rounded,
-                            size: 15,
+                            size: context.rw(15),
                             color: AppColors.darkGrey,
                           ),
-                          const SizedBox(width: 5),
+                          SizedBox(width: context.rw(5)),
                           Expanded(
                             child: Text(
                               period.teacherName,
-                              style: const TextStyle(
-                                fontSize: 12.5,
+                              style: TextStyle(
+                                fontSize: context.rf(12.5),
                                 color: AppColors.darkGrey,
                                 fontWeight: FontWeight.w400,
                               ),

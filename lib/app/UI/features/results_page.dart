@@ -1,5 +1,6 @@
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -98,11 +99,11 @@ class ResultsPage extends StatelessWidget {
           icon: const Icon(Icons.arrow_back_rounded, color: AppColors.darkText),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Marks & Results',
           style: TextStyle(
             color: AppColors.darkText,
-            fontSize: AppValues.fontSizeTitle,
+            fontSize: context.rf(AppValues.fontSizeTitle),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -119,38 +120,38 @@ class ResultsPage extends StatelessWidget {
         ),
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 12.0,
+            padding: EdgeInsets.symmetric(
+              horizontal: context.rw(16.0),
+              vertical: context.rh(12.0),
             ),
             physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildOverallProgressCard(),
-                const SizedBox(height: 20),
-                const Text(
+                _buildOverallProgressCard(context),
+                SizedBox(height: context.rh(20)),
+                Text(
                   'Subject Wise Performance',
                   style: TextStyle(
                     color: AppColors.darkText,
-                    fontSize: 15,
+                    fontSize: context.rf(15),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 8),
-                _buildSubjectPerformanceCard(subjects),
-                const SizedBox(height: 20),
-                const Text(
+                SizedBox(height: context.rh(8)),
+                _buildSubjectPerformanceCard(context, subjects),
+                SizedBox(height: context.rh(20)),
+                Text(
                   'Recent Test / Exam Results',
                   style: TextStyle(
                     color: AppColors.darkText,
-                    fontSize: 15,
+                    fontSize: context.rf(15),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 8),
-                _buildRecentResultsCard(),
-                const SizedBox(height: 12),
+                SizedBox(height: context.rh(8)),
+                _buildRecentResultsCard(context),
+                SizedBox(height: context.rh(12)),
               ],
             ),
           ),
@@ -159,12 +160,12 @@ class ResultsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildOverallProgressCard() {
+  Widget _buildOverallProgressCard(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(context.rw(16.0)),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(context.rw(16.0)),
         border: Border.all(color: AppColors.lightBackground),
         boxShadow: [
           BoxShadow(
@@ -177,18 +178,18 @@ class ResultsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Overall Progress',
             style: TextStyle(
               color: AppColors.darkText,
-              fontSize: 14.5,
+              fontSize: context.rf(14.5),
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: context.rh(12)),
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 flex: 3,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -196,15 +197,15 @@ class ResultsPage extends StatelessWidget {
                     Text(
                       '78%',
                       style: TextStyle(
-                        color: Color(0xFF16A34A),
-                        fontSize: 32,
+                        color: const Color(0xFF16A34A),
+                        fontSize: context.rf(32),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: context.rh(4)),
                     Text(
                       'Good Job! Keep it up.',
-                      style: TextStyle(color: AppColors.darkGrey, fontSize: 12),
+                      style: TextStyle(color: AppColors.darkGrey, fontSize: context.rf(12)),
                     ),
                   ],
                 ),
@@ -225,14 +226,14 @@ class ResultsPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: context.rh(8)),
                     RichText(
-                      text: const TextSpan(
+                      text: TextSpan(
                         style: TextStyle(
-                          fontSize: 12.5,
+                          fontSize: context.rf(12.5),
                           fontWeight: FontWeight.bold,
                         ),
-                        children: [
+                        children: const [
                           TextSpan(
                             text: '390',
                             style: TextStyle(color: Color(0xFF16A34A)),
@@ -257,12 +258,18 @@ class ResultsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSubjectPerformanceCard(List<SubjectProgress> subjects) {
+  Widget _buildSubjectPerformanceCard(
+    BuildContext context,
+    List<SubjectProgress> subjects,
+  ) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      padding: EdgeInsets.symmetric(
+        horizontal: context.rw(16.0),
+        vertical: context.rh(12.0),
+      ),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(context.rw(16.0)),
         border: Border.all(color: AppColors.lightBackground),
         boxShadow: [
           BoxShadow(
@@ -276,7 +283,7 @@ class ResultsPage extends StatelessWidget {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: subjects.length,
-        separatorBuilder: (context, index) => const SizedBox(height: 18),
+        separatorBuilder: (context, index) => SizedBox(height: context.rh(18)),
         itemBuilder: (context, index) {
           final sub = subjects[index];
           return Row(
@@ -284,8 +291,8 @@ class ResultsPage extends StatelessWidget {
             children: [
               // Circular icon
               Container(
-                width: 44,
-                height: 44,
+                width: context.rw(44),
+                height: context.rw(44),
                 decoration: BoxDecoration(
                   color: sub.circleBgColor,
                   shape: BoxShape.circle,
@@ -296,13 +303,13 @@ class ResultsPage extends StatelessWidget {
                         sub.customIconText!,
                         style: TextStyle(
                           color: sub.themeColor,
-                          fontSize: 18,
+                          fontSize: context.rf(18),
                           fontWeight: FontWeight.bold,
                         ),
                       )
-                    : Icon(sub.icon, color: sub.themeColor, size: 20),
+                    : Icon(sub.icon, color: sub.themeColor, size: context.rw(20)),
               ),
-              const SizedBox(width: 14),
+              SizedBox(width: context.rw(14)),
               // Name and progress bar
               Expanded(
                 child: Column(
@@ -310,13 +317,13 @@ class ResultsPage extends StatelessWidget {
                   children: [
                     Text(
                       sub.subjectName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColors.darkText,
-                        fontSize: 14.5,
+                        fontSize: context.rf(14.5),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 6),
+                    SizedBox(height: context.rh(6)),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(4),
                       child: LinearProgressIndicator(
@@ -331,7 +338,7 @@ class ResultsPage extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: context.rw(16)),
               // Percentage text and fraction score
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -340,16 +347,16 @@ class ResultsPage extends StatelessWidget {
                     '${(sub.percentage * 100).toInt()}%',
                     style: TextStyle(
                       color: sub.themeColor,
-                      fontSize: 14,
+                      fontSize: context.rf(14),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: context.rh(4)),
                   Text(
                     '${sub.score} / ${sub.total}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColors.darkGrey,
-                      fontSize: 11.5,
+                      fontSize: context.rf(11.5),
                     ),
                   ),
                 ],
@@ -361,12 +368,12 @@ class ResultsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildRecentResultsCard() {
+  Widget _buildRecentResultsCard(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(context.rw(16.0)),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(context.rw(16.0)),
         border: Border.all(color: AppColors.lightBackground),
         boxShadow: [
           BoxShadow(
@@ -380,21 +387,21 @@ class ResultsPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: 44,
-            height: 44,
+            width: context.rw(44),
+            height: context.rw(44),
             decoration: const BoxDecoration(
               color: Color(0xFFEAF4FC),
               shape: BoxShape.circle,
             ),
             alignment: Alignment.center,
-            child: const Icon(
+            child: Icon(
               Icons.assignment_outlined,
-              color: Color(0xFF0F65D6),
-              size: 20,
+              color: const Color(0xFF0F65D6),
+              size: context.rw(20),
             ),
           ),
-          const SizedBox(width: 14),
-          const Expanded(
+          SizedBox(width: context.rw(14)),
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -402,42 +409,42 @@ class ResultsPage extends StatelessWidget {
                   'Unit Test - 1',
                   style: TextStyle(
                     color: AppColors.darkText,
-                    fontSize: 14.5,
+                    fontSize: context.rf(14.5),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 4),
+                SizedBox(height: context.rh(4)),
                 Text(
                   '20 May 2025',
-                  style: TextStyle(color: AppColors.darkGrey, fontSize: 12.5),
+                  style: TextStyle(color: AppColors.darkGrey, fontSize: context.rf(12.5)),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 16),
-          const Column(
+          SizedBox(width: context.rw(16)),
+          Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
                 '78%',
                 style: TextStyle(
-                  color: Color(0xFF0F65D6),
-                  fontSize: 14,
+                  color: const Color(0xFF0F65D6),
+                  fontSize: context.rf(14),
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 4),
+              SizedBox(height: context.rh(4)),
               Text(
                 '390 / 500',
-                style: TextStyle(color: AppColors.darkGrey, fontSize: 11.5),
+                style: TextStyle(color: AppColors.darkGrey, fontSize: context.rf(11.5)),
               ),
             ],
           ),
-          const SizedBox(width: 8),
-          const Icon(
+          SizedBox(width: context.rw(8)),
+          Icon(
             Icons.chevron_right_rounded,
             color: AppColors.borderGrey,
-            size: 20,
+            size: context.rw(20),
           ),
         ],
       ),

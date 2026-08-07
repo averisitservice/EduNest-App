@@ -4,6 +4,7 @@ import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/homework/homework_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -80,11 +81,11 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
           icon: const Icon(Icons.arrow_back_rounded, color: AppColors.darkText),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Notes Details',
           style: TextStyle(
             color: AppColors.darkText,
-            fontSize: AppValues.fontSizeTitle,
+            fontSize: context.rf(AppValues.fontSizeTitle),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -114,19 +115,19 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
     if (_errorMessage != null) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(context.rw(24)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 _errorMessage!,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: AppValues.fontSizeBody,
+                style: TextStyle(
+                  fontSize: context.rf(AppValues.fontSizeBody),
                   color: AppColors.darkGrey,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: context.rh(16)),
               ElevatedButton(
                 onPressed: _loadDetail,
                 child: const Text('Retry'),
@@ -143,17 +144,20 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
         item.attachmentUrl != null && item.attachmentUrl!.isNotEmpty;
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      padding: EdgeInsets.symmetric(
+        horizontal: context.rw(16.0),
+        vertical: context.rh(12.0),
+      ),
       physics: const BouncingScrollPhysics(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(context.rw(16.0)),
             decoration: BoxDecoration(
               color: AppColors.colorWhite,
-              borderRadius: BorderRadius.circular(16.0),
+              borderRadius: BorderRadius.circular(context.rw(16.0)),
               border: Border.all(color: AppColors.lightBackground),
               boxShadow: [
                 BoxShadow(
@@ -167,8 +171,8 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: 44,
-                  height: 44,
+                  width: context.rw(44),
+                  height: context.rw(44),
                   decoration: const BoxDecoration(
                     color: AppColors.blueBackground,
                     shape: BoxShape.circle,
@@ -177,45 +181,45 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
                   child: Icon(
                     SubjectIconService.iconFor(item.subjectName),
                     color: AppColors.primary,
-                    size: 22,
+                    size: context.rw(22),
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: context.rw(12)),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         item.subjectName,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.darkText,
-                          fontSize: 18,
+                          fontSize: context.rf(18),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 6),
+                      SizedBox(height: context.rh(6)),
                       Text(
                         item.title,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.darkGrey,
-                          fontSize: 13.5,
+                          fontSize: context.rf(13.5),
                           height: 1.3,
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: context.rh(12)),
                       Row(
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.person_rounded,
-                            size: 16,
+                            size: context.rw(16),
                             color: AppColors.primary,
                           ),
-                          const SizedBox(width: 6),
+                          SizedBox(width: context.rw(6)),
                           Text(
                             item.teacherName,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: AppColors.darkGrey,
-                              fontSize: 13,
+                              fontSize: context.rf(13),
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -227,14 +231,14 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: context.rh(16)),
 
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(context.rw(16.0)),
             decoration: BoxDecoration(
               color: AppColors.colorWhite,
-              borderRadius: BorderRadius.circular(16.0),
+              borderRadius: BorderRadius.circular(context.rw(16.0)),
               border: Border.all(color: AppColors.lightBackground),
               boxShadow: [
                 BoxShadow(
@@ -247,37 +251,37 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'Description',
                   style: TextStyle(
                     color: AppColors.darkText,
-                    fontSize: 16,
+                    fontSize: context.rf(16),
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 12),
+                SizedBox(height: context.rh(12)),
                 Text(
                   item.description.isNotEmpty
                       ? item.description
                       : 'No description provided.',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.darkGrey,
-                    fontSize: 14,
+                    fontSize: context.rf(14),
                     height: 1.4,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: context.rh(16)),
 
           if (hasAttachment) ...[
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(context.rw(16.0)),
               decoration: BoxDecoration(
                 color: AppColors.colorWhite,
-                borderRadius: BorderRadius.circular(16.0),
+                borderRadius: BorderRadius.circular(context.rw(16.0)),
                 border: Border.all(color: AppColors.lightBackground),
                 boxShadow: [
                   BoxShadow(
@@ -290,60 +294,60 @@ class _NotesDetailPageState extends State<NotesDetailPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Attachments',
                     style: TextStyle(
                       color: AppColors.darkText,
-                      fontSize: 16,
+                      fontSize: context.rf(16),
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: context.rh(12)),
                   InkWell(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(context.rw(12)),
                     onTap: () => _openAttachment(item.attachmentUrl!),
                     child: Container(
-                      padding: const EdgeInsets.all(12.0),
+                      padding: EdgeInsets.all(context.rw(12.0)),
                       decoration: BoxDecoration(
                         color: const Color(0xFFF8FAFC),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(context.rw(12)),
                         border: Border.all(color: const Color(0xFFF1F5F9)),
                       ),
                       child: Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 6,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: context.rw(8),
+                              vertical: context.rh(6),
                             ),
                             decoration: BoxDecoration(
                               color: const Color(0xFFFEE2E2),
-                              borderRadius: BorderRadius.circular(6),
+                              borderRadius: BorderRadius.circular(context.rw(6)),
                               border: Border.all(color: const Color(0xFFFECACA)),
                             ),
-                            child: const Icon(
+                            child: Icon(
                               Icons.description_outlined,
-                              color: Color(0xFFDC2626),
-                              size: 22,
+                              color: const Color(0xFFDC2626),
+                              size: context.rw(22),
                             ),
                           ),
-                          const SizedBox(width: 14),
+                          SizedBox(width: context.rw(14)),
                           Expanded(
                             child: Text(
                               filename,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: AppColors.darkText,
-                                fontSize: 14,
+                                fontSize: context.rf(14),
                                 fontWeight: FontWeight.bold,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          const Icon(
+                          Icon(
                             Icons.file_download_outlined,
                             color: AppColors.primary,
-                            size: 24,
+                            size: context.rw(24),
                           ),
                         ],
                       ),

@@ -4,6 +4,7 @@ import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/exam/exam_schedule_model.dart';
 import 'package:edunest/app/data/repository/features_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_empty_state.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -56,11 +57,11 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
           icon: const Icon(Icons.arrow_back_rounded, color: AppColors.darkText),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Exam Schedule',
           style: TextStyle(
             color: AppColors.darkText,
-            fontSize: AppValues.fontSizeTitle,
+            fontSize: context.rf(AppValues.fontSizeTitle),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -94,24 +95,27 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
 
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      padding: EdgeInsets.symmetric(
+        horizontal: context.rw(16.0),
+        vertical: context.rh(8.0),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildTabSwitcher(),
-          const SizedBox(height: 18),
+          SizedBox(height: context.rh(18)),
           Text(
             _selectedTabIndex == 0 ? 'Upcoming Exams' : 'Past Exams',
-            style: const TextStyle(
-              fontSize: AppValues.fontSizeDefault,
+            style: TextStyle(
+              fontSize: context.rf(AppValues.fontSizeDefault),
               fontWeight: FontWeight.bold,
               color: AppColors.darkText,
             ),
           ),
-          const SizedBox(height: 12),
+          SizedBox(height: context.rh(12)),
           if (currentExams.isEmpty)
             SizedBox(
-              height: 260,
+              height: context.rh(260),
               child: EdunestEmptyState(
                 subtitle: _selectedTabIndex == 0
                     ? 'No upcoming exams.'
@@ -126,10 +130,10 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
               itemBuilder: (context, index) =>
                   _buildExamCard(currentExams[index]),
             ),
-          const SizedBox(height: 6),
+          SizedBox(height: context.rh(6)),
           if (_selectedTabIndex == 0 && upcoming.isNotEmpty)
             _buildSummaryCard(upcoming),
-          const SizedBox(height: 14),
+          SizedBox(height: context.rh(14)),
         ],
       ),
     );
@@ -137,11 +141,11 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
 
   Widget _buildTabSwitcher() {
     return Container(
-      height: 48,
-      padding: const EdgeInsets.all(AppValues.margin4),
+      height: context.rh(48),
+      padding: EdgeInsets.all(context.rw(AppValues.margin4)),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(context.rw(14)),
         border: Border.all(color: AppColors.lightBackground),
         boxShadow: [
           BoxShadow(
@@ -174,7 +178,7 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
           child: Text(
             label,
             style: TextStyle(
-              fontSize: AppValues.fontSizeBody,
+              fontSize: context.rf(AppValues.fontSizeBody),
               fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
               color: isSelected ? AppColors.colorWhite : AppColors.darkGrey,
             ),
@@ -188,11 +192,11 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
     final isUpcoming = item.status == 'Upcoming';
 
     return Container(
-      margin: const EdgeInsets.only(bottom: AppValues.radius12),
-      padding: const EdgeInsets.all(14),
+      margin: EdgeInsets.only(bottom: context.rh(AppValues.radius12)),
+      padding: EdgeInsets.all(context.rw(14)),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+        borderRadius: BorderRadius.circular(context.rw(AppValues.radiusLarge)),
         border: Border.all(color: AppColors.lightBackground),
         boxShadow: [
           BoxShadow(
@@ -205,71 +209,71 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
       child: Row(
         children: [
           Container(
-            width: 66,
-            height: 72,
+            width: context.rw(66),
+            height: context.rh(72),
             decoration: BoxDecoration(
               color: AppColors.blueBackground,
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(context.rw(14)),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   DateUtil.getDay(item.examDate),
-                  style: const TextStyle(
-                    fontSize: 22,
+                  style: TextStyle(
+                    fontSize: context.rf(22),
                     fontWeight: FontWeight.bold,
                     color: AppColors.primary,
                     height: 1.1,
                   ),
                 ),
-                const SizedBox(height: 2),
+                SizedBox(height: context.rh(2)),
                 Text(
                   DateUtil.getMonth(item.examDate),
-                  style: const TextStyle(
-                    fontSize: AppValues.fontSizeSmall,
+                  style: TextStyle(
+                    fontSize: context.rf(AppValues.fontSizeSmall),
                     fontWeight: FontWeight.w500,
                     color: AppColors.darkText,
                   ),
                 ),
                 Text(
                   DateUtil.getYear(item.examDate),
-                  style: const TextStyle(
-                    fontSize: 11,
+                  style: TextStyle(
+                    fontSize: context.rf(11),
                     color: AppColors.textMuted,
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(width: 14),
+          SizedBox(width: context.rw(14)),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   item.subjectName,
-                  style: const TextStyle(
-                    fontSize: AppValues.fontSizeDefault,
+                  style: TextStyle(
+                    fontSize: context.rf(AppValues.fontSizeDefault),
                     fontWeight: FontWeight.bold,
                     color: AppColors.darkText,
                   ),
                 ),
-                const SizedBox(height: 6),
+                SizedBox(height: context.rh(6)),
 
                 Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.description_outlined,
-                      size: 15,
+                      size: context.rw(15),
                       color: AppColors.textMuted,
                     ),
-                    const SizedBox(width: 6),
+                    SizedBox(width: context.rw(6)),
                     Expanded(
                       child: Text(
                         item.examName,
-                        style: const TextStyle(
-                          fontSize: 12.5,
+                        style: TextStyle(
+                          fontSize: context.rf(12.5),
                           color: AppColors.textMuted,
                         ),
                         overflow: TextOverflow.ellipsis,
@@ -277,20 +281,20 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: context.rh(4)),
                 Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.stars_outlined,
-                      size: 15,
+                      size: context.rw(15),
                       color: AppColors.textMuted,
                     ),
-                    const SizedBox(width: 6),
+                    SizedBox(width: context.rw(6)),
                     Expanded(
                       child: Text(
                         '${item.maxMarks} Marks',
-                        style: const TextStyle(
-                          fontSize: 12.5,
+                        style: TextStyle(
+                          fontSize: context.rf(12.5),
                           color: AppColors.textMuted,
                         ),
                         overflow: TextOverflow.ellipsis,
@@ -301,19 +305,22 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
               ],
             ),
           ),
-          const SizedBox(width: 8),
+          SizedBox(width: context.rw(8)),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            padding: EdgeInsets.symmetric(
+              horizontal: context.rw(10),
+              vertical: context.rh(5),
+            ),
             decoration: BoxDecoration(
               color: isUpcoming
                   ? AppColors.notificationOrangeBg
                   : AppColors.notificationGreenBg,
-              borderRadius: BorderRadius.circular(AppValues.radius20),
+              borderRadius: BorderRadius.circular(context.rw(AppValues.radius20)),
             ),
             child: Text(
               item.status,
               style: TextStyle(
-                fontSize: 11.5,
+                fontSize: context.rf(11.5),
                 fontWeight: FontWeight.w600,
                 color: isUpcoming
                     ? AppColors.notificationOrangeIcon
@@ -329,10 +336,10 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
   Widget _buildSummaryCard(List<ExamItem> upcoming) {
     final next = upcoming.first;
     return Container(
-      padding: const EdgeInsets.all(AppValues.paddingDefault),
+      padding: EdgeInsets.all(context.rw(AppValues.paddingDefault)),
       decoration: BoxDecoration(
         color: AppColors.blueBackground,
-        borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+        borderRadius: BorderRadius.circular(context.rw(AppValues.radiusLarge)),
         border: Border.all(color: AppColors.lightBackground),
       ),
       child: Row(
@@ -341,38 +348,38 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
             child: Row(
               children: [
                 Container(
-                  width: 44,
-                  height: 44,
+                  width: context.rw(44),
+                  height: context.rw(44),
                   decoration: const BoxDecoration(
                     color: AppColors.colorWhite,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.calendar_month_rounded,
                     color: AppColors.primary,
-                    size: AppValues.iconSize22,
+                    size: context.rw(AppValues.iconSize22),
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: context.rw(10)),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Total Upcoming',
                         style: TextStyle(
-                          fontSize: 11.5,
+                          fontSize: context.rf(11.5),
                           color: AppColors.textMuted,
                           fontWeight: FontWeight.w500,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: context.rh(2)),
                       Text(
                         '${upcoming.length}',
-                        style: const TextStyle(
-                          fontSize: AppValues.fontSizeTitle,
+                        style: TextStyle(
+                          fontSize: context.rf(AppValues.fontSizeTitle),
                           fontWeight: FontWeight.bold,
                           color: AppColors.darkText,
                         ),
@@ -385,9 +392,9 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
           ),
           Container(
             width: 1,
-            height: AppValues.iconLargeSize,
-            margin: const EdgeInsets.symmetric(
-              horizontal: AppValues.smallMargin,
+            height: context.rh(AppValues.iconLargeSize),
+            margin: EdgeInsets.symmetric(
+              horizontal: context.rw(AppValues.smallMargin),
             ),
             color: AppColors.borderGrey,
           ),
@@ -395,44 +402,44 @@ class _ExamSchedulePageState extends State<ExamSchedulePage> {
             child: Row(
               children: [
                 Container(
-                  width: 44,
-                  height: 44,
+                  width: context.rw(44),
+                  height: context.rw(44),
                   decoration: const BoxDecoration(
                     color: AppColors.colorWhite,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
+                  child: Icon(
                     Icons.access_time_rounded,
                     color: AppColors.primary,
-                    size: AppValues.iconSize22,
+                    size: context.rw(AppValues.iconSize22),
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: context.rw(10)),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Next Exam',
                         style: TextStyle(
-                          fontSize: 11.5,
+                          fontSize: context.rf(11.5),
                           color: AppColors.textMuted,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      const SizedBox(height: 2),
+                      SizedBox(height: context.rh(2)),
                       Text(
                         '${DateUtil.getDay(next.examDate)} ${DateUtil.getMonth(next.examDate)}',
-                        style: const TextStyle(
-                          fontSize: 13.5,
+                        style: TextStyle(
+                          fontSize: context.rf(13.5),
                           fontWeight: FontWeight.bold,
                           color: AppColors.primary,
                         ),
                       ),
                       Text(
                         next.subjectName,
-                        style: const TextStyle(
-                          fontSize: 11.5,
+                        style: TextStyle(
+                          fontSize: context.rf(11.5),
                           color: AppColors.textMuted,
                         ),
                         maxLines: 1,

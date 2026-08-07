@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 
 class EdunestTextField extends StatelessWidget {
   final String labelText;
@@ -41,9 +42,13 @@ class EdunestTextField extends StatelessWidget {
     this.inputFormatters,
   });
 
-  OutlineInputBorder _buildBorder(Color color, [double borderWidth = 1.2]) {
+  OutlineInputBorder _buildBorder(
+    BuildContext context,
+    Color color, [
+    double borderWidth = 1.2,
+  ]) {
     return OutlineInputBorder(
-      borderRadius: BorderRadius.circular(borderRadius),
+      borderRadius: BorderRadius.circular(context.rw(borderRadius)),
       borderSide: BorderSide(color: color, width: borderWidth),
     );
   }
@@ -57,35 +62,35 @@ class EdunestTextField extends StatelessWidget {
       onChanged: onChanged,
       maxLength: maxLength,
       inputFormatters: inputFormatters,
-      style: const TextStyle(
-        fontSize: AppValues.fontSizeBody,
+      style: TextStyle(
+        fontSize: context.rf(AppValues.fontSizeBody),
         fontWeight: FontWeight.w500,
         color: AppColors.darkGrey,
       ),
       decoration: InputDecoration(
         labelText: labelText,
-        labelStyle: const TextStyle(
+        labelStyle: TextStyle(
           color: AppColors.colorBlack,
-          fontSize: AppValues.fontSizeBody,
+          fontSize: context.rf(AppValues.fontSizeBody),
           fontWeight: FontWeight.w600,
         ),
         floatingLabelBehavior: FloatingLabelBehavior.always,
         hintText: hintText,
-        hintStyle: const TextStyle(
+        hintStyle: TextStyle(
           color: AppColors.borderGrey,
-          fontSize: AppValues.fontSizeBody,
+          fontSize: context.rf(AppValues.fontSizeBody),
           fontWeight: FontWeight.normal,
         ),
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         contentPadding:
-            padding ?? const EdgeInsets.all(AppValues.paddingDefault),
+            padding ?? EdgeInsets.all(context.rw(AppValues.paddingDefault)),
         filled: true,
         fillColor: AppColors.inputFill,
-        enabledBorder: _buildBorder(AppColors.borderGrey),
-        focusedBorder: _buildBorder(AppColors.borderGrey, 1.2),
-        errorBorder: _buildBorder(AppColors.errorColor),
-        focusedErrorBorder: _buildBorder(AppColors.errorColor, 1.5),
+        enabledBorder: _buildBorder(context, AppColors.borderGrey),
+        focusedBorder: _buildBorder(context, AppColors.borderGrey, 1.2),
+        errorBorder: _buildBorder(context, AppColors.errorColor),
+        focusedErrorBorder: _buildBorder(context, AppColors.errorColor, 1.5),
         counterText: counterText,
       ),
     );

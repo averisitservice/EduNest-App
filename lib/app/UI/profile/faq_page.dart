@@ -1,6 +1,7 @@
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/global_widgets/edunest_divider.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 
 class FAQPage extends StatefulWidget {
@@ -62,42 +63,42 @@ class _FAQPageState extends State<FAQPage> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 8.0,
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.rw(8.0),
+                  vertical: context.rh(8.0),
                 ),
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.chevron_left_rounded,
                         color: AppColors.primary,
-                        size: AppValues.appBarIconSize,
+                        size: context.rw(AppValues.appBarIconSize),
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Center(
                         child: Text(
                           'FAQS',
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: context.rf(22),
                             fontWeight: FontWeight.bold,
                             color: AppColors.primary,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 48),
+                    SizedBox(width: context.rw(48)),
                   ],
                 ),
               ),
               Expanded(
                 child: ListView.builder(
                   physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: 10.0,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: context.rw(20.0),
+                    vertical: context.rh(10.0),
                   ),
                   itemCount: _faqs.length,
                   itemBuilder: (context, index) {
@@ -107,13 +108,13 @@ class _FAQPageState extends State<FAQPage> {
                     final bool isExpanded = _expandedIndex == index;
 
                     return Container(
-                      margin: const EdgeInsets.only(
-                        bottom: AppValues.paddingDefault,
+                      margin: EdgeInsets.only(
+                        bottom: context.rh(AppValues.paddingDefault),
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.colorWhite,
                         borderRadius: BorderRadius.circular(
-                          AppValues.radiusDefault,
+                          context.rw(AppValues.radiusDefault),
                         ),
                         boxShadow: [
                           BoxShadow(
@@ -126,7 +127,7 @@ class _FAQPageState extends State<FAQPage> {
                       child: Material(
                         color: AppColors.transparent,
                         borderRadius: BorderRadius.circular(
-                          AppValues.radiusDefault,
+                          context.rw(AppValues.radiusDefault),
                         ),
                         child: InkWell(
                           onTap: () {
@@ -139,11 +140,11 @@ class _FAQPageState extends State<FAQPage> {
                             });
                           },
                           borderRadius: BorderRadius.circular(
-                            AppValues.radiusDefault,
+                            context.rw(AppValues.radiusDefault),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(
-                              AppValues.paddingDefault,
+                            padding: EdgeInsets.all(
+                              context.rw(AppValues.paddingDefault),
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,20 +154,20 @@ class _FAQPageState extends State<FAQPage> {
                                     Expanded(
                                       child: Text(
                                         question,
-                                        style: const TextStyle(
-                                          fontSize: 15,
+                                        style: TextStyle(
+                                          fontSize: context.rf(15),
                                           fontWeight: FontWeight.bold,
                                           color: AppColors.darkText,
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(width: 16),
+                                    SizedBox(width: context.rw(16)),
                                     Icon(
                                       isExpanded
                                           ? Icons.remove_rounded
                                           : Icons.add_rounded,
                                       color: AppColors.darkText,
-                                      size: AppValues.iconDefaultSize,
+                                      size: context.rw(AppValues.iconDefaultSize),
                                     ),
                                   ],
                                 ),
@@ -184,8 +185,8 @@ class _FAQPageState extends State<FAQPage> {
                                             ),
                                             Text(
                                               answer,
-                                              style: const TextStyle(
-                                                fontSize: 13,
+                                              style: TextStyle(
+                                                fontSize: context.rf(13),
                                                 color: AppColors.darkGrey,
                                                 height: 1.4,
                                               ),

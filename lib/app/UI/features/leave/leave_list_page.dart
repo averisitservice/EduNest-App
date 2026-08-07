@@ -7,6 +7,7 @@ import 'package:edunest/app/data/model/leave/leave_model.dart';
 import 'package:edunest/app/data/repository/leave_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_confirm_dialog.dart';
 import 'package:edunest/app/global_widgets/edunest_empty_state.dart';
+import 'package:edunest/app/core/utils/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -101,11 +102,11 @@ class _LeaveListPageState extends State<LeaveListPage> {
           icon: const Icon(Icons.arrow_back_rounded, color: AppColors.darkText),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'My Leaves',
           style: TextStyle(
             color: AppColors.darkText,
-            fontSize: AppValues.fontSizeTitle,
+            fontSize: context.rf(AppValues.fontSizeTitle),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -141,19 +142,19 @@ class _LeaveListPageState extends State<LeaveListPage> {
     if (_errorMessage != null) {
       return Center(
         child: Padding(
-          padding: const EdgeInsets.all(24),
+          padding: EdgeInsets.all(context.rw(24)),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 _errorMessage!,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: AppValues.fontSizeBody,
+                style: TextStyle(
+                  fontSize: context.rf(AppValues.fontSizeBody),
                   color: AppColors.darkGrey,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: context.rh(16)),
               ElevatedButton(onPressed: _loadLeaves, child: const Text('Retry')),
             ],
           ),
@@ -169,9 +170,9 @@ class _LeaveListPageState extends State<LeaveListPage> {
           physics: const AlwaysScrollableScrollPhysics(
             parent: BouncingScrollPhysics(),
           ),
-          children: const [
-            SizedBox(height: 80),
-            EdunestEmptyState(subtitle: 'No leave requests yet.'),
+          children: [
+            SizedBox(height: context.rh(80)),
+            const EdunestEmptyState(subtitle: 'No leave requests yet.'),
           ],
         ),
       );
@@ -181,7 +182,10 @@ class _LeaveListPageState extends State<LeaveListPage> {
       onRefresh: _loadLeaves,
       color: AppColors.primary,
       child: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+        padding: EdgeInsets.symmetric(
+          horizontal: context.rw(16.0),
+          vertical: context.rh(12.0),
+        ),
         physics: const AlwaysScrollableScrollPhysics(
           parent: BouncingScrollPhysics(),
         ),
@@ -199,11 +203,11 @@ class _LeaveListPageState extends State<LeaveListPage> {
     final isDeleting = _deletingId == leave.leaveId;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: AppValues.radius12),
-      padding: const EdgeInsets.all(AppValues.paddingDefault),
+      margin: EdgeInsets.only(bottom: context.rh(AppValues.radius12)),
+      padding: EdgeInsets.all(context.rw(AppValues.paddingDefault)),
       decoration: BoxDecoration(
         color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+        borderRadius: BorderRadius.circular(context.rw(AppValues.radiusLarge)),
         border: Border.all(color: AppColors.lightBackground),
         boxShadow: [
           BoxShadow(
@@ -217,20 +221,20 @@ class _LeaveListPageState extends State<LeaveListPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 44,
-            height: 44,
+            width: context.rw(44),
+            height: context.rw(44),
             decoration: const BoxDecoration(
               color: AppColors.blueBackground,
               shape: BoxShape.circle,
             ),
             alignment: Alignment.center,
-            child: const Icon(
+            child: Icon(
               Icons.exit_to_app_rounded,
               color: AppColors.primary,
-              size: 22,
+              size: context.rw(22),
             ),
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: context.rw(12)),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,9 +244,9 @@ class _LeaveListPageState extends State<LeaveListPage> {
                     Expanded(
                       child: Text(
                         displayDate,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColors.darkText,
-                          fontSize: 15,
+                          fontSize: context.rf(15),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -250,12 +254,12 @@ class _LeaveListPageState extends State<LeaveListPage> {
                     _buildStatusBadge(leave.status),
                   ],
                 ),
-                const SizedBox(height: 6),
+                SizedBox(height: context.rh(6)),
                 Text(
                   leave.reason,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.darkGrey,
-                    fontSize: 13,
+                    fontSize: context.rf(13),
                     height: 1.3,
                   ),
                 ),
@@ -263,21 +267,21 @@ class _LeaveListPageState extends State<LeaveListPage> {
             ),
           ),
           if (isPending) ...[
-            const SizedBox(width: 8),
+            SizedBox(width: context.rw(8)),
             isDeleting
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
+                ? SizedBox(
+                    width: context.rw(20),
+                    height: context.rw(20),
+                    child: const CircularProgressIndicator(
                       strokeWidth: 2.2,
                       color: AppColors.errorColor,
                     ),
                   )
                 : IconButton(
-                    icon: const Icon(
+                    icon: Icon(
                       Icons.delete_outline_rounded,
                       color: AppColors.errorColor,
-                      size: 22,
+                      size: context.rw(22),
                     ),
                     onPressed: () => _confirmDelete(leave),
                   ),
@@ -306,11 +310,14 @@ class _LeaveListPageState extends State<LeaveListPage> {
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(6)),
+      padding: EdgeInsets.symmetric(
+        horizontal: context.rw(8),
+        vertical: context.rh(3),
+      ),
+      decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(context.rw(6))),
       child: Text(
         upper,
-        style: TextStyle(color: fg, fontSize: 10.5, fontWeight: FontWeight.bold),
+        style: TextStyle(color: fg, fontSize: context.rf(10.5), fontWeight: FontWeight.bold),
       ),
     );
   }

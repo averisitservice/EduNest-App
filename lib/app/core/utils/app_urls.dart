@@ -36,6 +36,11 @@ class AppUrls {
   static String getStudentDetailsById(int studentId) =>
       "$baseUrl/api/student/$studentId";
 
+  // fcm
+  static String saveFcmToken() => "$baseUrl/api/student/fcm-token";
+
+  static String deleteFcmToken() => "$baseUrl/api/student/fcm-token";
+
   // fee
   static String getFeeDetail() => "$baseUrl/api/student/fee/detail";
 

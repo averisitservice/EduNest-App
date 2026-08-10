@@ -137,6 +137,9 @@ class _LoginPageState extends State<LoginPage> {
       await CommonService.setStudent(result.student);
       await CommonService.setTenant(result.tenant);
 
+      // Register this device's FCM token now that we have a valid session
+      NotificationService.syncFcmToken();
+
       if (!mounted) return;
 
       Get.off(

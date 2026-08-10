@@ -1,92 +1,70 @@
+import 'package:edunest/app/UI/features/result_detail_page.dart';
+import 'package:edunest/app/core/helper/date_util.dart';
+import 'package:edunest/app/core/network/error_helper.dart';
+import 'package:edunest/app/core/services/subject_icon_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
+import 'package:edunest/app/data/model/exam/result_model.dart';
+import 'package:edunest/app/data/repository/features_repo.dart';
+import 'package:edunest/app/global_widgets/edunest_empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
-class SubjectProgress {
-  final String subjectName;
-  final double percentage;
-  final int score;
-  final int total;
-  final IconData? icon;
-  final String? customIconText;
-  final Color themeColor;
-  final Color circleBgColor;
-
-  const SubjectProgress({
-    required this.subjectName,
-    required this.percentage,
-    required this.score,
-    required this.total,
-    this.icon,
-    this.customIconText,
-    required this.themeColor,
-    required this.circleBgColor,
-  });
-}
-
-class ResultsPage extends StatelessWidget {
+class ResultsPage extends StatefulWidget {
   const ResultsPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final List<SubjectProgress> subjects = const [
-      SubjectProgress(
-        subjectName: 'English',
-        percentage: 0.85,
-        score: 85,
-        total: 100,
-        icon: Icons.menu_book_rounded,
-        themeColor: Color(0xFF0F65D6),
-        circleBgColor: Color(0xFFEAF4FC),
-      ),
-      SubjectProgress(
-        subjectName: 'Mathematics',
-        percentage: 0.76,
-        score: 76,
-        total: 100,
-        icon: Icons.calculate_outlined,
-        themeColor: Color(0xFF16A34A),
-        circleBgColor: Color(0xFFF0FDF4),
-      ),
-      SubjectProgress(
-        subjectName: 'Science',
-        percentage: 0.82,
-        score: 82,
-        total: 100,
-        icon: Icons.science_outlined,
-        themeColor: Color(0xFF9333EA),
-        circleBgColor: Color(0xFFF3E8FF),
-      ),
-      SubjectProgress(
-        subjectName: 'Social Studies',
-        percentage: 0.70,
-        score: 70,
-        total: 100,
-        icon: Icons.public_outlined,
-        themeColor: Color(0xFFD97706),
-        circleBgColor: Color(0xFFFEF3C7),
-      ),
-      SubjectProgress(
-        subjectName: 'Hindi',
-        percentage: 0.88,
-        score: 88,
-        total: 100,
-        customIconText: 'अ',
-        themeColor: Color(0xFFE11D48),
-        circleBgColor: Color(0xFFFFE4E6),
-      ),
-      SubjectProgress(
-        subjectName: 'Computer',
-        percentage: 0.80,
-        score: 80,
-        total: 100,
-        icon: Icons.desktop_windows_outlined,
-        themeColor: Color(0xFF0891B2),
-        circleBgColor: Color(0xFFCFFAFE),
-      ),
-    ];
+  State<ResultsPage> createState() => _ResultsPageState();
+}
 
+class _ResultsPageState extends State<ResultsPage> {
+  final FeaturesRepo featuresRepo = FeaturesRepo();
+
+  StudentResultsModel? _results;
+  bool _isLoading = true;
+  String? _errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadResults();
+  }
+
+  Future<void> _loadResults() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
+    try {
+      final results = await featuresRepo.getStudentResults();
+      if (!mounted) return;
+      setState(() => _results = results);
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      setState(() => _errorMessage = e.message);
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
+
+  Color _progressColor(double percentage) {
+    if (percentage >= 75) return const Color(0xFF16A34A);
+    if (percentage >= 50) return const Color(0xFFD97706);
+    return const Color(0xFFDC2626);
+  }
+
+  String _progressMessage(double percentage) {
+    if (percentage >= 75) return 'Good Job! Keep it up.';
+    if (percentage >= 50) return 'Doing okay, aim higher.';
+    return 'Needs improvement.';
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -117,49 +95,98 @@ class ResultsPage extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 12.0,
-            ),
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildOverallProgressCard(),
-                const SizedBox(height: 20),
-                const Text(
-                  'Subject Wise Performance',
-                  style: TextStyle(
-                    color: AppColors.darkText,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                _buildSubjectPerformanceCard(subjects),
-                const SizedBox(height: 20),
-                const Text(
-                  'Recent Test / Exam Results',
-                  style: TextStyle(
-                    color: AppColors.darkText,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                _buildRecentResultsCard(),
-                const SizedBox(height: 12),
-              ],
-            ),
-          ),
-        ),
+        child: SafeArea(child: _buildBody()),
       ),
     );
   }
 
-  Widget _buildOverallProgressCard() {
+  Widget _buildBody() {
+    if (_isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.primary),
+      );
+    }
+
+    if (_errorMessage != null) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                _errorMessage!,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: AppValues.fontSizeBody,
+                  color: AppColors.darkGrey,
+                ),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _loadResults,
+                child: const Text('Retry'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    final results = _results;
+    if (results == null || results.exams.isEmpty) {
+      return const EdunestEmptyState(
+        title: 'No Results Yet',
+        subtitle: 'Your exam results will appear here once published.',
+        icon: Icons.grade_outlined,
+      );
+    }
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildOverallProgressCard(results),
+          const SizedBox(height: 20),
+          if (results.subjects.isNotEmpty) ...[
+            const Text(
+              'Subject Wise Performance',
+              style: TextStyle(
+                color: AppColors.darkText,
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            _buildSubjectPerformanceCard(results.subjects),
+            const SizedBox(height: 20),
+          ],
+          const Text(
+            'Recent Test / Exam Results',
+            style: TextStyle(
+              color: AppColors.darkText,
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          ...results.exams.map(
+            (exam) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _buildRecentResultCard(exam),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOverallProgressCard(StudentResultsModel results) {
+    final percentage = results.overallPercentage;
+    final color = _progressColor(percentage);
+
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -188,23 +215,26 @@ class ResultsPage extends StatelessWidget {
           const SizedBox(height: 12),
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 flex: 3,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '78%',
+                      '${percentage.toStringAsFixed(0)}%',
                       style: TextStyle(
-                        color: Color(0xFF16A34A),
+                        color: color,
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(
-                      'Good Job! Keep it up.',
-                      style: TextStyle(color: AppColors.darkGrey, fontSize: 12),
+                      _progressMessage(percentage),
+                      style: const TextStyle(
+                        color: AppColors.darkGrey,
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 ),
@@ -216,30 +246,28 @@ class ResultsPage extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
-                      child: const LinearProgressIndicator(
-                        value: 0.78,
+                      child: LinearProgressIndicator(
+                        value: (percentage / 100).clamp(0.0, 1.0),
                         minHeight: 8,
-                        backgroundColor: Color(0xFFF1F5F9),
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          Color(0xFF16A34A),
-                        ),
+                        backgroundColor: const Color(0xFFF1F5F9),
+                        valueColor: AlwaysStoppedAnimation<Color>(color),
                       ),
                     ),
                     const SizedBox(height: 8),
                     RichText(
-                      text: const TextSpan(
-                        style: TextStyle(
+                      text: TextSpan(
+                        style: const TextStyle(
                           fontSize: 12.5,
                           fontWeight: FontWeight.bold,
                         ),
                         children: [
                           TextSpan(
-                            text: '390',
-                            style: TextStyle(color: Color(0xFF16A34A)),
+                            text: '${results.overallObtained}',
+                            style: TextStyle(color: color),
                           ),
                           TextSpan(
-                            text: ' / 500',
-                            style: TextStyle(
+                            text: ' / ${results.overallMax}',
+                            style: const TextStyle(
                               color: AppColors.darkGrey,
                               fontWeight: FontWeight.normal,
                             ),
@@ -257,7 +285,7 @@ class ResultsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSubjectPerformanceCard(List<SubjectProgress> subjects) {
+  Widget _buildSubjectPerformanceCard(List<SubjectResultItem> subjects) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       decoration: BoxDecoration(
@@ -279,31 +307,27 @@ class ResultsPage extends StatelessWidget {
         separatorBuilder: (context, index) => const SizedBox(height: 18),
         itemBuilder: (context, index) {
           final sub = subjects[index];
+          final themeColor = SubjectIconService.colorFor(sub.subjectName);
+          final circleBgColor = SubjectIconService.bgColorFor(sub.subjectName);
+
           return Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // Circular icon
               Container(
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: sub.circleBgColor,
+                  color: circleBgColor,
                   shape: BoxShape.circle,
                 ),
                 alignment: Alignment.center,
-                child: sub.customIconText != null
-                    ? Text(
-                        sub.customIconText!,
-                        style: TextStyle(
-                          color: sub.themeColor,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                    : Icon(sub.icon, color: sub.themeColor, size: 20),
+                child: Icon(
+                  SubjectIconService.iconFor(sub.subjectName),
+                  color: themeColor,
+                  size: 20,
+                ),
               ),
               const SizedBox(width: 14),
-              // Name and progress bar
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -320,33 +344,30 @@ class ResultsPage extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(4),
                       child: LinearProgressIndicator(
-                        value: sub.percentage,
+                        value: (sub.percentage / 100).clamp(0.0, 1.0),
                         minHeight: 5,
                         backgroundColor: const Color(0xFFF1F5F9),
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                          sub.themeColor,
-                        ),
+                        valueColor: AlwaysStoppedAnimation<Color>(themeColor),
                       ),
                     ),
                   ],
                 ),
               ),
               const SizedBox(width: 16),
-              // Percentage text and fraction score
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    '${(sub.percentage * 100).toInt()}%',
+                    '${sub.percentage.toStringAsFixed(0)}%',
                     style: TextStyle(
-                      color: sub.themeColor,
+                      color: themeColor,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${sub.score} / ${sub.total}',
+                    '${sub.obtained} / ${sub.max}',
                     style: const TextStyle(
                       color: AppColors.darkGrey,
                       fontSize: 11.5,
@@ -361,85 +382,100 @@ class ResultsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildRecentResultsCard() {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(16.0),
-        border: Border.all(color: AppColors.lightBackground),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.colorBlack.withValues(alpha: 0.02),
-            blurRadius: 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: const BoxDecoration(
-              color: Color(0xFFEAF4FC),
-              shape: BoxShape.circle,
+  Widget _buildRecentResultCard(ExamResultItem exam) {
+    final dateText = exam.examDate != null
+        ? '${DateUtil.getDay(exam.examDate)} ${DateUtil.getMonth(exam.examDate)} ${DateUtil.getYear(exam.examDate)}'
+        : '--';
+    final color = _progressColor(exam.percentage);
+
+    return InkWell(
+      borderRadius: BorderRadius.circular(16.0),
+      onTap: () => Get.to(() => ResultDetailPage(examId: exam.examId)),
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: AppColors.colorWhite,
+          borderRadius: BorderRadius.circular(16.0),
+          border: Border.all(color: AppColors.lightBackground),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.colorBlack.withValues(alpha: 0.02),
+              blurRadius: 6,
+              offset: const Offset(0, 2),
             ),
-            alignment: Alignment.center,
-            child: const Icon(
-              Icons.assignment_outlined,
-              color: Color(0xFF0F65D6),
-              size: 20,
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: const BoxDecoration(
+                color: Color(0xFFEAF4FC),
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: const Icon(
+                Icons.assignment_outlined,
+                color: Color(0xFF0F65D6),
+                size: 20,
+              ),
             ),
-          ),
-          const SizedBox(width: 14),
-          const Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    exam.examName,
+                    style: const TextStyle(
+                      color: AppColors.darkText,
+                      fontSize: 14.5,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    dateText,
+                    style: const TextStyle(
+                      color: AppColors.darkGrey,
+                      fontSize: 12.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  'Unit Test - 1',
+                  '${exam.percentage.toStringAsFixed(0)}%',
                   style: TextStyle(
-                    color: AppColors.darkText,
-                    fontSize: 14.5,
+                    color: color,
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 4),
+                const SizedBox(height: 4),
                 Text(
-                  '20 May 2025',
-                  style: TextStyle(color: AppColors.darkGrey, fontSize: 12.5),
+                  '${exam.obtained} / ${exam.max}',
+                  style: const TextStyle(
+                    color: AppColors.darkGrey,
+                    fontSize: 11.5,
+                  ),
                 ),
               ],
             ),
-          ),
-          const SizedBox(width: 16),
-          const Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '78%',
-                style: TextStyle(
-                  color: Color(0xFF0F65D6),
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 4),
-              Text(
-                '390 / 500',
-                style: TextStyle(color: AppColors.darkGrey, fontSize: 11.5),
-              ),
-            ],
-          ),
-          const SizedBox(width: 8),
-          const Icon(
-            Icons.chevron_right_rounded,
-            color: AppColors.borderGrey,
-            size: 20,
-          ),
-        ],
+            const SizedBox(width: 8),
+            const Icon(
+              Icons.chevron_right_rounded,
+              color: AppColors.borderGrey,
+              size: 20,
+            ),
+          ],
+        ),
       ),
     );
   }

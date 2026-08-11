@@ -41,6 +41,11 @@ class AppUrls {
   static String getStudentResultDetail(int examId) =>
       "$baseUrl/api/student/results/$examId";
 
+  static String getStudentNotifications() => "$baseUrl/api/student/notifications";
+
+  static String markNotificationAsRead(int notificationId) =>
+      "$baseUrl/api/student/notifications/$notificationId/read";
+
   // fcm
   static String saveFcmToken() => "$baseUrl/api/student/fcm-token";
 

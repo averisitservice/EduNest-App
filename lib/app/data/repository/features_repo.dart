@@ -5,6 +5,7 @@ import 'package:edunest/app/core/utils/app_urls.dart';
 import 'package:edunest/app/data/model/attendance/attendance_model.dart';
 import 'package:edunest/app/data/model/exam/exam_schedule_model.dart';
 import 'package:edunest/app/data/model/exam/result_model.dart';
+import 'package:edunest/app/data/model/notification/notification_model.dart';
 import 'package:edunest/app/data/model/homework/homework_model.dart';
 import 'package:edunest/app/data/model/timetable/timetable_model.dart';
 import 'package:intl/intl.dart';
@@ -112,6 +113,31 @@ class FeaturesRepo extends BaseRepo {
         AppUrls.getStudentResultDetail(examId),
       );
       return ReportCardModel.fromJson(res.data['data']);
+    } catch (e) {
+      throw ErrorHelper.toApiException(e);
+    }
+  }
+
+  Future<StudentNotificationPage> getStudentNotifications({
+    int page = 0,
+    int size = 10,
+  }) async {
+    try {
+      var res = await DioClient.getInstance().get(
+        AppUrls.getStudentNotifications(),
+        queryParameters: {'page': page, 'size': size},
+      );
+      return StudentNotificationPage.fromJson(res.data['data']);
+    } catch (e) {
+      throw ErrorHelper.toApiException(e);
+    }
+  }
+
+  Future<void> markNotificationAsRead(int notificationId) async {
+    try {
+      await DioClient.getInstance().patch(
+        AppUrls.markNotificationAsRead(notificationId),
+      );
     } catch (e) {
       throw ErrorHelper.toApiException(e);
     }

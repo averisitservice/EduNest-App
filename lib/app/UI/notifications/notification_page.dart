@@ -1,7 +1,17 @@
+import 'package:edunest/app/UI/features/exam_schedule_page.dart';
+import 'package:edunest/app/UI/features/homework/homework_detail_page.dart';
+import 'package:edunest/app/UI/features/leave/leave_list_page.dart';
+import 'package:edunest/app/UI/features/notes/notes_detail_page.dart';
+import 'package:edunest/app/UI/features/result/result_detail_page.dart';
+import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
+import 'package:edunest/app/data/model/notification/notification_model.dart';
+import 'package:edunest/app/data/repository/features_repo.dart';
+import 'package:edunest/app/global_widgets/edunest_empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({super.key});
@@ -11,71 +21,235 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  final List<Map<String, dynamic>> _notifications = [
-    {
-      'title': 'Homework Uploaded',
-      'subtitle': 'New homework has been uploaded for Mathematics.',
-      'time': '10:30 AM',
-      'isUnread': true,
-      'icon': Icons.menu_book_rounded,
-      'iconColor': AppColors.primary,
-      'iconBgColor': AppColors.blueBackground,
-    },
-    {
-      'title': 'Attendance Marked',
-      'subtitle': 'Your attendance has been marked for today.',
-      'time': '09:15 AM',
-      'isUnread': true,
-      'icon': Icons.calendar_today_rounded,
-      'iconColor': AppColors.notificationGreenIcon,
-      'iconBgColor': AppColors.notificationGreenBg,
-    },
-    {
-      'title': 'Fee Receipt Generated',
-      'subtitle': 'Your fee receipt for July 2026 has been generated.',
-      'time': '08:45 AM',
-      'isUnread': false,
-      'icon': Icons.currency_rupee_rounded,
-      'iconColor': AppColors.notificationOrangeIcon,
-      'iconBgColor': AppColors.notificationOrangeBg,
-    },
-    {
-      'title': 'School Announcement',
-      'subtitle': 'Annual Sports Day will be held on 18 August 2026.',
-      'time': 'Yesterday',
-      'isUnread': false,
-      'icon': Icons.campaign_outlined,
-      'iconColor': AppColors.notificationPurpleIcon,
-      'iconBgColor': AppColors.notificationPurpleBg,
-    },
-    {
-      'title': 'Bus Update',
-      'subtitle': 'Bus #GJ-01-AB-123 is on the way.',
-      'time': 'Yesterday',
-      'isUnread': false,
-      'icon': Icons.directions_bus_rounded,
-      'iconColor': AppColors.notificationCyanIcon,
-      'iconBgColor': AppColors.notificationCyanBg,
-    },
-    {
-      'title': 'Exam Schedule Published',
-      'subtitle': 'Mid Term exam schedule is now available. Check now.',
-      'time': '22 Jul 2026',
-      'isUnread': false,
-      'icon': Icons.assignment_outlined,
-      'iconColor': AppColors.notificationRedIcon,
-      'iconBgColor': AppColors.notificationRedBg,
-    },
-    {
-      'title': 'Circular Published',
-      'subtitle': 'New circular has been published regarding library hours.',
-      'time': '21 Jul 2026',
-      'isUnread': false,
-      'icon': Icons.star_outline_rounded,
-      'iconColor': AppColors.notificationAmberIcon,
-      'iconBgColor': AppColors.notificationAmberBg,
-    },
-  ];
+  static const int _pageSize = 10;
+
+  final FeaturesRepo featuresRepo = FeaturesRepo();
+
+  final List<StudentNotificationItem> _notifications = [];
+  int _currentPage = 0;
+  bool _hasMore = true;
+  bool _isLoading = true;
+  bool _isLoadingMore = false;
+  String? _errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadNotifications(reset: true);
+  }
+
+  Future<void> _loadNotifications({bool reset = false}) async {
+    setState(() {
+      if (reset) {
+        _isLoading = true;
+        _currentPage = 0;
+      } else {
+        _isLoadingMore = true;
+      }
+      _errorMessage = null;
+    });
+
+    try {
+      final result = await featuresRepo.getStudentNotifications(
+        page: _currentPage,
+        size: _pageSize,
+      );
+      if (!mounted) return;
+      setState(() {
+        if (reset) {
+          _notifications.clear();
+        }
+        _notifications.addAll(result.content);
+        _hasMore = result.hasMore;
+      });
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      setState(() => _errorMessage = e.message);
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _isLoadingMore = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _loadMore() async {
+    if (_isLoadingMore || !_hasMore) return;
+    _currentPage++;
+    await _loadNotifications();
+  }
+
+  ({IconData icon, Color iconColor, Color bgColor}) _styleFor(String type) {
+    switch (type) {
+      case 'HOMEWORK':
+        return (
+          icon: Icons.menu_book_rounded,
+          iconColor: AppColors.primary,
+          bgColor: AppColors.blueBackground,
+        );
+      case 'NOTE':
+        return (
+          icon: Icons.note_alt_rounded,
+          iconColor: AppColors.notificationGreenIcon,
+          bgColor: AppColors.notificationGreenBg,
+        );
+      case 'EXAM_SCHEDULED':
+        return (
+          icon: Icons.assignment_outlined,
+          iconColor: AppColors.notificationRedIcon,
+          bgColor: AppColors.notificationRedBg,
+        );
+      case 'RESULT_PUBLISHED':
+        return (
+          icon: Icons.bar_chart_rounded,
+          iconColor: AppColors.notificationAmberIcon,
+          bgColor: AppColors.notificationAmberBg,
+        );
+      case 'LEAVE_STATUS':
+        return (
+          icon: Icons.event_available_rounded,
+          iconColor: AppColors.notificationCyanIcon,
+          bgColor: AppColors.notificationCyanBg,
+        );
+      case 'ANNOUNCEMENT':
+        return (
+          icon: Icons.campaign_outlined,
+          iconColor: AppColors.notificationPurpleIcon,
+          bgColor: AppColors.notificationPurpleBg,
+        );
+      default:
+        return (
+          icon: Icons.notifications_outlined,
+          iconColor: AppColors.primary,
+          bgColor: AppColors.blueBackground,
+        );
+    }
+  }
+
+  String _timeText(String? createdDate) {
+    if (createdDate == null || createdDate.isEmpty) return '';
+    try {
+      final dateTime = DateTime.parse(createdDate).toLocal();
+      final now = DateTime.now();
+      final isToday = dateTime.year == now.year &&
+          dateTime.month == now.month &&
+          dateTime.day == now.day;
+      final yesterday = now.subtract(const Duration(days: 1));
+      final isYesterday = dateTime.year == yesterday.year &&
+          dateTime.month == yesterday.month &&
+          dateTime.day == yesterday.day;
+
+      if (isToday) {
+        final hour = dateTime.hour == 0
+            ? 12
+            : (dateTime.hour > 12 ? dateTime.hour - 12 : dateTime.hour);
+        final minute = dateTime.minute.toString().padLeft(2, '0');
+        final ampm = dateTime.hour >= 12 ? 'PM' : 'AM';
+        return '$hour:$minute $ampm';
+      }
+      if (isYesterday) return 'Yesterday';
+
+      const months = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      ];
+      return '${dateTime.day} ${months[dateTime.month - 1]} ${dateTime.year}';
+    } catch (_) {
+      return '';
+    }
+  }
+
+  Future<void> _onNotificationTap(StudentNotificationItem item) async {
+    if (!item.isRead) {
+      setState(() {
+        final index = _notifications.indexWhere(
+          (n) => n.notificationId == item.notificationId,
+        );
+        if (index != -1) {
+          _notifications[index] = StudentNotificationItem(
+            notificationId: item.notificationId,
+            type: item.type,
+            referenceId: item.referenceId,
+            title: item.title,
+            body: item.body,
+            isRead: true,
+            createdDate: item.createdDate,
+          );
+        }
+      });
+      featuresRepo.markNotificationAsRead(item.notificationId).catchError((_) {});
+    }
+
+    final referenceId = item.referenceId;
+
+    switch (item.type) {
+      case 'HOMEWORK':
+        if (referenceId != null) {
+          Get.to(() => HomeworkDetailPage(homeworkId: referenceId));
+        }
+        break;
+      case 'NOTE':
+        if (referenceId != null) {
+          Get.to(() => NotesDetailPage(noteId: referenceId));
+        }
+        break;
+      case 'RESULT_PUBLISHED':
+        if (referenceId != null) {
+          Get.to(() => ResultDetailPage(examId: referenceId));
+        }
+        break;
+      case 'EXAM_SCHEDULED':
+        Get.to(() => const ExamSchedulePage());
+        break;
+      case 'LEAVE_STATUS':
+        Get.to(() => const LeaveListPage());
+        break;
+      case 'ANNOUNCEMENT':
+        _showAnnouncementDetail(item);
+        break;
+      default:
+        break;
+    }
+  }
+
+  void _showAnnouncementDetail(StudentNotificationItem item) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.colorWhite,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              item.title,
+              style: const TextStyle(
+                color: AppColors.darkText,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              item.body,
+              style: const TextStyle(
+                color: AppColors.darkGrey,
+                fontSize: 13.5,
+                height: 1.45,
+              ),
+            ),
+            const SizedBox(height: 12),
+          ],
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,144 +283,197 @@ class _NotificationPageState extends State<NotificationPage> {
             fit: BoxFit.cover,
           ),
         ),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 8.0,
-            ),
-            child: Column(
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.colorWhite,
-                    borderRadius: BorderRadius.circular(AppValues.radius20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.colorBlack.withValues(alpha: 0.03),
-                        blurRadius: 10,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: _notifications.length,
-                    separatorBuilder: (context, index) => const Divider(
-                      height: 1,
-                      thickness: 1,
-                      color: AppColors.lightBackground,
-                      indent: 60,
-                      endIndent: 16,
-                    ),
-                    itemBuilder: (context, index) {
-                      final item = _notifications[index];
-                      final bool isUnread = item['isUnread'] as bool;
+        child: SafeArea(child: _buildBody()),
+      ),
+    );
+  }
 
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12.0,
-                          vertical: 14.0,
+  Widget _buildBody() {
+    if (_isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.primary),
+      );
+    }
+
+    if (_errorMessage != null && _notifications.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                _errorMessage!,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: AppValues.fontSizeBody,
+                  color: AppColors.darkGrey,
+                ),
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () => _loadNotifications(reset: true),
+                child: const Text('Retry'),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (_notifications.isEmpty) {
+      return const EdunestEmptyState(
+        title: "You're all caught up!",
+        subtitle: "We'll notify you when something new arrives.",
+        icon: Icons.notifications_none_rounded,
+      );
+    }
+
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      child: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: AppColors.colorWhite,
+              borderRadius: BorderRadius.circular(AppValues.radius20),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.colorBlack.withValues(alpha: 0.03),
+                  blurRadius: 10,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: _notifications.length,
+              separatorBuilder: (context, index) => const Divider(
+                height: 1,
+                thickness: 1,
+                color: AppColors.lightBackground,
+                indent: 60,
+                endIndent: 16,
+              ),
+              itemBuilder: (context, index) {
+                final item = _notifications[index];
+                final style = _styleFor(item.type);
+
+                return InkWell(
+                  onTap: () => _onNotificationTap(item),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12.0,
+                      vertical: 14.0,
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 8,
+                          height: 8,
+                          margin: const EdgeInsets.only(top: 18, right: 8),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: item.isRead
+                                ? AppColors.transparent
+                                : AppColors.primary,
+                          ),
                         ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: 8,
-                              height: 8,
-                              margin: const EdgeInsets.only(top: 18, right: 8),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: isUnread
-                                    ? AppColors.primary
-                                    : AppColors.transparent,
-                              ),
-                            ),
-                            Container(
-                              width: 44,
-                              height: 44,
-                              decoration: BoxDecoration(
-                                color: item['iconBgColor'] as Color,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                item['icon'] as IconData,
-                                color: item['iconColor'] as Color,
-                                size: 22,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                        Container(
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            color: style.bgColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            style.icon,
+                            color: style.iconColor,
+                            size: 22,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          item['title'] as String,
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: AppColors.darkText,
-                                          ),
-                                        ),
+                                  Expanded(
+                                    child: Text(
+                                      item.title,
+                                      style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.darkText,
                                       ),
-                                      Text(
-                                        item['time'] as String,
-                                        style: const TextStyle(
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.w500,
-                                          color: AppColors.textMuted,
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
-                                  const SizedBox(height: 4),
                                   Text(
-                                    item['subtitle'] as String,
+                                    _timeText(item.createdDate),
                                     style: const TextStyle(
-                                      fontSize: 12,
-                                      color: AppColors.darkGrey,
-                                      height: 1.3,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w500,
+                                      color: AppColors.textMuted,
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 4),
+                              Text(
+                                item.body,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: AppColors.darkGrey,
+                                  height: 1.3,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      );
-                    },
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 32),
-                Column(
-                  children: const [
-                    Text(
-                      "You're all caught up!",
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.darkText,
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      "We'll notify you when something new arrives.",
-                      style: TextStyle(fontSize: 12, color: AppColors.darkGrey),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-              ],
+                );
+              },
             ),
           ),
-        ),
+          const SizedBox(height: 20),
+          if (_hasMore)
+            _isLoadingMore
+                ? const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    child: CircularProgressIndicator(color: AppColors.primary),
+                  )
+                : OutlinedButton(
+                    onPressed: _loadMore,
+                    child: const Text('More'),
+                  )
+          else
+            Column(
+              children: const [
+                Text(
+                  "You're all caught up!",
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.darkText,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  "We'll notify you when something new arrives.",
+                  style: TextStyle(fontSize: 12, color: AppColors.darkGrey),
+                ),
+              ],
+            ),
+          const SizedBox(height: 24),
+        ],
       ),
     );
   }

@@ -1,4 +1,4 @@
-import 'package:edunest/app/UI/features/result_detail_page.dart';
+import 'package:edunest/app/UI/features/result/result_detail_page.dart';
 import 'package:edunest/app/core/helper/date_util.dart';
 import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/services/subject_icon_service.dart';

@@ -198,7 +198,10 @@ class _ResultDetailPageState extends State<ResultDetailPage> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: resultColor.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
@@ -221,7 +224,10 @@ class _ResultDetailPageState extends State<ResultDetailPage> {
                 'Total Marks',
                 '${report.totalObtained} / ${report.totalMax}',
               ),
-              _buildStatTile('Percentage', '${report.percentage.toStringAsFixed(1)}%'),
+              _buildStatTile(
+                'Percentage',
+                '${report.percentage.toStringAsFixed(1)}%',
+              ),
               _buildStatTile('Grade', report.overallGrade),
             ],
           ),
@@ -272,14 +278,14 @@ class _ResultDetailPageState extends State<ResultDetailPage> {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         itemCount: report.subjects.length,
-        separatorBuilder: (context, index) => const Divider(
-          height: 24,
-          color: AppColors.lightBackground,
-        ),
+        separatorBuilder: (context, index) =>
+            const Divider(height: 24, color: AppColors.lightBackground),
         itemBuilder: (context, index) {
           final subject = report.subjects[index];
           final themeColor = SubjectIconService.colorFor(subject.subjectName);
-          final circleBgColor = SubjectIconService.bgColorFor(subject.subjectName);
+          final circleBgColor = SubjectIconService.bgColorFor(
+            subject.subjectName,
+          );
           final passed = subject.passed;
 
           return Row(
@@ -326,14 +332,19 @@ class _ResultDetailPageState extends State<ResultDetailPage> {
                 height: 24,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: (passed ? const Color(0xFF16A34A) : const Color(0xFFDC2626))
-                      .withValues(alpha: 0.1),
+                  color:
+                      (passed
+                              ? const Color(0xFF16A34A)
+                              : const Color(0xFFDC2626))
+                          .withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
                   subject.grade,
                   style: TextStyle(
-                    color: passed ? const Color(0xFF16A34A) : const Color(0xFFDC2626),
+                    color: passed
+                        ? const Color(0xFF16A34A)
+                        : const Color(0xFFDC2626),
                     fontSize: 12,
                     fontWeight: FontWeight.bold,
                   ),

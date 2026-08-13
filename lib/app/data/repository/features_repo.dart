@@ -4,6 +4,7 @@ import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/utils/app_urls.dart';
 import 'package:edunest/app/data/model/attendance/attendance_model.dart';
 import 'package:edunest/app/data/model/exam/exam_schedule_model.dart';
+import 'package:edunest/app/data/model/announcement/announcement_model.dart';
 import 'package:edunest/app/data/model/exam/result_model.dart';
 import 'package:edunest/app/data/model/notification/notification_model.dart';
 import 'package:edunest/app/data/model/homework/homework_model.dart';
@@ -138,6 +139,29 @@ class FeaturesRepo extends BaseRepo {
       await DioClient.getInstance().patch(
         AppUrls.markNotificationAsRead(notificationId),
       );
+    } catch (e) {
+      throw ErrorHelper.toApiException(e);
+    }
+  }
+
+  Future<List<AnnouncementItem>> getStudentAnnouncements() async {
+    try {
+      var res = await DioClient.getInstance().get(
+        AppUrls.getStudentAnnouncements(),
+      );
+      final list = res.data['data'] as List? ?? [];
+      return list.map((e) => AnnouncementItem.fromJson(e)).toList();
+    } catch (e) {
+      throw ErrorHelper.toApiException(e);
+    }
+  }
+
+  Future<int> getUnreadNotificationCount() async {
+    try {
+      var res = await DioClient.getInstance().get(
+        AppUrls.getUnreadNotificationCount(),
+      );
+      return (res.data['data'] as num?)?.toInt() ?? 0;
     } catch (e) {
       throw ErrorHelper.toApiException(e);
     }

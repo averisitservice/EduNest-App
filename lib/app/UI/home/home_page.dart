@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:edunest/app/UI/features/announcement/announcements_page.dart';
 import 'package:edunest/app/UI/home/widgets/drawer_menu.dart';
 import 'package:edunest/app/UI/notifications/notification_page.dart';
 import 'package:edunest/app/UI/features/timetable_page.dart';
@@ -13,6 +14,7 @@ import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
 import 'package:edunest/app/core/values/app_values.dart';
 import 'package:edunest/app/data/model/student/student_home_model.dart';
+import 'package:edunest/app/data/repository/features_repo.dart';
 import 'package:edunest/app/data/repository/profile_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,17 +30,28 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final ProfileRepo _profileRepo = ProfileRepo();
+  final FeaturesRepo _featuresRepo = FeaturesRepo();
 
   StudentHomeModel? _home;
   bool _isLoading = true;
+  int _unreadNotificationCount = 0;
 
   @override
   void initState() {
     super.initState();
     _loadHomeData();
+    _loadUnreadNotificationCount();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkAndShowPermissionPrompts();
     });
+  }
+
+  Future<void> _loadUnreadNotificationCount() async {
+    try {
+      final count = await _featuresRepo.getUnreadNotificationCount();
+      if (!mounted) return;
+      setState(() => _unreadNotificationCount = count);
+    } catch (_) {}
   }
 
   Future<void> _loadHomeData() async {
@@ -124,29 +137,38 @@ class _HomePageState extends State<HomePage> {
                   color: AppColors.darkText,
                   size: 28,
                 ),
-                onPressed: () {
-                  Get.to(() => const NotificationPage());
+                onPressed: () async {
+                  await Get.to(() => const NotificationPage());
+                  _loadUnreadNotificationCount();
                 },
               ),
-              Positioned(
-                right: 6,
-                top: 6,
-                child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: const BoxDecoration(
-                    color: AppColors.errorColor,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Text(
-                    '3',
-                    style: TextStyle(
-                      color: AppColors.colorWhite,
-                      fontSize: 10,
-                      fontWeight: FontWeight.bold,
+              if (_unreadNotificationCount > 0)
+                Positioned(
+                  right: 6,
+                  top: 6,
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    constraints: const BoxConstraints(
+                      minWidth: 16,
+                      minHeight: 16,
+                    ),
+                    decoration: const BoxDecoration(
+                      color: AppColors.errorColor,
+                      shape: BoxShape.circle,
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      _unreadNotificationCount > 99
+                          ? '99+'
+                          : '$_unreadNotificationCount',
+                      style: const TextStyle(
+                        color: AppColors.colorWhite,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
-              ),
             ],
           ),
           const SizedBox(width: 8),
@@ -324,7 +346,9 @@ class _HomePageState extends State<HomePage> {
                 'Announcements',
                 AppColors.notificationPurpleBg,
                 AppColors.notificationPurpleIcon,
-                onTap: () {},
+                onTap: () {
+                  Get.to(() => const AnnouncementsPage());
+                },
               ),
             ),
           ],

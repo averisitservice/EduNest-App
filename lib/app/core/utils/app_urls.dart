@@ -46,6 +46,11 @@ class AppUrls {
   static String markNotificationAsRead(int notificationId) =>
       "$baseUrl/api/student/notifications/$notificationId/read";
 
+  static String getUnreadNotificationCount() =>
+      "$baseUrl/api/student/notifications/unread-count";
+
+  static String getStudentAnnouncements() => "$baseUrl/api/student/announcements";
+
   // fcm
   static String saveFcmToken() => "$baseUrl/api/student/fcm-token";
 

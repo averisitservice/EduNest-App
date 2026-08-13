@@ -1,3 +1,4 @@
+import 'package:edunest/app/UI/features/announcement/announcement_detail_page.dart';
 import 'package:edunest/app/core/helper/date_util.dart';
 import 'package:edunest/app/core/network/error_helper.dart';
 import 'package:edunest/app/core/values/app_colors.dart';
@@ -7,6 +8,7 @@ import 'package:edunest/app/data/repository/features_repo.dart';
 import 'package:edunest/app/global_widgets/edunest_empty_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 class AnnouncementsPage extends StatefulWidget {
   const AnnouncementsPage({super.key});
@@ -159,82 +161,100 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
         ? '${DateUtil.getDay(item.publishDate)} ${DateUtil.getMonth(item.publishDate)} ${DateUtil.getYear(item.publishDate)}'
         : '';
 
-    return Container(
-      margin: const EdgeInsets.only(bottom: AppValues.radius12),
-      padding: const EdgeInsets.all(AppValues.paddingDefault),
-      decoration: BoxDecoration(
-        color: AppColors.colorWhite,
-        borderRadius: BorderRadius.circular(AppValues.radiusLarge),
-        border: Border.all(color: AppColors.lightBackground),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.colorBlack.withValues(alpha: 0.02),
-            blurRadius: AppValues.smallMargin,
-            offset: const Offset(0, 2),
-          ),
-        ],
+    return InkWell(
+      borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+      onTap: () => Get.to(
+        () => AnnouncementDetailPage(
+          title: item.title,
+          message: item.message,
+          dateText: dateText,
+        ),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: const BoxDecoration(
-              color: AppColors.notificationPurpleBg,
-              shape: BoxShape.circle,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: AppValues.radius12),
+        padding: const EdgeInsets.all(AppValues.paddingDefault),
+        decoration: BoxDecoration(
+          color: AppColors.colorWhite,
+          borderRadius: BorderRadius.circular(AppValues.radiusLarge),
+          border: Border.all(color: AppColors.lightBackground),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.colorBlack.withValues(alpha: 0.02),
+              blurRadius: AppValues.smallMargin,
+              offset: const Offset(0, 2),
             ),
-            alignment: Alignment.center,
-            child: const Icon(
-              Icons.campaign_rounded,
-              color: AppColors.notificationPurpleIcon,
-              size: 22,
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 44,
+              height: 44,
+              decoration: const BoxDecoration(
+                color: AppColors.notificationPurpleBg,
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: const Icon(
+                Icons.campaign_rounded,
+                color: AppColors.notificationPurpleIcon,
+                size: 22,
+              ),
             ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        item.title,
-                        style: const TextStyle(
-                          color: AppColors.darkText,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          item.title,
+                          style: const TextStyle(
+                            color: AppColors.darkText,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    if (dateText.isNotEmpty) ...[
-                      const SizedBox(width: 8),
-                      Text(
-                        dateText,
-                        style: const TextStyle(
-                          color: AppColors.textMuted,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w500,
+                      if (dateText.isNotEmpty) ...[
+                        const SizedBox(width: 8),
+                        Text(
+                          dateText,
+                          style: const TextStyle(
+                            color: AppColors.textMuted,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
+                      ],
                     ],
-                  ],
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  item.message,
-                  style: const TextStyle(
-                    color: AppColors.darkGrey,
-                    fontSize: 13.5,
-                    height: 1.4,
                   ),
-                ),
-              ],
+                  const SizedBox(height: 6),
+                  Text(
+                    item.message,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: AppColors.darkGrey,
+                      fontSize: 13.5,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            const SizedBox(width: 8),
+            const Icon(
+              Icons.chevron_right_rounded,
+              color: AppColors.borderGrey,
+              size: 20,
+            ),
+          ],
+        ),
       ),
     );
   }

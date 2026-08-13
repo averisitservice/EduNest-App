@@ -1,3 +1,4 @@
+import 'package:edunest/app/UI/features/announcement/announcement_detail_page.dart';
 import 'package:edunest/app/UI/features/exam_schedule_page.dart';
 import 'package:edunest/app/UI/features/homework/homework_detail_page.dart';
 import 'package:edunest/app/UI/features/leave/leave_list_page.dart';
@@ -207,48 +208,17 @@ class _NotificationPageState extends State<NotificationPage> {
         Get.to(() => const LeaveListPage());
         break;
       case 'ANNOUNCEMENT':
-        _showAnnouncementDetail(item);
+        Get.to(
+          () => AnnouncementDetailPage(
+            title: item.title,
+            message: item.body,
+            dateText: _timeText(item.createdDate),
+          ),
+        );
         break;
       default:
         break;
     }
-  }
-
-  void _showAnnouncementDetail(StudentNotificationItem item) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: AppColors.colorWhite,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              item.title,
-              style: const TextStyle(
-                color: AppColors.darkText,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              item.body,
-              style: const TextStyle(
-                color: AppColors.darkGrey,
-                fontSize: 13.5,
-                height: 1.45,
-              ),
-            ),
-            const SizedBox(height: 12),
-          ],
-        ),
-      ),
-    );
   }
 
   @override
@@ -427,6 +397,8 @@ class _NotificationPageState extends State<NotificationPage> {
                               const SizedBox(height: 4),
                               Text(
                                 item.body,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   fontSize: 12,
                                   color: AppColors.darkGrey,

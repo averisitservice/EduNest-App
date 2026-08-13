@@ -7,12 +7,20 @@ class AnnouncementDetailPage extends StatelessWidget {
   final String title;
   final String message;
   final String? dateText;
+  final String appBarTitle;
+  final IconData icon;
+  final Color iconColor;
+  final Color iconBgColor;
 
   const AnnouncementDetailPage({
     super.key,
     required this.title,
     required this.message,
     this.dateText,
+    this.appBarTitle = 'Announcement',
+    this.icon = Icons.campaign_rounded,
+    this.iconColor = AppColors.notificationPurpleIcon,
+    this.iconBgColor = AppColors.notificationPurpleBg,
   });
 
   @override
@@ -28,9 +36,9 @@ class AnnouncementDetailPage extends StatelessWidget {
           icon: const Icon(Icons.arrow_back_rounded, color: AppColors.darkText),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'Announcement',
-          style: TextStyle(
+        title: Text(
+          appBarTitle,
+          style: const TextStyle(
             color: AppColors.darkText,
             fontSize: AppValues.fontSizeTitle,
             fontWeight: FontWeight.bold,
@@ -78,16 +86,12 @@ class AnnouncementDetailPage extends StatelessWidget {
                       Container(
                         width: 48,
                         height: 48,
-                        decoration: const BoxDecoration(
-                          color: AppColors.notificationPurpleBg,
+                        decoration: BoxDecoration(
+                          color: iconBgColor,
                           shape: BoxShape.circle,
                         ),
                         alignment: Alignment.center,
-                        child: const Icon(
-                          Icons.campaign_rounded,
-                          color: AppColors.notificationPurpleIcon,
-                          size: 22,
-                        ),
+                        child: Icon(icon, color: iconColor, size: 22),
                       ),
                       const SizedBox(width: 14),
                       Expanded(

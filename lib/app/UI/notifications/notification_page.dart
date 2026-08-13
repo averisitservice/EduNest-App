@@ -120,6 +120,12 @@ class _NotificationPageState extends State<NotificationPage> {
           iconColor: AppColors.notificationPurpleIcon,
           bgColor: AppColors.notificationPurpleBg,
         );
+      case 'BIRTHDAY':
+        return (
+          icon: Icons.cake_rounded,
+          iconColor: AppColors.notificationRedIcon,
+          bgColor: AppColors.notificationRedBg,
+        );
       default:
         return (
           icon: Icons.notifications_outlined,
@@ -213,6 +219,19 @@ class _NotificationPageState extends State<NotificationPage> {
             title: item.title,
             message: item.body,
             dateText: _timeText(item.createdDate),
+          ),
+        );
+        break;
+      case 'BIRTHDAY':
+        Get.to(
+          () => AnnouncementDetailPage(
+            title: item.title,
+            message: item.body,
+            dateText: _timeText(item.createdDate),
+            appBarTitle: 'Birthday',
+            icon: Icons.cake_rounded,
+            iconColor: AppColors.notificationRedIcon,
+            iconBgColor: AppColors.notificationRedBg,
           ),
         );
         break;

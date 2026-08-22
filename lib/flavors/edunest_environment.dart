@@ -7,7 +7,7 @@ class EduNestEnvironment {
 
     switch (env.toLowerCase()) {
       case 'dev':
-        serverApiUrl = 'http://10.98.251.76:8081';
+        serverApiUrl = 'http://172.28.62.76:8081';
         break;
       case 'uat':
         serverApiUrl = 'https://uat-api.mynovian.com';

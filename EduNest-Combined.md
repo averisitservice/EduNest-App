@@ -84,10 +84,10 @@ Work completed across all three repos in this session, in order:
 Patched (not rewritten) the existing README to close real gaps found against the actual
 `lib/` source:
 - Added missing pubspec dependencies to the table: `url_launcher`, `table_calendar`,
-  `firebase_core`, `firebase_messaging`, `flutter_local_notifications`.
+  `firebase_core`, `firebase_messaging`.
 - Documented the entirely-missing **Leave** feature (`leave_list_page`, `leave_request_page`,
   `LeaveRepo`), **Announcements** feature, and the full **push notification** pipeline
-  (`NotificationService` — FCM init, foreground/background/tap handlers, local banner display,
+  (`NotificationService` — FCM init, foreground/background/tap handlers,
   permission request, token sync on login/refresh, unregister on logout).
 - Expanded the architecture tree and the student-facing API table with the endpoints that
   back these features (attendance, results, announcements, notifications ×3, leave ×3,
@@ -506,7 +506,6 @@ Base URLs live in `lib/flavors/edunest_environment.dart`:
 | `url_launcher` | Opening external links (e.g. school contact phone/email) |
 | `table_calendar` | Calendar widget (attendance / date-range pickers) |
 | `firebase_core`, `firebase_messaging` | Firebase init + push notification delivery (`NotificationService`) |
-| `flutter_local_notifications` | Shows a local banner when a push arrives while the app is in the foreground |
 
 ## Architecture
 

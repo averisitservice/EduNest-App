@@ -3,6 +3,7 @@ import 'package:edunest/app/core/services/common_service.dart';
 import 'package:edunest/app/data/repository/fcm_repo.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -15,6 +16,17 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 class NotificationService {
   static final FirebaseMessaging _messaging = FirebaseMessaging.instance;
+  static final FlutterLocalNotificationsPlugin _localNotifications =
+      FlutterLocalNotificationsPlugin();
+
+  static bool _isLocalInitialized = false;
+
+  static const AndroidNotificationChannel _channel = AndroidNotificationChannel(
+    'high_importance_channel',
+    'High Importance Notifications',
+    description: 'This channel is used for important notifications.',
+    importance: Importance.high,
+  );
 
   static Future<void> initialize() async {
     // 1. Enable foreground notification presentation for iOS (Alert, Badge, Sound)
@@ -24,7 +36,10 @@ class NotificationService {
       sound: true,
     );
 
-    // 2. Register FCM Listeners
+    // 2. Setup Local Notifications for Android & iOS foreground banners
+    await _setupLocalNotifications();
+
+    // 3. Register FCM Listeners
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
     // Triggered when app receives notification while active in foreground
@@ -34,6 +49,7 @@ class NotificationService {
           '🔔 [Foreground] ${message.notification?.title}: ${message.notification?.body}',
         );
       }
+      _showLocalNotificationBanner(message);
     });
 
     // Triggered when user taps on notification banner while app is in background
@@ -115,6 +131,75 @@ class NotificationService {
     }
   }
 
+  /// Initialize Local Notification Plugin for Android & iOS
+  static Future<void> _setupLocalNotifications() async {
+    try {
+      const androidSettings = AndroidInitializationSettings(
+        '@mipmap/ic_launcher',
+      );
+      const iosSettings = DarwinInitializationSettings(
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: true,
+      );
+      const initSettings = InitializationSettings(
+        android: androidSettings,
+        iOS: iosSettings,
+      );
+
+      await _localNotifications.initialize(initSettings);
+
+      // Create Android Notification Channel
+      await _localNotifications
+          .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin
+          >()
+          ?.createNotificationChannel(_channel);
+
+      _isLocalInitialized = true;
+    } catch (e) {
+      _isLocalInitialized = false;
+      if (kDebugMode) {
+        print('⚠️ Local notifications setup error: $e');
+      }
+    }
+  }
+
+  /// Show banner when notification arrives in foreground (Android & iOS)
+  static void _showLocalNotificationBanner(RemoteMessage message) {
+    final notification = message.notification;
+    final android = message.notification?.android;
+
+    if (notification != null && _isLocalInitialized) {
+      try {
+        _localNotifications.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              _channel.id,
+              _channel.name,
+              channelDescription: _channel.description,
+              icon: android?.smallIcon ?? '@mipmap/ic_launcher',
+              importance: Importance.high,
+              priority: Priority.high,
+            ),
+            iOS: const DarwinNotificationDetails(
+              presentAlert: true,
+              presentBadge: true,
+              presentSound: true,
+            ),
+          ),
+        );
+      } catch (e) {
+        if (kDebugMode) {
+          print('⚠️ Error showing local notification: $e');
+        }
+      }
+    }
+  }
+
   /// Request notification permissions for both Android & iOS
   static Future<void> requestNotificationPermission() async {
     final bool hasAsked = await CommonService.hasAskedNotificationPermission();
@@ -139,7 +224,14 @@ class NotificationService {
         );
       }
 
-      // 2. Permission Handler request
+      // 2. Request iOS Local Notifications permission
+      await _localNotifications
+          .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin
+          >()
+          ?.requestPermissions(alert: true, badge: true, sound: true);
+
+      // 3. Permission Handler request
       try {
         await Permission.notification.request();
       } catch (_) {}

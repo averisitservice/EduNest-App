@@ -54,6 +54,7 @@ Base URLs live in `lib/flavors/edunest_environment.dart`:
 | `url_launcher` | Opening external links (e.g. school contact phone/email) |
 | `table_calendar` | Calendar widget (attendance / date-range pickers) |
 | `firebase_core`, `firebase_messaging` | Firebase init + push notification delivery (`NotificationService`) |
+| `flutter_local_notifications` | Shows a local banner when a push arrives while the app is in the foreground |
 
 ## Architecture
 

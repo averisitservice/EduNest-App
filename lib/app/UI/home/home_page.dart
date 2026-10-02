@@ -40,18 +40,9 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _loadHomeData();
-    _loadUnreadNotificationCount();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkAndShowPermissionPrompts();
     });
-  }
-
-  Future<void> _loadUnreadNotificationCount() async {
-    try {
-      final count = await _featuresRepo.getUnreadNotificationCount();
-      if (!mounted) return;
-      setState(() => _unreadNotificationCount = count);
-    } catch (_) {}
   }
 
   Future<void> _loadHomeData() async {
@@ -62,7 +53,10 @@ class _HomePageState extends State<HomePage> {
     try {
       final data = await _profileRepo.getStudentHome();
       if (!mounted) return;
-      setState(() => _home = data);
+      setState(() {
+        _home = data;
+        _unreadNotificationCount = data.unreadNotificationCount;
+      });
     } finally {
       if (mounted) {
         setState(() => _isLoading = false);
@@ -139,7 +133,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 onPressed: () async {
                   await Get.to(() => const NotificationPage());
-                  _loadUnreadNotificationCount();
+                  _loadHomeData();
                 },
               ),
               if (_unreadNotificationCount > 0)

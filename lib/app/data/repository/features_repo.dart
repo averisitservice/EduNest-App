@@ -156,17 +156,6 @@ class FeaturesRepo extends BaseRepo {
     }
   }
 
-  Future<int> getUnreadNotificationCount() async {
-    try {
-      var res = await DioClient.getInstance().get(
-        AppUrls.getUnreadNotificationCount(),
-      );
-      return (res.data['data'] as num?)?.toInt() ?? 0;
-    } catch (e) {
-      throw ErrorHelper.toApiException(e);
-    }
-  }
-
   Future<TimetableModel> getStudentTimetable({String? day}) async {
     try {
       var res = await DioClient.getInstance().get(

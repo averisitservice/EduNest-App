@@ -13,6 +13,7 @@ class StudentHomeModel {
   final int lateDays;
   final double thisMonthPercent;
   final double averagePercent;
+  final int unreadNotificationCount;
 
   const StudentHomeModel({
     required this.studentId,
@@ -27,6 +28,7 @@ class StudentHomeModel {
     required this.lateDays,
     required this.thisMonthPercent,
     required this.averagePercent,
+    this.unreadNotificationCount = 0,
   });
 
   factory StudentHomeModel.fromJson(Map<String, dynamic> json) {
@@ -43,6 +45,7 @@ class StudentHomeModel {
       lateDays: json['lateDays'] ?? 0,
       thisMonthPercent: (json['thisMonthPercent'] ?? 0).toDouble(),
       averagePercent: (json['averagePercent'] ?? 0).toDouble(),
+      unreadNotificationCount: (json['unreadNotificationCount'] ?? 0).toInt(),
     );
   }
 }
